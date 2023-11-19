@@ -25,8 +25,7 @@ document.getElementById("change-pic-button").addEventListener("click", () => {
 fileInput.addEventListener("change", () => {
     const selectedFile = fileInput.files[0];
     if (selectedFile) {
-        const imageUrl = URL.createObjectURL(selectedFile);
-        profilePictureEdit.src = imageUrl;
+        profilePictureEdit.src = URL.createObjectURL(selectedFile);
     }
 });
 
