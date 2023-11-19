@@ -1,0 +1,32 @@
+ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: lightgrey;
+    width:60px;
+    position: fixed;
+    height: 99%;
+}
+
+li.menu-item {
+    display: inline;
+    margin: 0 15px;
+}
+
+li.menu-item a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    font-family: Arial,serif;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    display: block;
+}
+
+li.menu-item a:hover {
+    background-color: grey;
+}
+li.menu-item i{
+    margin-right: 10px;
+}
