@@ -1,0 +1,23 @@
+table, th, td{
+    position: center;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+td {
+    width: 100px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    border: 1px solid;
+    background-color: lightcyan;
+}
+tr:nth-child(odd) {
+    border: 1px solid;
+    background-color: lightblue;
+}
+
+#highscoreTableHead tr {
+    background-color: lightgrey;
+}
