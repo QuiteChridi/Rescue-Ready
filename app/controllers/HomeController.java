@@ -17,13 +17,22 @@ public class HomeController extends Controller {
     public Result index() {
         return ok(views.html.index.render());
     }
-    
     public Result explore() {
         return ok(views.html.explore.render());
     }
-    
     public Result tutorial() {
         return ok(views.html.tutorial.render());
     }
-
+    public Result login(){
+        return ok(views.html.login.render());
+    }
+    public Result main(){
+        return ok(views.html.mainPage.render());
+    }
+    public Result profile(){
+        return ok(views.html.profile.render());
+    }
+    public Result highscore(){
+        return ok(views.html.highscore.render());
+    }
 }
