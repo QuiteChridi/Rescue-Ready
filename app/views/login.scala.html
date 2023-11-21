@@ -1,59 +1,27 @@
 @()
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>RescueReady Login Page</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+
+@index("Login") {
+    @defining(play.core.PlayVersion.current) { version =>
+
+
+        <section id="content">
+            <div class="login-container">
+                <img src="assets/images/rescueReadyIcon.png" alt="Rescue Ready Logo" width="250" height="250">
+
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <label for="username">Benutzername:</label>
+                    <input type="text" id="username" name="username" required><br><br>
+
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="password" name="password" required><br><br>
+
+                    <input type="button" value="Login" onclick="checkLogin()">
+
+                </form>
+            </div>
+
+        </section>
     }
-
-    .login-container {
-      text-align: center;
-      border: 3px solid #b0b5b1;
-      padding: 20px;
-    }
-
-    label {
-      display: block;
-    }
-  </style>
-</head>
-<body>
-
-<div class="login-container">
-  <img src="/assets/images/RescueReady.png" alt="Rescue Ready Logo" width="250" height="250">
-
-  <h2>Login</h2>
-  <form id="loginForm">
-    <label for="username">Benutzername:</label>
-    <input type="text" id="username" name="username" required><br><br>
-
-    <label for="password">Passwort:</label>
-    <input type="password" id="password" name="password" required><br><br>
-
-    <input type="button" value="Login" onclick="checkLogin()">
-
-  </form>
-</div>
-
-<script>
-  function checkLogin() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-
-    if (username === "admin" && password === "admin") {
-      // Weiterleitung zur Main Page
-      window.location.href = "success.html";
-    } else {
-      alert("Falscher Benutzername oder Passwort. Bitte versuchen Sie es erneut.");
-    }
-  }
-</script>
-</body>
-</html>
+}

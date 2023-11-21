@@ -4,11 +4,8 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
-GET    /explore                     controllers.HomeController.explore
-GET    /tutorial                    controllers.HomeController.tutorial
-
-GET     /login                      controllers.HomeController.login
 GET     /main                       controllers.HomeController.main
+GET     /login                      controllers.HomeController.login
 GET     /profile                    controllers.HomeController.profile
 GET     /highscore                  controllers.HomeController.highscore
 

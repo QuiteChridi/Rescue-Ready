@@ -1,24 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="assets/stylesheets/style_scoreboard.css">
-  <script type="text/javascript" src="assets/javascripts/Scoreboard.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <title>Index</title>
-</head>
-<body onload="refreshHighscore()">
-  <h1>Highscores</h1>
+@()
 
-  <table id="highscoreTable">
-    <thead id="highscoreTableHead">
-      <tr>
-        <td>Name</td>
-        <td>Score</td>
-      </tr>
-    </thead>
-    <tbody id="highscoreTableBody">
-    </tbody>
-  </table>
-</body>
-</html>
+
+@index("Profil") {
+    @defining(play.core.PlayVersion.current) { version =>
+        <section id="content" onload="refreshHighscore()">
+            <h1>Highscores</h1>
+
+            <table id="highscoreTable">
+                <thead id="highscoreTableHead">
+                    <tr>
+                        <td>Name</td>
+                        <td>Score</td>
+                    </tr>
+                </thead>
+                <tbody id="highscoreTableBody">
+                    <tr>
+                        <td>Willi</td>
+                        <td>45</td>
+                    </tr>
+                    <tr>
+                        <td>Hubert</td>
+                        <td>40</td>
+                    </tr>
+                    <tr>
+                        <td>Hansi</td>
+                        <td>23</td>
+                    </tr>
+                    <tr>
+                        <td>Sepp</td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    }
+}
