@@ -1,7 +1,9 @@
 package controllers;
 
 import play.mvc.*;
-import play.twirl.api.Html;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -18,5 +20,13 @@ public class HomeController extends Controller {
     public Result main() { return ok(views.html.main.render()); }
     public Result login() { return ok(views.html.login.render()); }
     public Result profile() { return ok(views.html.profile.render()); }
-    public Result highscore() { return ok(views.html.highscore.render()); }
+    public Result highscore() {
+        Map<String, Integer> highscores = new HashMap<>();
+        highscores.put("Willi", 0);
+        highscores.put("Hubert", 2);
+        highscores.put("Sepp", 0);
+        highscores.put("Fred", 0);
+        highscores.put("Paul", 0);
+
+        return ok(views.html.highscore.render(highscores)); }
 }
