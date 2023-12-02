@@ -1,24 +1,29 @@
 function checkLogin() {
-    var username = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
-
-    /*if (username === "admin" && password === "admin") {
-        // Weiterleitung zur Main Page
-        window.location.href = "main";
-    } else {
-        alert("Falscher Benutzername oder Passwort. Bitte versuchen Sie es erneut.");
-    }*/
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
 
     fetch("/login", {
         method: "POST",
         body: JSON.stringify({
-            data: "hello",
+            username: username,
+            password: password
         }),
         headers: {
             "Content-Type": "text/json"
         },
         credentials: "include"})
-        .then(result => result.json())
-        .then(data => console.log(data));
-}
+        .then(response  => {
+            if (!response.ok){
 
+                throw new Error('HTTP error! Status: ${result.status}')
+            }
+            return response.json()
+        }).then(data => {
+            if(data.response === "Login successfull"){
+                window.location.href = "main"
+            } else {
+                alert(data.response)
+            }
+        })
+        .catch(error => console.log(error.message))
+}

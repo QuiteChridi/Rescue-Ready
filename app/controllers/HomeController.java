@@ -43,10 +43,19 @@ public class HomeController extends Controller {
 
     public Result authenticate(Http.Request request) {
         JsonNode json = request.body().asJson();
-        json.findPath("data").textValue();
-
+        String username = json.findPath("username").textValue();
+        String password = json.findPath("password").textValue();
         ObjectNode result = Json.newObject();
-        result.put("data", "okay");
+
+        if(username.equals("admin")){
+            if(password.equals("admin")){
+                result.put("response", "Login successfull");
+            } else{
+                result.put("response", "Wrong Password");
+            }
+        } else {
+            result.put("response", "User not found");
+        }
         return ok(result);
     }
 }
