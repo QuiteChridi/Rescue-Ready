@@ -1,0 +1,19 @@
+@(question: models.QuizQuestion, nextQuestionId: Option[String], score: Int)
+
+@index("Quiz") {
+    @defining(play.core.PlayVersion.current) { version =><!DOCTYPE html>
+
+<div style="text-align: center; margin-top: 50px; font-family: 'Helvetica Neue', Arial, sans-serif;">
+    <h3 style="font-size: 18px; color: #333;">Aktueller Punktestand: @score</h3>
+    <h2 style="font-size: 24px; color: #930808; margin-bottom: 20px;">@question.question</h2>
+    <form action="@routes.QuizController.submitAnswer(question.id)" method="post">
+        <ul style="list-style-type: none; padding: 0;">
+        @for(option <- question.options) {
+            <li style="margin-bottom: 10px;"><label style="display: block;"><input type="radio" name="answer" value="@option"> <span style="font-size: 16px; color: #555;">@option</span></label></li>
+        }
+        </ul>
+        <button type="submit" style="font-size: 16px; background-color: #930808; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">Antwort abschicken</button>
+    </form>
+</div>
+    }
+}

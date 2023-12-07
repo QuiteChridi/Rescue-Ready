@@ -1,0 +1,15 @@
+@(question: models.QuizQuestion, isCorrect: Boolean, nextQuestionId: Option[String], score: Int)
+
+@index("Quiz") {
+    @defining(play.core.PlayVersion.current) { version => <!DOCTYPE html>
+
+        <div style="text-align: center; margin-top: 50px; font-family: 'Helvetica Neue', Arial, sans-serif;">
+            <h2 style="font-size: 24px; color: #930808; margin-bottom: 20px;">Ergebnis</h2>
+            <p style="font-size: 18px; color: #333;">@if(isCorrect) { "Richtig! Du hast einen Punkt erhalten." } else { "Falsch. Kein Punkt für diese Frage." }</p>
+            <h3 style="font-size: 18px; color: #333;">Aktueller Punktestand: @score</h3>
+            @if(nextQuestionId.isDefined) {
+                <a href="@routes.QuizController.showQuestion(nextQuestionId.get)" >Nächste Frage</a>
+            }
+        </div>
+    }
+      }

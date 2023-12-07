@@ -22,4 +22,5 @@ public class HomeController extends Controller {
 
     public Result profile() { return ok(views.html.profile.render()); }
     public Result highscore() { return ok(views.html.highscore.render()); }
+
 }
