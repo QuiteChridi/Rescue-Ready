@@ -45,11 +45,12 @@ public class HomeController extends Controller {
         JsonNode json = request.body().asJson();
         String username = json.findPath("username").textValue();
         String password = json.findPath("password").textValue();
+
         ObjectNode result = Json.newObject();
 
         if(username.equals("admin")){
             if(password.equals("admin")){
-                result.put("response", "Login successfull");
+                result.put("response", "Login successful");
             } else{
                 result.put("response", "Wrong Password");
             }
