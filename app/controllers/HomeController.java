@@ -57,6 +57,6 @@ public class HomeController extends Controller {
         } else {
             result.put("response", "User not found");
         }
-        return ok(result);
+        return ok(result).addingToSession(request, "connected", "admin");
     }
 }
