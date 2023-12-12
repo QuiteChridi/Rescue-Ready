@@ -8,3 +8,11 @@
 label {
     display: block;
 }
+.signupOption{
+    text-align: center;
+    padding: 5px;
+}
+#signUpLink {
+    color: blue;
+    text-decoration: underline;
+}

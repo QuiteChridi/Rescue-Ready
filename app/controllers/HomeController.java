@@ -63,4 +63,8 @@ public class HomeController extends Controller {
     public Result logout(Http.Request request){
         return redirect("/login").withNewSession();
     }
+
+    public Result signup() {
+        return ok(signup.render());
+    }
 }

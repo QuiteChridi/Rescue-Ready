@@ -1,0 +1,31 @@
+@index("SignUp") {
+    @defining(play.core.PlayVersion.current) { version =>
+        <section id="content">
+            <div class="signup-container">
+                <img src="@routes.Assets.versioned("images/rescueReadyIcon.png")" alt="Rescue Ready Logo" width="250" height="250">
+                <h2>SignUp</h2>
+                <form id="signupForm">
+                    <label for="username">Benutzername:</label>
+                    <input type="text" id="newUsername" name="username" placeholder="Wählen Sie einen Benutzernamen" required><br><br>
+
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="newPassword" name="password" required placeholder="Erstellen Sie ein Passwort"><br><br>
+
+                    <label for="email">E-Mail:</label>
+                    <input type="email" id="email" name="email" required placeholder="Ihre E-Mail Adresse"><br><br>
+
+                    <label for="gender">Geschlecht:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Bitte auswählen</option>
+                        <option value="male">Männlich</option>
+                        <option value="female">Weiblich</option>
+                        <option value="other">Andere</option>
+                    </select><br><br>
+
+                    <input type="submit" value="Registrieren">
+
+                </form>
+            </div>
+        </section>
+    }
+}
