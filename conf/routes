@@ -15,3 +15,4 @@ GET     /signup                     controllers.HomeController.signup()
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 POST    /login                      controllers.HomeController.authenticate(request:  play.mvc.Http.Request)
+POST    /saveResult             controllers.HomeController.handleResult(request:  play.mvc.Http.Request)
