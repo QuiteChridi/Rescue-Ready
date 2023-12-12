@@ -1,0 +1,10 @@
+@(questions: Seq[models.QuizQuestion])
+
+
+
+<h1>Quiz</h1>
+<ul>
+    @for(question <- questions) {
+        <li><a href="@routes.QuizController.showQuestion(question.id)">@question.question</a></li>
+    }
+</ul>
