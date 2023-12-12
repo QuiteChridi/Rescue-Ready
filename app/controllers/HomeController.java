@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mysql.cj.Session;
 import models.DummyDatabase;
 import play.libs.Json;
 import play.mvc.*;
@@ -9,6 +10,7 @@ import views.html.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 
 
 /**
@@ -31,19 +33,16 @@ public class HomeController extends Controller {
         return ok(highscore.render(DummyDatabase.getHighscores()));
     }
 
-    private Result saveHighscore(Http.Request request){
+    public Result handleResult(Http.Request request){
         JsonNode json = request.body().asJson();
         int highscore = Integer.parseInt(json.findPath("highscore").textValue());
 
         String username = request.session().get("username").orElse("Guest");
 
         DummyDatabase.updateHighscore(username, highscore);
+        int rank = DummyDatabase.getRank(username);
 
-        return ok().addingToSession(request, "higscore", String.valueOf(highscore));
-    }
-
-    private int computeRank(){
-       return 0;
+        return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
     }
 
     public Result authenticate(Http.Request request) {

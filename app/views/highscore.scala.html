@@ -1,4 +1,4 @@
-@(highscores: Map[String, Integer])
+@(highscores: List[Highscore])
 
 @index("Profil") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -13,10 +13,10 @@
                     </tr>
                 </thead>
                 <tbody id="highscoreTableBody">
-                    @for(keyValue <- highscores){
+                    @for(value <- highscores){
                         <tr>
-                            <td>@keyValue._1</td>
-                            <td>@keyValue._2</td>
+                            <td>@value.getName</td>
+                            <td>@value.getScore</td>
                         </tr>
                     }
                 </tbody>
