@@ -4,3 +4,48 @@
     margin: auto;
     display: block;
 }
+.quiz-container {
+    background-color: #f2f2f2;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+.quiz-category {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.quiz-image img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.quiz-question {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.quiz-answers {
+    display: flex;
+    justify-content: space-around;
+}
+
+.answer-option {
+    background-color: #ffeadb;
+    border: 1px solid #ff7b54;
+    padding: 10px;
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.answer-option:hover {
+    background-color: #ff7b54;
+    color: white;
+}

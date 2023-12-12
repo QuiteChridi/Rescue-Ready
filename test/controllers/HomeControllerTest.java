@@ -23,6 +23,7 @@ public class HomeControllerTest extends WithApplication {
     public void testIndex() {
         Http.RequestBuilder request = new Http.RequestBuilder()
                 .method(GET)
+                .header(Http.HeaderNames.HOST, "localhost:19001")
                 .uri("/");
 
         Result result = route(app, request);
