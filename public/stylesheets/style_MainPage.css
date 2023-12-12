@@ -1,0 +1,37 @@
+body {
+    background-image: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35));
+    background-position: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+h1 {
+    color: red;
+    background-color: white;
+    font-size: 90px;
+    text-align: center;
+}
+
+p{
+    color:black;
+    font-size: 50px;
+}
+
+table{
+    border: 1px solid;
+}
+th{
+    font-size: 32px;
+}
+
+tr{
+    font-size: 24px;
+}
+
+/* Main */
+#rescueReadyImage{
+    width: 607px;
+    height: 491px;
+}

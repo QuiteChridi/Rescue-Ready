@@ -1,27 +1,23 @@
-@()
-
-
 @index("Login") {
     @defining(play.core.PlayVersion.current) { version =>
-
-
         <section id="content">
             <div class="login-container">
-                <img src="assets/images/rescueReadyIcon.png" alt="Rescue Ready Logo" width="250" height="250">
+                <img src="@routes.Assets.versioned("images/rescueReadyIcon.png")" alt="Rescue Ready Logo" width="250" height="250">
+                    <h2>Login</h2>
+                    <form id="loginForm">
+                        <label for="username">Benutzername:</label>
+                        <input type="text" id="username" name="username"  placeholder="Benutername" required><br><br>
 
-                <h2>Login</h2>
-                <form id="loginForm">
-                    <label for="username">Benutzername:</label>
-                    <input type="text" id="username" name="username" required><br><br>
+                        <label for="password">Passwort:</label>
+                        <input type="password" id="password" name="password" required placeholder="Passwort"><br><br>
 
-                    <label for="password">Passwort:</label>
-                    <input type="password" id="password" name="password" required><br><br>
+                        <input type="button" value="Login" onclick="checkLogin()">
 
-                    <input type="button" value="Login" onclick="validateLogin()">
-
-                </form>
+                    </form>
             </div>
 
         </section>
     }
 }
+
+

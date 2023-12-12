@@ -5,19 +5,9 @@
     @defining(play.core.PlayVersion.current) { version =>
 
         <section id="content">
-            <h1>RescueReady</h1>
-            <div class = quiz-container>
-                <div class="quiz-category">Wundversorgung</div>
-                <div class="quiz-image">
-                    <img src="assets/images/wound-care.png" alt="Wundversorgung Bild">
-                </div>
-                <div class="quiz-question">In welcher Reihenfolge wird eine blutende Wunde versorgt?</div>
-                <div class="quiz-answers">
-                    <div class="answer-option">1. Desinfizieren</div>
-                    <div class="answer-option">2. Druck anwenden</div>
-                    <div class="answer-option">3. Verband anlegen</div>
-                    <div class="answer-option">4. Arzt rufen</div>
-                </div>
+            <div>
+                <h1>RescueReady</h1>
+                <img src="@routes.Assets.versioned("images/rescueReady.png")" alt="RescueReady" id="rescueReadyImage">
             </div>
         </section>
     }
