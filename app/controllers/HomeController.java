@@ -24,9 +24,11 @@ public class HomeController extends Controller {
      */
 
     public Result main() { return ok(main.render()); }
-    public Result login() { return ok(login.render()); }
+    public Result login() {return ok(login.render()); }
     public Result profile() { return ok(profile.render()); }
-    public Result highscore() { return ok(highscore.render(getHighscores())); }
+    public Result highscore() {
+        return ok(highscore.render(getHighscores()));
+    }
 
     private Map<String, Integer> getHighscores(){
         Map<String, Integer> highscores = new HashMap<>();
@@ -57,8 +59,5 @@ public class HomeController extends Controller {
         }
         return ok(result).addingToSession(request, "connected", "admin");
     }
-
-    public Result logout(Http.Request request){
-        return redirect("/login").withNewSession();
-    }
+>>>>>>>>> Temporary merge branch 2
 }
