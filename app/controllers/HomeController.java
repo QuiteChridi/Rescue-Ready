@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import models.DummyDatabase;
 import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
@@ -27,18 +28,22 @@ public class HomeController extends Controller {
     public Result login() {return ok(login.render()); }
     public Result profile() { return ok(profile.render()); }
     public Result highscore() {
-        return ok(highscore.render(getHighscores()));
+        return ok(highscore.render(DummyDatabase.getHighscores()));
     }
 
-    private Map<String, Integer> getHighscores(){
-        Map<String, Integer> highscores = new HashMap<>();
-        highscores.put("Willi", (int) (Math.random() * 100));
-        highscores.put("Hubert", (int) (Math.random() * 100));
-        highscores.put("Sepp", (int) (Math.random() * 100));
-        highscores.put("Fred", (int) (Math.random() * 100));
-        highscores.put("Paul", (int) (Math.random() * 100));
+    private Result saveHighscore(Http.Request request){
+        JsonNode json = request.body().asJson();
+        int highscore = Integer.parseInt(json.findPath("highscore").textValue());
 
-        return highscores;
+        String username = request.session().get("username").orElse("Guest");
+
+        DummyDatabase.updateHighscore(username, highscore);
+
+        return ok().addingToSession(request, "higscore", String.valueOf(highscore));
+    }
+
+    private int computeRank(){
+       return 0;
     }
 
     public Result authenticate(Http.Request request) {
@@ -57,6 +62,6 @@ public class HomeController extends Controller {
         } else {
             result.put("response", "User not found");
         }
-        return ok(result).addingToSession(request, "connected", "admin");
+        return ok(result).addingToSession(request, "username", "admin");
     }
 }
