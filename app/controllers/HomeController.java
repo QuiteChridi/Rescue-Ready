@@ -15,7 +15,6 @@ import java.net.http.HttpRequest;
  * to the application's home page.
  */
 public class HomeController extends Controller {
-
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
