@@ -59,4 +59,8 @@ public class HomeController extends Controller {
         }
         return ok(result).addingToSession(request, "connected", "admin");
     }
+
+    public Result logout(Http.Request request){
+        return redirect("/login").withNewSession();
+    }
 }

@@ -28,3 +28,20 @@ function checkLogin() {
     })
     .catch(error => console.log(error.message))
 }
+
+function logout() {
+    fetch("/logout", {
+        method: 'GET',
+        credentials: 'include'
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "/login";
+            } else {
+                console.error("Logout failed");
+            }
+        })
+        .catch(error => {
+            console.error("An Error appeared: ", error);
+        })
+}
