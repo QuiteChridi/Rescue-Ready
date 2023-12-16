@@ -70,20 +70,6 @@ ul li a {
     height: 100%;
 }
 
-.login-icon {
-
-}
-.profile-icon {
-
-}
-
-.highscore-icon {
-
-}
-
-.logout-icon {
-
-}
 
 /* Abschnittsüberschriften */
 h1, h2, h3, h4, h5, h6 {
@@ -128,14 +114,6 @@ button, input[type="submit"], input[type="button"]{
 button:hover, input[type="submit"]:hover, input[type="button"]:hover {
     background-color: #0057a3;
 }
-
-/*input[type="text"], textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-}*/
 
 @media screen and (min-width: 768px) {
     .container {
