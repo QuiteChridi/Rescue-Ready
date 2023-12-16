@@ -2,9 +2,11 @@
 
 @index("Profil") {
     @defining(play.core.PlayVersion.current) { version =>
-        <section id="content">
-            <h1>Highscores</h1>
-
+        <head>
+            <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/globalStyle.css")">
+        </head>
+        <body>
+        <section class="container">
             <table id="highscoreTable">
                 <thead id="highscoreTableHead">
                     <tr>
@@ -22,5 +24,6 @@
                 </tbody>
             </table>
         </section>
+    </body>
     }
 }
