@@ -8,6 +8,7 @@ import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -26,14 +27,19 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
 
-    public Result main() { return ok(main.render()); }
-    public Result login() {return ok(login.render()); }
-    public Result profile() { return ok(profile.render()); }
+    public Result main() {
+        return ok(main.render());
+    }
+
+    public Result profile() {
+        return ok(profile.render());
+    }
+
     public Result highscore() {
         return ok(highscore.render(DummyDatabase.getHighscores()));
     }
 
-    public Result handleResult(Http.Request request){
+    public Result handleResult(Http.Request request) {
         JsonNode json = request.body().asJson();
         int highscore = Integer.parseInt(json.findPath("highscore").textValue());
 
@@ -43,29 +49,6 @@ public class HomeController extends Controller {
         int rank = DummyDatabase.getRank(username);
 
         return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
-    }
-
-    public Result authenticate(Http.Request request) {
-        JsonNode json = request.body().asJson();
-        String username = json.findPath("username").textValue();
-        String password = json.findPath("password").textValue();
-
-        ObjectNode result = Json.newObject();
-
-        if(username.equals("admin")){
-            if(password.equals("admin")){
-                result.put("response", "Login successful");
-            } else{
-                result.put("response", "Wrong Password");
-            }
-        } else {
-            result.put("response", "User not found");
-        }
-        return ok(result).addingToSession(request, "username", "admin");
-    }
-
-    public Result logout(Http.Request request){
-        return redirect("/login").withNewSession();
     }
 
     public Result signup() {

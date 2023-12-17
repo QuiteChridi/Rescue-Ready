@@ -31,12 +31,12 @@ function checkLogin() {
 
 function logout() {
     fetch("/logout", {
-        method: 'GET',
+        method: 'POST',
         credentials: 'include'
     })
         .then(response => {
             if (response.ok) {
-                window.location.href = "/login";
+                window.location.href = "/";
             } else {
                 console.error("Logout failed");
             }

@@ -3,10 +3,14 @@
 
 @index("Profile") {
     @defining(play.core.PlayVersion.current) { version =>
-        <section id="content">
-            <div class="profile">
+        <head>
+            <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/globalStyle.css")">
+        </head>
+            <body>
+        <section class="container">
+            <div class="content">
                 <div class="profile-display">
-                    <img id="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
+                    <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
                     <h1 id="user-name">Franco Di Milano</h1>
                     <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
                     <button id="edit-button">Edit</button>
@@ -15,7 +19,7 @@
                     <div class="profile-picture-edit-container">
                         <input type="file" id="file-input" accept="image/*" style="display: none">
                         <label for="file-input">
-                            <img id="profile-picture-edit" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
+                            <img id="profile-picture-edit" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
                         </label>
                         <button id="change-pic-button">Edit Picture</button>
                     </div>
@@ -27,5 +31,6 @@
                 </div>
             </div>
         </section>
+            </body>
     }
 }
