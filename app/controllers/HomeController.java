@@ -8,6 +8,7 @@ import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -30,10 +31,6 @@ public class HomeController extends Controller {
         return ok(main.render());
     }
 
-    public Result login() {
-        return ok(login.render());
-    }
-
     public Result profile() {
         return ok(profile.render());
     }
@@ -52,30 +49,6 @@ public class HomeController extends Controller {
         int rank = DummyDatabase.getRank(username);
 
         return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
-    }
-
-    public Result authenticate(Http.Request request) {
-        JsonNode json = request.body().asJson();
-        String username = json.findPath("username").textValue();
-        String password = json.findPath("password").textValue();
-        ObjectNode result = Json.newObject();
-
-        if (username.equals("admin")) {
-            if (password.equals("admin")) {
-                result.put("response", "Login successful");
-            } else {
-                result.put("response", "Wrong Password");
-            }
-        } else {
-            result.put("response", "User not found");
-        }
-        System.out.println("Username: " + username + "\nPassword: " + password);
-        return ok(result).addingToSession(request, "username", "admin");
-    }
-
-    public Result logout() {
-        System.out.println("Logged out");
-        return redirect("/login").withNewSession();
     }
 
     public Result signup() {
