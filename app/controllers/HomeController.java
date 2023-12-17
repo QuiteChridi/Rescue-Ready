@@ -26,14 +26,23 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
 
-    public Result main() { return ok(main.render()); }
-    public Result login() {return ok(login.render()); }
-    public Result profile() { return ok(profile.render()); }
+    public Result main() {
+        return ok(main.render());
+    }
+
+    public Result login() {
+        return ok(login.render());
+    }
+
+    public Result profile() {
+        return ok(profile.render());
+    }
+
     public Result highscore() {
         return ok(highscore.render(DummyDatabase.getHighscores()));
     }
 
-    public Result handleResult(Http.Request request){
+    public Result handleResult(Http.Request request) {
         JsonNode json = request.body().asJson();
         int highscore = Integer.parseInt(json.findPath("highscore").textValue());
 
@@ -49,22 +58,23 @@ public class HomeController extends Controller {
         JsonNode json = request.body().asJson();
         String username = json.findPath("username").textValue();
         String password = json.findPath("password").textValue();
-
         ObjectNode result = Json.newObject();
 
-        if(username.equals("admin")){
-            if(password.equals("admin")){
+        if (username.equals("admin")) {
+            if (password.equals("admin")) {
                 result.put("response", "Login successful");
-            } else{
+            } else {
                 result.put("response", "Wrong Password");
             }
         } else {
             result.put("response", "User not found");
         }
+        System.out.println("Username: " + username + "\nPassword: " + password);
         return ok(result).addingToSession(request, "username", "admin");
     }
 
-    public Result logout(Http.Request request){
+    public Result logout() {
+        System.out.println("Logged out");
         return redirect("/login").withNewSession();
     }
 

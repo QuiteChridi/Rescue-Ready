@@ -8,7 +8,7 @@ GET     /main                       controllers.HomeController.main
 GET     /login                      controllers.HomeController.login
 GET     /profile                    controllers.HomeController.profile
 GET     /highscore                  controllers.HomeController.highscore
-GET     /logout                     controllers.HomeController.logout(request: play.mvc.Http.Request)
+GET     /logout                     controllers.HomeController.logout()
 GET     /signup                     controllers.HomeController.signup()
 
 # Map static resources from the /public folder to the /assets URL path
