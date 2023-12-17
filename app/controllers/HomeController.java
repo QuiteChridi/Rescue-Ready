@@ -54,4 +54,9 @@ public class HomeController extends Controller {
     public Result signup() {
         return ok(signup.render());
     }
+
+    public Result getHighscoreFromSession(Http.Request request) {
+        String highscore = request.session().get("highscore").orElse("0");
+        return ok(highscore);
+    }
 }

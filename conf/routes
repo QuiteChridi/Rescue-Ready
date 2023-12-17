@@ -27,3 +27,4 @@ POST    /quiz/submit/:id            controllers.QuizController.submitAnswer(id: 
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
 POST    /saveResult             controllers.HomeController.handleResult(request:  play.mvc.Http.Request)
+GET     /getHighscore           controllers.HomeController.getHighscoreFromSession(request:  play.mvc.Http.Request)

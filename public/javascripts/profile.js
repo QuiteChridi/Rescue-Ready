@@ -42,4 +42,15 @@ document.addEventListener("DOMContentLoaded", function() {
         profileDisplay.style.display = "inline-block";
         profileEditor.style.display = "none";
     });
+
+    function fetchHighscore() {
+        fetch('/getHighscore')
+            .then(response => response.text())
+            .then(highscore => {
+                document.getElementById("points").textContent = highscore;
+            })
+            .catch(error => console.error('Fehler beim Abrufen des Highscores:', error));
+    }
+
+    fetchHighscore();
 });
