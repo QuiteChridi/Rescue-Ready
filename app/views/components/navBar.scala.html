@@ -1,12 +1,47 @@
 @()
 
 @defining(play.core.PlayVersion.current) { version =>
+        <head>
+            <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/globalStyle.css")">
+            <title>NavBAr</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+        </head>
+        <header>
+    <nav>
+        <div>
+            <a href="main" class="logo">
+                <img src="@routes.Assets.versioned("images/RescueReadyIcon.png")" alt="Home" id="home-icon">
+            </a>
+        </div>
+        <div class="nav-icons">
+        <ul>
+        <li>
+            <a href="login" >
+                <i class="fa-solid fa-right-to-bracket">login</i>
+            </a>
+        </li>
+        <li>
+            <a href="profile" >
+                <i class="fa-solid fa-user">profile</i>
+            </a>
+        </li>
+        <li>
+            <a href="highscore" >
+                <i class="fa-solid fa-star">highscore</i>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" onclick="logout()" >
+                <i class="fa-solid fa-arrow-right-from-bracket">logout</i>
+            </a>
+        </li>
+        </ul>
+        </div>
+    </nav>
+        </header>
+
     <ul>
-        <li><a href="login">Login</a></li>
-        <li><a href="main">Main</a></li>
-        <li><a href="profile">Profile</a></li>
-        <li><a href="highscore">Highscore</a></li>
-        <li><a href="@routes.QuizController.index">Quiz</a></li>
-        <li><a href="javascript:void(0)" onclick="logout()">Logout</a></li>
+
     </ul>
 }

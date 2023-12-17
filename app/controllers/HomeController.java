@@ -2,12 +2,16 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mysql.cj.Session;
+import models.DummyDatabase;
 import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 
 
 /**
@@ -23,41 +27,31 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
 
-    public Result main() { return ok(main.render()); }
-    public Result login() {return ok(login.render()); }
-    public Result profile() { return ok(profile.render()); }
+    public Result main() {
+        return ok(main.render());
+    }
+
+    public Result profile() {
+        return ok(profile.render());
+    }
+
     public Result highscore() {
-        return ok(highscore.render(getHighscores()));
+        return ok(highscore.render(DummyDatabase.getHighscores()));
     }
 
-    private Map<String, Integer> getHighscores(){
-        Map<String, Integer> highscores = new HashMap<>();
-        highscores.put("Willi", (int) (Math.random() * 100));
-        highscores.put("Hubert", (int) (Math.random() * 100));
-        highscores.put("Sepp", (int) (Math.random() * 100));
-        highscores.put("Fred", (int) (Math.random() * 100));
-        highscores.put("Paul", (int) (Math.random() * 100));
-
-        return highscores;
-    }
-
-    public Result authenticate(Http.Request request) {
+    public Result handleResult(Http.Request request) {
         JsonNode json = request.body().asJson();
-        String username = json.findPath("username").textValue();
-        String password = json.findPath("password").textValue();
+        int highscore = Integer.parseInt(json.findPath("highscore").textValue());
 
-        ObjectNode result = Json.newObject();
+        String username = request.session().get("username").orElse("Guest");
 
-        if(username.equals("admin")){
-            if(password.equals("admin")){
-                result.put("response", "Login successful");
-            } else{
-                result.put("response", "Wrong Password");
-            }
-        } else {
-            result.put("response", "User not found");
-        }
-        return ok(result).addingToSession(request, "connected", "admin");
+        DummyDatabase.updateHighscore(username, highscore);
+        int rank = DummyDatabase.getRank(username);
+
+        return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
     }
->>>>>>>>> Temporary merge branch 2
+
+    public Result signup() {
+        return ok(signup.render());
+    }
 }
