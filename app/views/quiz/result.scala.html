@@ -4,12 +4,28 @@
     @defining(play.core.PlayVersion.current) { version => <!DOCTYPE html>
 
         <div style="text-align: center; margin-top: 50px; font-family: 'Helvetica Neue', Arial, sans-serif;">
-            <h2 style="font-size: 24px; color: #930808; margin-bottom: 20px;">Ergebnis</h2>
-            <p style="font-size: 18px; color: #333;">@if(isCorrect) { "Richtig! Du hast einen Punkt erhalten." } else { "Falsch. Kein Punkt für diese Frage." }</p>
             <h3 style="font-size: 18px; color: #333;">Aktueller Punktestand: @score</h3>
+            <div class="quiz-container" style="max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
+                <h2 style="font-size: 24px; color: #930808; margin-bottom: 20px;">@question.question</h2>
+                <form id="quizForm" action="@routes.QuizController.submitAnswer(question.id)" method="post">
+                    <ul style="list-style-type: none; padding: 0;">
+                    @for(option <- question.options) {
+                        <li id="@option" class="quiz-option" style="margin-bottom: 10px;">
+                            <label style="display: block; width: 100%;">
+                                <input type="radio" name="answer" value="@option" style="display: none;">
+                                <span style="font-size: 16px; color: #555; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: inline-block; width: 100%; box-sizing: border-box; position: relative; cursor: pointer;">@option</span>
+                            </label>
+                        </li>
+                    }
+                    </ul>
+                    <span style="font-size: 16px; background-color: #930808; color: #fff; padding: 10px; border: none; width: 100%; border-radius: 5px; position: relative; bottom: 10px; display: inline-block;">Antwort überprüfen</span>
+                </form>
+            </div>
+            <p style="font-size: 18px; color: #333;">@if(isCorrect) { "Richtig! Du hast einen Punkt erhalten." } else { "Falsch. Die richtige Antwort ist: @question.correctAnswer"  }</p>
             @if(nextQuestionId.isDefined) {
                 <a href="@routes.QuizController.showQuestion(nextQuestionId.get)" >Nächste Frage</a>
             }
+
         </div>
     }
-      }
+}

@@ -4,21 +4,23 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.LoginController.login
+GET     /login                      controllers.LoginController.login
 POST    /login                      controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
 
 POST    /logout                     controllers.LoginController.logout
 
-GET     /main                       controllers.HomeController.main
-GET     /login                      controllers.HomeController.login
+GET     /main                       controllers.QuizController.showQuestion(id: String)
 GET     /profile                    controllers.HomeController.profile
 GET     /highscore                  controllers.HomeController.highscore
 GET     /signup                     controllers.HomeController.signup()
 
-GET     /quiz                       controllers.QuizController.index
+GET     /quiz                       controllers.QuizController.showQuestion(id: String)
 # In der routes-Datei
 
 GET     /quiz/question/:id          controllers.QuizController.showQuestion(id: String)
 POST    /quiz/submit/:id            controllers.QuizController.submitAnswer(id: String)
+
+
 
 
 # Map static resources from the /public folder to the /assets URL path
