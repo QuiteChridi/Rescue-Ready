@@ -41,7 +41,7 @@ public class HomeController extends Controller {
 
     public Result handleResult(Http.Request request) {
         JsonNode json = request.body().asJson();
-        int highscore = Integer.parseInt(json.findPath("highscore").textValue());
+        int highscore = json.findPath("highscore").asInt();
 
         String username = request.session().get("username").orElse("Guest");
 

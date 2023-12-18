@@ -2,7 +2,9 @@
 
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version => <!DOCTYPE html>
-
+        <head>
+            <script src="@routes.Assets.versioned("javascripts/main.js")" type="text/javascript"></script>
+        </head>
         <div style="text-align: center; margin-top: 50px; font-family: 'Helvetica Neue', Arial, sans-serif;">
             <h3 style="font-size: 18px; color: #333;">Aktueller Punktestand: @score</h3>
             <div class="quiz-container" style="max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
@@ -24,8 +26,9 @@
             <p style="font-size: 18px; color: #333;">@if(isCorrect) { "Richtig! Du hast einen Punkt erhalten." } else { "Falsch. Die richtige Antwort ist: @question.correctAnswer"  }</p>
             @if(nextQuestionId.isDefined) {
                 <a href="@routes.QuizController.showQuestion(nextQuestionId.get)" >Nächste Frage</a>
+            }else {
+                <a href="javascript:void(0)" onclick="safeQuizResult(@score);">Quiz beenden</a>
             }
-
         </div>
     }
 }
