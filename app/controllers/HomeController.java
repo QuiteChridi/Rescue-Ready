@@ -1,23 +1,13 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.DummyDatabase;
+import models.*;
 import play.mvc.*;
 import views.html.*;
 
 
-/**
- * This controller contains an action to handle HTTP requests
- * to the application's home page.
- */
 public class HomeController extends Controller {
-
-    /**
-     * An action that renders an HTML page with a welcome message.
-     * The configuration in the <code>routes</code> file means that
-     * this method will be called when the application receives a
-     * <code>GET</code> request with a path of <code>/</code>.
-     */
+    Database database = new DummyDatabase();
 
     public Result main() {
         return ok(main.render());
@@ -28,7 +18,7 @@ public class HomeController extends Controller {
     }
 
     public Result highscore() {
-        return ok(highscore.render(DummyDatabase.getHighscores()));
+        return ok(highscore.render(database.getHighscores()));
     }
 
     public Result handleResult(Http.Request request) {
@@ -36,12 +26,14 @@ public class HomeController extends Controller {
         int highscore = json.findPath("highscore").asInt();
 
         String username = request.session().get("username").orElse("Guest");
-        if(DummyDatabase.isInList(username)){
-            DummyDatabase.updateHighscore(username, highscore);
+
+        if(database.isInList(username)){
+            database.updateHighscore(username, highscore);
         } else {
-            DummyDatabase.addHighscore(username, highscore);
+            database.addHighscore(username, highscore);
         }
-        int rank = DummyDatabase.getRank(username);
+
+        int rank = database.getRank(username);
 
         return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
     }
