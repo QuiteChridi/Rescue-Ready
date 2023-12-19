@@ -9,7 +9,7 @@ POST    /login                      controllers.LoginController.authenticate(req
 
 POST    /logout                     controllers.LoginController.logout
 
-GET     /main                       controllers.QuizController.showQuestion(id: String)
+GET     /main                       controllers.QuizController.showFirstQuestion()
 GET     /profile                    controllers.HomeController.profile
 GET     /highscore                  controllers.HomeController.highscore
 GET     /signup                     controllers.HomeController.signup()

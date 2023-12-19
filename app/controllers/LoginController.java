@@ -47,10 +47,8 @@ public class LoginController extends Controller {
         return ok(result).addingToSession(request, "username", "admin");
     }
 
-        public Result logout () {
-            System.out.println("Logged out");
-            return redirect("/").withNewSession();
-        }
-
-
+    public Result logout () {
+        System.out.println("Logged out");
+        return redirect("/").withNewSession();
     }
+}

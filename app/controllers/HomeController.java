@@ -1,17 +1,9 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.mysql.cj.Session;
 import models.DummyDatabase;
-import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
-
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
 
 
 /**
@@ -44,8 +36,11 @@ public class HomeController extends Controller {
         int highscore = json.findPath("highscore").asInt();
 
         String username = request.session().get("username").orElse("Guest");
-
-        DummyDatabase.updateHighscore(username, highscore);
+        if(DummyDatabase.isInList(username)){
+            DummyDatabase.updateHighscore(username, highscore);
+        } else {
+            DummyDatabase.addHighscore(username, highscore);
+        }
         int rank = DummyDatabase.getRank(username);
 
         return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));

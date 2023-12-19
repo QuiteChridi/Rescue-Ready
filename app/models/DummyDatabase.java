@@ -1,5 +1,4 @@
 package models;
-
 import java.util.*;
 
 public class DummyDatabase {
@@ -20,6 +19,7 @@ public class DummyDatabase {
     public static void addHighscore(String name, int score){
         highscores.add(new Highscore(name, score));
     }
+
     public static void generateRandomHighscores(){
         highscores = new ArrayList<>();
         highscores.add(new Highscore("Willi",(int) (Math.random() * 100)));
@@ -29,7 +29,7 @@ public class DummyDatabase {
         highscores.add(new Highscore("Paul",(int) (Math.random() * 100)));
     }
 
-    private static boolean isInList(String name){
+    public static boolean isInList(String name){
         return highscores.stream()
                 .anyMatch(h -> (h.getName()
                         .equals(name)));

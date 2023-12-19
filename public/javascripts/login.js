@@ -33,8 +33,7 @@ function logout() {
     fetch("/logout", {
         method: 'POST',
         credentials: 'include'
-    })
-        .then(response => {
+    }).then(response => {
             if (response.ok) {
                 window.location.href = "/";
             } else {

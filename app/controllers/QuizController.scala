@@ -2,7 +2,6 @@
 package controllers
 
 import javax.inject._
-import play.api._
 import play.api.mvc._
 import models.QuizQuestion
 
@@ -39,6 +38,18 @@ class QuizController @Inject()(val controllerComponents: ControllerComponents) e
     }
   }
 
+  def showFirstQuestion(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    if ("1" == "1") {
+      // Wenn die Frage-ID gleich "1" ist, setze den Punktestand auf 0
+      score = 0
+    }
+
+    quizQuestions.find(_.id == "1") match {
+      case Some(question) => Ok(views.html.quiz.question(question, getNextQuestionId("1"), score))
+      case None => NotFound("Frage nicht gefunden")
+    }
+  }
+
 
   // Methode zum Verarbeiten von Benutzerantworten
   def submitAnswer(id: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
@@ -63,7 +74,4 @@ class QuizController @Inject()(val controllerComponents: ControllerComponents) e
       None // Keine nächste Frage verfügbar
     }
   }
-
-
-
 }

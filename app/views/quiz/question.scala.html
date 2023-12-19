@@ -40,6 +40,16 @@
                         });
                     });
                 });
+
+                document.getElementById('quizForm').addEventListener('submit', function (event) {
+                    var selectedOption = document.querySelector('input[name="answer"]:checked');
+                    if (!selectedOption) {
+                        alert('Bitte wählen Sie eine Antwort aus.');
+                        event.preventDefault();
+                    }
+                });
         </script>
+
+
     }
 }
