@@ -86,6 +86,6 @@ public class DummyDatabase implements Database {
                 new ArrayList<>(List.of("Mund-zu-Mund-Beatmung, Brustkompressionen", "Zuerst den Notarzt rufen, dann warten", "Die Person schütteln, um eine Reaktion zu testen", "Brustkompressionen, Mund-zu-Mund-Beatmung")),
                 "Brustkompressionen, Mund-zu-Mund-Beatmung"
         ));
-
+        return quiz;
     }
 }
