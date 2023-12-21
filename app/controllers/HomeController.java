@@ -21,23 +21,6 @@ public class HomeController extends Controller {
         return ok(highscore.render(database.getHighscores()));
     }
 
-    public Result handleResult(Http.Request request) {
-        JsonNode json = request.body().asJson();
-        int highscore = json.findPath("highscore").asInt();
-
-        String username = request.session().get("username").orElse("Guest");
-
-        if(database.isInList(username)){
-            database.updateHighscore(username, highscore);
-        } else {
-            database.addHighscore(username, highscore);
-        }
-
-        int rank = database.getRank(username);
-
-        return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
-    }
-
     public Result signup() {
         return ok(signup.render());
     }

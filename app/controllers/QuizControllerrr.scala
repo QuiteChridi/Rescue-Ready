@@ -13,12 +13,6 @@ class QuizControllerrr @Inject()(val controllerComponents: ControllerComponents)
   var score: Int = 0 // Initialer Punktestand
 
 
-  // Indexseite, um alle Fragen anzuzeigen (optional)
-  def index: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val startQuestionId = quizQuestions.headOption.map(_.id).getOrElse("")
-    Redirect(routes.QuizController.showQuestion(startQuestionId))
-  }
-
   // Methode zum Anzeigen einer spezifischen Frage
   def showQuestion(id: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     if (id == "1") {
@@ -31,19 +25,6 @@ class QuizControllerrr @Inject()(val controllerComponents: ControllerComponents)
       case None => NotFound("Frage nicht gefunden")
     }
   }
-
-  def showFirstQuestion(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    if ("1" == "1") {
-      // Wenn die Frage-ID gleich "1" ist, setze den Punktestand auf 0
-      score = 0
-    }
-
-    quizQuestions.find(_.id == "1") match {
-      case Some(question) => Ok(views.html.quiz.question(question, getNextQuestionId("1"), score))
-      case None => NotFound("Frage nicht gefunden")
-    }
-  }
-
 
   // Methode zum Verarbeiten von Benutzerantworten
   def submitAnswer(id: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
