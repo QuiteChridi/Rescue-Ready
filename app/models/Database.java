@@ -14,4 +14,6 @@ public interface Database {
     void addHighscore(String name, int score);
 
     boolean isInList(String name);
+
+    List<QuizQuestion> getQuizQuestions();
 }
