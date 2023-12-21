@@ -20,8 +20,10 @@
                         </label><br>
                         }
                 </form>
-                <button onclick="checkAnswer()">Antwort überprüfen</button>
-                <button onclick="getNextQuestion()">Nächste Frage</button>
+                <div id="button-container">
+                    <button id="check-answer-button" onclick="checkAnswer()">Antwort überprüfen</button>
+                    <button id="next-question-button" onclick="getNextQuestion()">Nächste Frage</button>
+                </div>
                 <div id="result"></div>
                 <div id="console"></div>
 

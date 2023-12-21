@@ -7,7 +7,7 @@ function startQuiz() {
     quizStarted = true;
 }
 
-function updateScore(newScore) {
+function updateScore() {
     score += 1;
     document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
 }
@@ -31,6 +31,8 @@ function renderNextQuestion(question, answers, score) {
         answersContainer.appendChild(document.createElement('br'));
     });
 
+    document.getElementById('check-answer-button').style.display = 'block';
+    document.getElementById('next-question-button').style.display = 'none';
     document.getElementById('end-quiz-container').style.display = 'block';
 
     document.getElementById('result').innerText = "";
@@ -88,6 +90,7 @@ function submitAnswer(selectedAnswerElement) {
         return response.json();
     }).then(data => {
         renderResult(data.isCorrect, data.correctAnswer);
+        document.getElementById('next-question-button').style.display = 'block';
     }).catch(error => console.log(error.message));
 }
 
