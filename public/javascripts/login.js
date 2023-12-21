@@ -21,7 +21,7 @@ function checkLogin() {
         return response.json()
     }).then(data => {
         if(data.response === "Login successful"){
-            window.location.href = "main"
+            window.location.href = "quiz"
         } else {
             alert(data.response)
         }

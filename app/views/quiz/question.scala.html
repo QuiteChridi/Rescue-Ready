@@ -1,53 +1,38 @@
-@(question: models.QuizQuestion, nextQuestionId: Option[String], score: Int)
+
+@(question: String, answers: List[String], score: Int)
 
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =><!DOCTYPE html>
-        <div style="text-align: center; margin-top: 50px; font-family: 'Helvetica Neue', Arial, sans-serif;">
-            <h3 style="font-size: 18px; color: #333;">Aktueller Punktestand: @score</h3>
-            <div class="quiz-container" style="max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
-                <h2 style="font-size: 24px; color: #930808; margin-bottom: 20px;">@question.question</h2>
-                <form id="quizForm" action="@routes.QuizController.submitAnswer(question.id)" method="post">
+        <body>
+            <h1>Quiz</h1>
+            <h3 id="current-score" style="font-size: 18px; color: #333;"></h3>
 
-                    <ul style="list-style-type: none; padding: 0;">
-                    @for(option <- question.options) {
-                        <li id="@option" class="quiz-option" style="margin-bottom: 10px;">
-                            <label style="display: block; width: 100%;">
-                                <input type="radio" name="answer" value="@option" style="display: none;">
-                                <span style="font-size: 16px; color: #555; padding: 10px; border: 1px solid #ddd; border-radius: 5px; display: inline-block; width: 100%; box-sizing: border-box; position: relative; cursor: pointer;">@option</span>
-                            </label>
-                        </li>
-                    }
-                    </ul>
-                    <button type="submit" style="font-size: 16px; background-color: #930808; color: #fff; padding: 10px; border: none; cursor: pointer; width: 100%; border-radius: 5px; position: relative; bottom: 10px;">Antwort überprüfen</button>
-
-                </form>
+            <div id="start-quiz-container">
+                <button onclick="startQuiz()">Quiz starten</button>
             </div>
-        </div>
 
-        <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    var options = document.querySelectorAll(".quiz-option");
+            <div id="question-container" style="display: none;">
+                <p id="question"></p>
+                <form id="answer-form">
+                        <!-- Hier werden die Antwortmöglichkeiten angezeigt -->
+                    @for(answer <- answers) {
+                        <label>
+                            <input type="radio" name="answer" value="@answer">@answer
+                        </label><br>
+                        }
+                </form>
+                <button onclick="checkAnswer()">Antwort überprüfen</button>
+                <button onclick="getNextQuestion()">Nächste Frage</button>
+                <div id="result"></div>
+                <div id="console"></div>
 
-                    options.forEach(function(option) {
-                        option.addEventListener("click", function() {
-                            options.forEach(function(opt) {
-                                opt.style.backgroundColor = "#fff";
-                                opt.style.color = "#555";
-                            });
+                <div id="end-quiz-container" style="display: none;">
+                    <button onclick="safeQuizResult()">Quiz beenden</button>
+                </div>
 
-                            option.style.backgroundColor = "#e7e7e7";
-                            option.style.color = "#fff";
-                        });
-                    });
-                });
+            </div>
+        </body>
 
-                document.getElementById('quizForm').addEventListener('submit', function (event) {
-                    var selectedOption = document.querySelector('input[name="answer"]:checked');
-                    if (!selectedOption) {
-                        alert('Bitte wählen Sie eine Antwort aus.');
-                        event.preventDefault();
-                    }
-                });
-        </script>
+
     }
 }

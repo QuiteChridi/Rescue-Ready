@@ -4,6 +4,13 @@ import java.util.*;
 
 public class DummyDatabase implements Database {
     static List<Highscore> highscores;
+    private List<QuizQuestion> quizQuestions;
+    private int currentQuestionIndex;
+
+    public DummyDatabase() {
+        this.quizQuestions = generateDummyQuiz();
+        this.currentQuestionIndex = -1;
+    }
 
     @Override
     public List<Highscore> getHighscores(){
@@ -59,6 +66,24 @@ public class DummyDatabase implements Database {
         highscores.add(new Highscore("Sepp",(int) (Math.random() * 100)));
         highscores.add(new Highscore("Fred",(int) (Math.random() * 100)));
         highscores.add(new Highscore("Paul",(int) (Math.random() * 100)));
+    }
+
+    @Override
+    public QuizQuestion getNextQuestion() {
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < quizQuestions.size()) {
+            return quizQuestions.get(currentQuestionIndex);
+        } else {
+            currentQuestionIndex = -1;
+            return null;
+        }
+    }
+
+
+    @Override
+    public QuizQuestion getCurrentQuestion() {
+        return quizQuestions.get(currentQuestionIndex);
     }
 
     private List<QuizQuestion> generateDummyQuiz(){

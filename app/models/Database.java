@@ -16,4 +16,8 @@ public interface Database {
     boolean isInList(String name);
 
     List<QuizQuestion> getQuizQuestions();
+
+    QuizQuestion getNextQuestion();
+
+    QuizQuestion getCurrentQuestion();
 }
