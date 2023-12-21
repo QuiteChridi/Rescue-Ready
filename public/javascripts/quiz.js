@@ -33,8 +33,7 @@ function renderNextQuestion(question, answers, score) {
 
     document.getElementById('check-answer-button').style.display = 'block';
     document.getElementById('next-question-button').style.display = 'none';
-    document.getElementById('end-quiz-container').style.display = 'block';
-
+    document.getElementById('end-quiz-container').style.display = 'none';
     document.getElementById('result').innerText = "";
 }
 
@@ -46,6 +45,11 @@ function getNextQuestion() {
         },
         credentials: "include"
     }).then(response => {
+        if (response.status === 404) {
+            document.getElementById('end-quiz-container').style.display = 'block';
+            return;
+        }
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -90,6 +94,7 @@ function submitAnswer(selectedAnswerElement) {
         return response.json();
     }).then(data => {
         renderResult(data.isCorrect, data.correctAnswer);
+        document.getElementById('check-answer-button').style.display = 'none';
         document.getElementById('next-question-button').style.display = 'block';
     }).catch(error => console.log(error.message));
 }

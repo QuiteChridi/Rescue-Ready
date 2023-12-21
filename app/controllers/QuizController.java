@@ -23,6 +23,10 @@ public class QuizController extends Controller {
     public Result getNextQuestion() {
         QuizQuestion nextQuestion = database.getNextQuestion();
 
+        if (nextQuestion == null) {
+            return status(404, "Keine weiteren Fragen vorhanden");
+        }
+
         JsonNode jsonQuestion = Json.newObject()
                 .put("question", nextQuestion.getQuestionText())
                 .set("answers", Json.toJson(nextQuestion.getAnswers()));
