@@ -1,9 +1,6 @@
 @index("Login") {
     @defining(play.core.PlayVersion.current) { version =>
-        <head>
-            <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/globalStyle.css")">
-        </head>
-            <body>
+    <body>
         <section class="container">
             <div class="content">
                 <!--<img class= "profile-picture" src="@routes.Assets.versioned("images/rescueReadyIcon.png")" alt="Rescue Ready Logo" width="250" height="250"> -->
@@ -28,7 +25,7 @@
                     <span>Noch keinen Account?</span>
                     <a class="link" href="@routes.HomeController.signup()">SignUp</a>
                 </div>
-            </body>
+    </body>
     }
 }
 

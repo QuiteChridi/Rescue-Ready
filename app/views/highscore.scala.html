@@ -1,28 +1,25 @@
 @(highscores: List[Highscore])
 
-@index("Profil") {
+@index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>
-        <head>
-            <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/globalStyle.css")">
-        </head>
-        <body>
-            <h1>Highscore</h1>
-            <table class="content-table">
-                <thead id="highscoreTableHead">
+    <body>
+        <h1>Highscore</h1>
+        <table class="content-table">
+            <thead id="highscoreTableHead">
+                <tr>
+                    <td>Name</td>
+                    <td>Score</td>
+                </tr>
+            </thead>
+            <tbody id="highscoreTableBody">
+                @for(value <- highscores){
                     <tr>
-                        <td>Name</td>
-                        <td>Score</td>
+                        <td>@value.getName</td>
+                        <td>@value.getScore</td>
                     </tr>
-                </thead>
-                <tbody id="highscoreTableBody">
-                    @for(value <- highscores){
-                        <tr>
-                            <td>@value.getName</td>
-                            <td>@value.getScore</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                }
+            </tbody>
+        </table>
     </body>
     }
 }

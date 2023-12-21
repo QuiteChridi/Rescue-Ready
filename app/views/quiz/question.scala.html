@@ -2,12 +2,12 @@
 
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =><!DOCTYPE html>
-
         <div style="text-align: center; margin-top: 50px; font-family: 'Helvetica Neue', Arial, sans-serif;">
             <h3 style="font-size: 18px; color: #333;">Aktueller Punktestand: @score</h3>
             <div class="quiz-container" style="max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px; border-radius: 10px;">
                 <h2 style="font-size: 24px; color: #930808; margin-bottom: 20px;">@question.question</h2>
                 <form id="quizForm" action="@routes.QuizController.submitAnswer(question.id)" method="post">
+
                     <ul style="list-style-type: none; padding: 0;">
                     @for(option <- question.options) {
                         <li id="@option" class="quiz-option" style="margin-bottom: 10px;">
@@ -49,7 +49,5 @@
                     }
                 });
         </script>
-
-
     }
 }

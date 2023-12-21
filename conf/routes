@@ -3,28 +3,22 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.LoginController.login
-GET     /login                      controllers.LoginController.login
-POST    /login                      controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
+GET         /                       controllers.LoginController.login
+GET         /login                  controllers.LoginController.login
+POST        /login                  controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
 
-POST    /logout                     controllers.LoginController.logout
+POST        /logout                 controllers.LoginController.logout
 
-GET     /main                       controllers.QuizController.showFirstQuestion()
-GET     /profile                    controllers.HomeController.profile
-GET     /highscore                  controllers.HomeController.highscore
-GET     /signup                     controllers.HomeController.signup()
+GET         /profile                controllers.HomeController.profile
+GET         /highscore              controllers.HomeController.highscore
+GET         /signup                 controllers.HomeController.signup
 
-GET     /quiz                       controllers.QuizController.showQuestion(id: String)
-# In der routes-Datei
+GET         /quiz                   controllers.QuizController.quiz
+GET         /getNextQuestion        controllers.QuizController.getNextQuestion
+POST        /checkAnswer            controllers.QuizController.checkAnswer(request: play.mvc.Http.Request)
+POST        /saveResult             controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
 
-GET     /quiz/question/:id          controllers.QuizController.showQuestion(id: String)
-POST    /quiz/submit/:id            controllers.QuizController.submitAnswer(id: String)
-
-
-
+GET         /getHighscore           controllers.HomeController.getHighscoreFromSession(request:  play.mvc.Http.Request)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-
-POST    /saveResult             controllers.HomeController.handleResult(request:  play.mvc.Http.Request)
-GET     /getHighscore           controllers.HomeController.getHighscoreFromSession(request:  play.mvc.Http.Request)
+GET         /assets/*file           controllers.Assets.versioned(path="/public", file: Asset)
