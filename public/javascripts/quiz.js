@@ -112,12 +112,14 @@ function renderResult(isCorrect, correctAnswer) {
     consoleOutput.innerHTML = message;
 }
 
+function saveEndScore() {
+    saveQuizResult(score)
+}
 
+function saveQuizResult(score) {
+    displayConsoleMessage("safeQuizResult wurde aufgerufen mit dem Highscore: " + score);
 
-function safeQuizResult() {
-    console.log("safeQuizResult wurde aufgerufen mit dem Highscore: ", highscore);
-
-    fetch("/saveResult", {
+    fetch("/saveQuizResult", {
         method: "POST",
         body: JSON.stringify({
             highscore: score
@@ -132,6 +134,7 @@ function safeQuizResult() {
         }
         return response.json();
     }).then(data => {
+        displayConsoleMessage("Test3 ")
         alert("Ergebnis gespeichert!");
     }).catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }

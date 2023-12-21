@@ -16,7 +16,7 @@ GET         /signup                 controllers.HomeController.signup()
 GET         /quiz                   controllers.QuizController.quiz
 GET         /getNextQuestion        controllers.QuizController.getNextQuestion
 POST        /checkAnswer            controllers.QuizController.checkAnswer(request: play.mvc.Http.Request)
-POST        /saveResult             controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
+POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
 
 GET         /getHighscore           controllers.HomeController.getHighscoreFromSession(request:  play.mvc.Http.Request)
 
