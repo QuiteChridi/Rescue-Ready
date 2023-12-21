@@ -38,7 +38,7 @@ public class QuizController extends Controller {
         JsonNode json = request.body().asJson();
         String selectedAnswer = json.findPath("selectedAnswer").asText();
 
-        QuizQuestion currentQuestion = database.getCurrentQuestion(); // Annahme, dass es eine Methode wie getCurrentQuestion gibt
+        QuizQuestion currentQuestion = database.getCurrentQuestion();
         String correctAnswer = currentQuestion.getCorrectAnswer();
 
         boolean isCorrect = selectedAnswer.equals(correctAnswer);

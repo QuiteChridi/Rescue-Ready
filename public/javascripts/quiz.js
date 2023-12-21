@@ -13,19 +13,15 @@ function updateScore() {
 }
 
 function renderNextQuestion(question, answers, score) {
-    //todo render Next question
-    console.log("Frage:", question);
-    console.log("Antworten:", answers);
-
     document.getElementById('start-quiz-container').innerText = "";
     document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
     document.getElementById('question').innerHTML = question;
 
-    var answersContainer = document.getElementById('answer-form');
+    let answersContainer = document.getElementById('answer-form');
     answersContainer.innerHTML = "";
 
     answers.forEach(answer => {
-        var label = document.createElement('label');
+        let label = document.createElement('label');
         label.innerHTML = `<input type="radio" name="answer" value="${answer}">${answer}`;
         answersContainer.appendChild(label);
         answersContainer.appendChild(document.createElement('br'));
@@ -47,6 +43,7 @@ function getNextQuestion() {
     }).then(response => {
         if (response.status === 404) {
             document.getElementById('end-quiz-container').style.display = 'block';
+            document.getElementById('next-question-button').style.display = 'none';
             return;
         }
 
@@ -59,18 +56,19 @@ function getNextQuestion() {
     }).catch(error => console.log(error.message));
 }
 
-/////
+///// nur zum Testen genutzt
 function displayConsoleMessage(message) {
-    var consoleOutput = document.getElementById('console');
+    let consoleOutput = document.getElementById('console');
     consoleOutput.innerHTML += message + '<br>';
 }
 ////
 
 function checkAnswer() {
     let selectedAnswerElement = document.querySelector('input[name="answer"]:checked');
-    if (selectedAnswerElement){
+
+    if (selectedAnswerElement) {
         submitAnswer(selectedAnswerElement)
-    }else{
+    } else {
         document.getElementById('result').textContent = 'Bitte wähle erst eine Antwort aus.'
     }
 }
@@ -111,19 +109,18 @@ function renderResult(isCorrect, correctAnswer) {
         message = "Falsch. Die richtige Antwort lautet: " + correctAnswer;
     }
 
-    console.log(message); //redundant?
     consoleOutput.innerHTML = message;
 }
 
 
 
-function safeQuizResult(highscore) {
+function safeQuizResult() {
     console.log("safeQuizResult wurde aufgerufen mit dem Highscore: ", highscore);
 
     fetch("/saveResult", {
         method: "POST",
         body: JSON.stringify({
-            highscore: highscore
+            highscore: score
         }),
         headers: {
             "Content-Type": "application/json"
