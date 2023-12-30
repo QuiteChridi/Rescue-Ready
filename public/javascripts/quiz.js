@@ -1,4 +1,4 @@
-let score = 0;
+let correctAnswerCount = 0;
 let quizStarted = false;
 
 let time = 0;
@@ -24,8 +24,8 @@ function startTimer() {
 }
 
 function updateScore() {
-    score += 1;
-    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
+    correctAnswerCount += 1;
+    document.getElementById('current-score').innerText = "Richtige Antworten : " + correctAnswerCount;
 }
 
 function renderNextQuestion(question, answers, score) {
@@ -68,7 +68,7 @@ function getNextQuestion() {
         }
         return response.json();
     }).then(data => {
-        renderNextQuestion(data.question, data.answers, score);
+        renderNextQuestion(data.question, data.answers, correctAnswerCount);
     }).catch(error => console.log(error.message));
 }
 
@@ -119,7 +119,7 @@ function renderResult(isCorrect, correctAnswer) {
     let message;
 
     if (isCorrect) {
-        updateScore(score);
+        updateScore(correctAnswerCount);
         message = "Richtige Antwort!";
     } else {
         message = "Falsch. Die richtige Antwort lautet: " + correctAnswer;
@@ -146,9 +146,17 @@ function stopTimer() {
     }
 }
 
+function calculateHighscore() {
+    if (correctAnswerCount === 0 ){
+        return 0;
+    }else{
+        return Math.round(10*(correctAnswerCount+(1/time)*100));
+    }
+}
+
 function saveEndScore() {
     stopTimer();
-    saveQuizResult(score)
+    saveQuizResult(calculateHighscore())
 }
 
 function saveQuizResult(score) {
