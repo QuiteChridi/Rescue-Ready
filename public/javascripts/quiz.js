@@ -1,10 +1,26 @@
 let score = 0;
 let quizStarted = false;
 
+let time = 0;
+let timerRunning = false;
+let timerInterval;
+
 function startQuiz() {
     getNextQuestion();
+    startTimer();
     document.getElementById('question-container').style.display = 'block';
+    document.getElementById('timer').style.display = 'block';
     quizStarted = true;
+}
+
+function startTimer() {
+    if (!timerRunning) {
+        timerRunning = true;
+        timerInterval = setInterval(function () {
+            time++;
+            updateTimerDisplay();
+        }, 1000);
+    }
 }
 
 function updateScore() {
@@ -112,7 +128,26 @@ function renderResult(isCorrect, correctAnswer) {
     consoleOutput.innerHTML = message;
 }
 
+function updateTimerDisplay() {
+    const timerElement = document.getElementById('timer');
+    timerElement.innerText = formatTime(time);
+}
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+}
+
+function stopTimer() {
+    if (timerRunning) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+    }
+}
+
 function saveEndScore() {
+    stopTimer();
     saveQuizResult(score)
 }
 
