@@ -2,7 +2,7 @@ package models;
 
 import java.util.Objects;
 
-public class Highscore {
+public class Highscore implements Comparable<Highscore>{
     private final String name;
     private int score;
 
@@ -34,5 +34,10 @@ public class Highscore {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public int compareTo(Highscore that) {
+        return that.score - this.score ;
     }
 }

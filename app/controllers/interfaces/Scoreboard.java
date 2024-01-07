@@ -1,8 +1,11 @@
-package models;
+package controllers.interfaces;
+
+import models.Highscore;
 
 import java.util.List;
 
-public interface Database {
+public interface Scoreboard {
+
     List<Highscore> getHighscores();
 
     Highscore getHighscore(String name);
@@ -13,11 +16,7 @@ public interface Database {
 
     void addHighscore(String name, int score);
 
-    boolean isInList(String name);
+    boolean isInHighscoreList(String name);
 
-    List<QuizQuestion> getQuizQuestions();
 
-    QuizQuestion getNextQuestion();
-
-    QuizQuestion getCurrentQuestion();
 }

@@ -1,13 +1,13 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import controllers.interfaces.Scoreboard;
 import models.*;
 import play.mvc.*;
 import views.html.*;
 
 
 public class HomeController extends Controller {
-    Database database = new DummyDatabase();
+    Scoreboard scoreboard = new DummyScoreboard();
 
     public Result main() {
         return ok(main.render());
@@ -18,7 +18,7 @@ public class HomeController extends Controller {
     }
 
     public Result highscore() {
-        return ok(highscore.render(database.getHighscores()));
+        return ok(highscore.render(scoreboard.getHighscores()));
     }
 
     public Result signup() {

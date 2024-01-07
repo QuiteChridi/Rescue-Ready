@@ -24,4 +24,8 @@ public class QuizQuestion {
     public String getCorrectAnswer() {
         return correctAnswer;
     }
+
+    public boolean isCorrectAnswer(String answer){
+        return answer.equals(correctAnswer);
+    }
 }

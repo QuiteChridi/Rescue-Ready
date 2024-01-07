@@ -1,8 +1,10 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.Database;
-import models.DummyDatabase;
+import controllers.interfaces.Quiz;
+import controllers.interfaces.Scoreboard;
+import models.DummyScoreboard;
+import models.DummyQuiz;
 import models.QuizQuestion;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -14,22 +16,25 @@ import java.util.Collections;
 
 
 public class QuizController extends Controller {
-    Database database = new DummyDatabase();
+
+    Quiz quiz = new DummyQuiz();
+    Scoreboard scoreboard = new DummyScoreboard();
 
     public Result quiz() {
         return ok(question.render("", Collections.emptyList(), 0));
     }
 
     public Result getNextQuestion() {
-        QuizQuestion nextQuestion = database.getNextQuestion();
 
-        if (nextQuestion == null) {
+        if (!quiz.hasNextQuestion()) {
             return status(404, "Keine weiteren Fragen vorhanden");
         }
+        quiz.nextQuestion();
 
+        QuizQuestion question = quiz.getCurrentQuestion();
         JsonNode jsonQuestion = Json.newObject()
-                .put("question", nextQuestion.getQuestionText())
-                .set("answers", Json.toJson(nextQuestion.getAnswers()));
+                .put("question", question.getQuestionText())
+                .set("answers", Json.toJson(question.getAnswers()));
 
         return ok(jsonQuestion);
     }
@@ -38,10 +43,8 @@ public class QuizController extends Controller {
         JsonNode json = request.body().asJson();
         String selectedAnswer = json.findPath("selectedAnswer").asText();
 
-        QuizQuestion currentQuestion = database.getCurrentQuestion();
-        String correctAnswer = currentQuestion.getCorrectAnswer();
-
-        boolean isCorrect = selectedAnswer.equals(correctAnswer);
+        boolean isCorrect = quiz.isCorrectAnswer(selectedAnswer);
+        String correctAnswer = quiz.getCorrectAnswer();
 
         return ok(Json.newObject().put("isCorrect", isCorrect).put("correctAnswer", correctAnswer));
     }
@@ -52,13 +55,14 @@ public class QuizController extends Controller {
 
         String username = request.session().get("username").orElse("Guest");
 
-        if(database.isInList(username)){
-            database.updateHighscore(username, highscore);
+        if(scoreboard.isInHighscoreList(username)){
+            scoreboard.updateHighscore(username, highscore);
         } else {
-            database.addHighscore(username, highscore);
+            scoreboard.addHighscore(username, highscore);
         }
 
-        int rank = database.getRank(username);
+        int rank = scoreboard.getRank(username);
+        quiz.resetQuiz();
 
         return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
     }

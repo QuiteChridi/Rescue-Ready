@@ -7,9 +7,6 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
 
-import play.test.WithBrowser;
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static play.mvc.Http.Status.OK;
