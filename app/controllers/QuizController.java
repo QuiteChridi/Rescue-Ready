@@ -17,8 +17,8 @@ import java.util.Collections;
 
 public class QuizController extends Controller {
 
-    Quiz quiz = new DummyQuiz();
-    Scoreboard scoreboard = new DummyScoreboard();
+    Quiz quiz = DummyQuiz.getInstance();
+    Scoreboard scoreboard = DummyScoreboard.getInstance();
 
     public Result quiz() {
         return ok(question.render("", Collections.emptyList(), 0));

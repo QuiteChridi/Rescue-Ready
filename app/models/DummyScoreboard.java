@@ -5,11 +5,18 @@ import controllers.interfaces.Scoreboard;
 import java.util.*;
 
 public class DummyScoreboard implements Scoreboard {
+    private static DummyScoreboard INSTANCE;
+    private List<Highscore> highscores;
 
-    private static List<Highscore> highscores;
-
-    public DummyScoreboard() {
+    private DummyScoreboard() {
         generateRandomHighscores();
+    }
+
+    public synchronized static DummyScoreboard getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new DummyScoreboard();
+        }
+        return INSTANCE;
     }
 
     @Override

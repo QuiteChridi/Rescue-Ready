@@ -7,7 +7,7 @@ import views.html.*;
 
 
 public class HomeController extends Controller {
-    Scoreboard scoreboard = new DummyScoreboard();
+    Scoreboard scoreboard = DummyScoreboard.getInstance();
 
     public Result main() {
         return ok(main.render());

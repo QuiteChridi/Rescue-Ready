@@ -21,7 +21,7 @@ public class HighscoreTest {
     }
 
     @Test
-    public void setScoreShouldsetNewScore(){
+    public void setScoreShouldSetNewScore(){
         var highscore = new Highscore("test", 123);
         highscore.setScore(10);
         assertEquals(10, highscore.getScore());

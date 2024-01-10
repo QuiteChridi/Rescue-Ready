@@ -5,11 +5,19 @@ import controllers.interfaces.Quiz;
 import java.util.*;
 
 public class DummyQuiz implements Quiz {
-    Queue<QuizQuestion> questions;
-    QuizQuestion currentQuestion;
+    private static DummyQuiz INSTANCE;
+    private Queue<QuizQuestion> questions;
+    private QuizQuestion currentQuestion;
 
-    public DummyQuiz(){
+    private DummyQuiz(){
         generateDummyQuiz();
+    }
+
+    public synchronized static DummyQuiz getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new DummyQuiz();
+        }
+        return INSTANCE;
     }
 
     @Override

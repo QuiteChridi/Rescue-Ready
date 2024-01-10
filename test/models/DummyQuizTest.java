@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class DummyQuizTest {
     @Test
     public void getNextQuizQuestionShouldReturnAQuestionAsLongAsThereIsAny(){
-        var quiz = new DummyQuiz();
+        var quiz = DummyQuiz.getInstance();
         quiz.nextQuestion();
 
         while(quiz.hasNextQuestion()){
@@ -16,17 +16,18 @@ public class DummyQuizTest {
         }
         quiz.nextQuestion();
         assertNull(quiz.getCurrentQuestion());
+        quiz.resetQuiz();
     }
 
     @Test
     public void isCorrectShouldMatchgetCorrectAnswer(){
-        var quiz = new DummyQuiz();
+        var quiz = DummyQuiz.getInstance();
         quiz.nextQuestion();
         assertTrue(quiz.isCorrectAnswer(quiz.getCorrectAnswer()));
     }
     @Test
     public void isCorrectShouldReturnFalseOnIncorrectAnswer(){
-        var quiz = new DummyQuiz();
+        var quiz = DummyQuiz.getInstance();
         quiz.nextQuestion();
         assertFalse(quiz.isCorrectAnswer(quiz.getCorrectAnswer() + "x"));
     }
