@@ -1,5 +1,6 @@
 package models;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.constraints.AssertFalse;
@@ -8,23 +9,28 @@ import static org.junit.Assert.*;
 
 public class HighscoreTest {
 
+    private Highscore highscore;
+    @Before
+    public void setUp(){
+         highscore = new Highscore("test", 123);
+    }
+
     @Test
     public void getNameShouldReturnName(){
-        var highscore = new Highscore("test", 123);
+
         assertEquals("test", highscore.getName());
     }
 
     @Test
     public void getScoreShouldReturnScore(){
-        var highscore = new Highscore("test", 123);
         assertEquals(123, highscore.getScore());
     }
 
     @Test
     public void setScoreShouldSetNewScore(){
-        var highscore = new Highscore("test", 123);
-        highscore.setScore(10);
-        assertEquals(10, highscore.getScore());
+        int newScore = 10;
+        highscore.setScore(newScore);
+        assertEquals(newScore, highscore.getScore());
     }
 
     @Test
