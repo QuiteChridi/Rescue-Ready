@@ -5,13 +5,13 @@ import controllers.interfaces.Quiz;
 import controllers.interfaces.Scoreboard;
 import models.DummyScoreboard;
 import models.DummyQuiz;
+import models.QuizFactory;
 import models.QuizQuestion;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import views.html.quiz.quizSelection;
-
 
 public class QuizController extends Controller {
 
@@ -20,6 +20,14 @@ public class QuizController extends Controller {
 
     public Result quiz() {
         return ok(quizSelection.render());
+    }
+
+    public Result setQuiz(Http.Request request){
+        JsonNode json = request.body().asJson();
+        String quizName = json.findPath("quizName").asText();
+
+        quiz = QuizFactory.getQuiz(quizName);
+        return ok();
     }
 
     public Result getNextQuestion() {
