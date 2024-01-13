@@ -21,7 +21,7 @@ public class QuizController extends Controller {
     Scoreboard scoreboard = new DummyScoreboard();
 
     public Result quiz() {
-        return ok(question.render("", Collections.emptyList(), 0));
+        return ok(question.render());
     }
 
     public Result getNextQuestion() {

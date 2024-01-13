@@ -17,6 +17,4 @@ public interface Scoreboard {
     void addHighscore(String name, int score);
 
     boolean isInHighscoreList(String name);
-
-
 }
