@@ -10,9 +10,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
-import views.html.quiz.question;
-
-import java.util.Collections;
+import views.html.quiz.quizSelection;
 
 
 public class QuizController extends Controller {
@@ -21,7 +19,7 @@ public class QuizController extends Controller {
     Scoreboard scoreboard = DummyScoreboard.getInstance();
 
     public Result quiz() {
-        return ok(question.render("", Collections.emptyList(), 0));
+        return ok(quizSelection.render());
     }
 
     public Result getNextQuestion() {

@@ -29,3 +29,4 @@ public class QuizQuestion {
         return answer.equals(correctAnswer);
     }
 }
+

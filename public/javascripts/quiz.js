@@ -181,3 +181,4 @@ function saveQuizResult(score) {
         alert("Ergebnis gespeichert!");
     }).catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }
+

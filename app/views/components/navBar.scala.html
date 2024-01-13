@@ -2,13 +2,24 @@
 
 @defining(play.core.PlayVersion.current) { version =>
         <head>
-            <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/globalStyle.css")">
-            <title>NavBAr</title>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+            <!--<link rel="stylesheet" media="screen" href=> -->
+            <title>NavBar</title>
+            <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/NavBar")">
 
         </head>
+        <body>
         <header>
-    <nav>
+            <img class="logo" src="../../../public/images/RescueReadyIcon.png" alt="logo">
+            <nav>
+                <ul class="nac__links">
+                    <li><a href="quiz">Quiz</a></li>
+                    <li><a href="login">Login</a></li>
+                    <li><a href="profile">Profile</a></li>
+                    <li><a href="highscore">Highscore</a></li>
+                </ul>
+            </nav>
+            <a class="cta" href="#"><button>Logout</button></a>
+   <!-- <nav>
         <div>
             <a href="quiz">Quiz</a>
         </div>
@@ -36,8 +47,10 @@
         </li>
         </ul>
         </div>
-    </nav>
+    </nav>-->
         </header>
+        </body>
+
 
 
 }

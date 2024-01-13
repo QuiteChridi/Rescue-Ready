@@ -1,0 +1,22 @@
+
+@index("Selection") {
+    @defining(play.core.PlayVersion.current) { version =>
+        <body>
+            <h1>Quiz</h1>
+
+            <div class = "category-btns">
+                <button type="button" id="category1">Kategorie 1</button>
+                <button type="button" id="category2">Kategorie 2</button>
+                <button type="button" id="category3">Kategorie 3</button>
+            </div>
+
+            <div id="start-quiz-container">
+                <button onclick="selectQuiz(this.id)">Quiz starten</button>
+            </div>
+
+
+        </body>
+
+
+    }
+}
