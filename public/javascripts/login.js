@@ -25,8 +25,7 @@ function checkLogin() {
         } else {
             alert(data.response)
         }
-    })
-    .catch(error => console.log(error.message))
+    }).catch(error => console.log(error.message))
 }
 
 function logout() {

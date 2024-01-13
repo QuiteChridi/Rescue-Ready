@@ -30,6 +30,7 @@ public class QuizController extends Controller {
         quiz = QuizFactory.getQuiz(quizName);
         return ok();
     }
+
     public Result quizView() {
         return ok(quizView.render());
     }

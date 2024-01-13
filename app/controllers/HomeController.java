@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import controllers.interfaces.Scoreboard;
 import models.*;
 import play.mvc.*;
@@ -17,7 +18,14 @@ public class HomeController extends Controller {
         return ok(profile.render());
     }
 
-    public Result highscore() {
+    public Result highscore(){
+        return ok(highscore.render(scoreboard.getHighscores()));
+    }
+
+    public Result renderHighscore(Http.Request request){
+        JsonNode json = request.body().asJson();
+        String quizName = json.findPath("quizName").asText();
+
         return ok(highscore.render(scoreboard.getHighscores()));
     }
 
