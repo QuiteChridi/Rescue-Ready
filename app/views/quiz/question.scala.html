@@ -1,6 +1,3 @@
-
-@(question: String, answers: List[String], score: Int)
-
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =><!DOCTYPE html>
         <body>
@@ -15,11 +12,7 @@
             <div id="question-container" style="display: none;">
                 <p id="question"></p>
                 <form id="answer-form">
-                    @for(answer <- answers) {
-                        <label>
-                            <input type="radio" name="answer" value="@answer">@answer
-                        </label><br>
-                        }
+
                 </form>
 
                 <div id="button-container">
@@ -33,7 +26,5 @@
                 <div id="console"></div>
             </div>
         </body>
-
-
     }
 }
