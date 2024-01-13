@@ -12,22 +12,26 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import views.html.quiz.quizSelection;
+import views.html.quiz.quizView;
 
 public class QuizController extends Controller {
 
     Quiz quiz = DummyQuiz.getInstance();
     Scoreboard scoreboard = DummyScoreboard.getInstance();
 
-    public Result quiz() {
-        return ok(quizSelection.render());
+    public Result quizSelection() {
+        return ok(quizSelection.render(QuizFactory.getPossibleQuizes()));
     }
 
-    public Result setQuiz(Http.Request request){
+    public Result selectQuiz(Http.Request request){
         JsonNode json = request.body().asJson();
         String quizName = json.findPath("quizName").asText();
 
         quiz = QuizFactory.getQuiz(quizName);
         return ok();
+    }
+    public Result quizView() {
+        return ok(quizView.render());
     }
 
     public Result getNextQuestion() {
