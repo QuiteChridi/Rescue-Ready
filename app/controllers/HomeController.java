@@ -8,7 +8,7 @@ import views.html.*;
 
 
 public class HomeController extends Controller {
-    Scoreboard scoreboard = DummyScoreboard.getInstance();
+     Scoreboard scoreboard = DummyScoreboard.getInstance();
 
     public Result main() {
         return ok(main.render());
@@ -19,14 +19,14 @@ public class HomeController extends Controller {
     }
 
     public Result highscore(){
-        return ok(highscore.render(scoreboard.getHighscores()));
+        return ok(highscore.render(scoreboard.getHighscores(),QuizFactory.getPossibleQuizes()));
     }
 
-    public Result renderHighscore(Http.Request request){
+    public  Result renderHighscore(Http.Request request){
         JsonNode json = request.body().asJson();
         String quizName = json.findPath("quizName").asText();
 
-        return ok(highscore.render(scoreboard.getHighscores()));
+        return ok(highscore.render(scoreboard.getHighscores(),QuizFactory.getPossibleQuizes()));
     }
 
     public Result signup() {
