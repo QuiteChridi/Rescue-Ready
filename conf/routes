@@ -4,7 +4,6 @@
 
 # An example controller showing a sample home page
 GET         /                       controllers.LoginController.login
-GET         /login                  controllers.LoginController.login
 POST        /login                  controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
 
 POST        /logout                 controllers.LoginController.logout
