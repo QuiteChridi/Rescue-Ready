@@ -1,12 +1,9 @@
 let correctAnswerCount = 0;
-let quizStarted = false;
-
 let time = 0;
 let timerRunning = false;
 let timerInterval;
 
 function startQuiz() {
-    quizStarted = true;
     getNextQuestion();
     startTimer();
 }
