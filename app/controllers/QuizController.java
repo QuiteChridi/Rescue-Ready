@@ -21,6 +21,7 @@ public class QuizController extends Controller {
     Scoreboard scoreboard = DummyScoreboard.getInstance();
 
     public Result quiz() {
+        quiz.setStartingQuestion(0);
         return ok(question.render());
     }
 
