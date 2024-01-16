@@ -12,8 +12,6 @@ import play.mvc.Http;
 import play.mvc.Result;
 import views.html.quiz.question;
 
-import java.util.Collections;
-
 
 public class QuizController extends Controller {
 
