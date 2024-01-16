@@ -9,11 +9,9 @@ public class DummyQuiz implements Quiz {
     private Queue<QuizQuestion> questions;
     private QuizQuestion currentQuestion;
 
-    private int currentQuestionIndex;
 
     private DummyQuiz(){
         generateDummyQuiz();
-        currentQuestionIndex = 0;
     }
 
     public synchronized static DummyQuiz getInstance(){
@@ -31,7 +29,6 @@ public class DummyQuiz implements Quiz {
     @Override
     public void nextQuestion() {
         currentQuestion = questions.poll();
-        currentQuestionIndex++;
     }
 
     @Override
@@ -52,12 +49,10 @@ public class DummyQuiz implements Quiz {
     @Override
     public void resetQuiz() {
         generateDummyQuiz();
-        currentQuestionIndex = 0;
     }
 
     @Override
     public void setStartingQuestion(int questionIndex) {
-        currentQuestionIndex = questionIndex;
         resetQuiz();
     }
 
