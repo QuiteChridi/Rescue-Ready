@@ -6,9 +6,13 @@ import models.*;
 import play.mvc.*;
 import views.html.*;
 
+import java.util.List;
+
 
 public class HomeController extends Controller {
      Scoreboard scoreboard = DummyScoreboard.getInstance();
+     private List<Highscore> currentHighscoreList;
+
 
     public Result main() {
         return ok(main.render());
@@ -25,8 +29,10 @@ public class HomeController extends Controller {
     public  Result renderHighscore(Http.Request request){
         JsonNode json = request.body().asJson();
         String quizName = json.findPath("quizName").asText();
+        currentHighscoreList= DummyScoreboard.getInstance().getHighscores();
 
-        return ok(highscore.render(scoreboard.getHighscores(),QuizFactory.getPossibleQuizes()));
+
+        return ok(highscore.render(currentHighscoreList,QuizFactory.getPossibleQuizes()));
     }
 
     public Result signup() {

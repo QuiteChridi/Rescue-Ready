@@ -10,8 +10,9 @@ POST        /logout                 controllers.LoginController.logout
 
 GET         /profile                controllers.HomeController.profile
 GET         /highscore              controllers.HomeController.highscore()
-GET         /highscoreByQuizName    controllers.HomeController.renderHighscore(request: play.mvc.Http.Request)
+POST        /highscoreByQuizName    controllers.HomeController.renderHighscore(request: play.mvc.Http.Request)
 GET         /signup                 controllers.HomeController.signup()
+
 
 GET         /quizView               controllers.QuizController.quizView
 GET         /quizSelection          controllers.QuizController.quizSelection

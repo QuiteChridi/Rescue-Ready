@@ -165,8 +165,7 @@ function saveQuizResult(score) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
-    }).then(data => {
         alert("Ergebnis gespeichert!");
-    }).catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
+    })
+    .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }

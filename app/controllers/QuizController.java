@@ -25,11 +25,13 @@ public class QuizController extends Controller {
     }
 
     public Result selectQuiz(Http.Request request){
+
         JsonNode json = request.body().asJson();
         String quizName = json.findPath("quizName").asText();
 
         quiz = QuizFactory.getQuiz(quizName);
         return ok();
+
     }
 
     public Result quizView() {
@@ -38,8 +40,11 @@ public class QuizController extends Controller {
     }
 
     public Result getNextQuestion() {
+        System.out.println("Hallo");
+        System.out.println(quiz);
 
         if (!quiz.hasNextQuestion()) {
+            System.out.println("Hallo2");
             return status(404, "Keine weiteren Fragen vorhanden");
         }
         quiz.nextQuestion();

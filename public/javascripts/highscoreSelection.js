@@ -8,10 +8,9 @@ function selectHighscore(quizName) {
             "Content-Type": "application/json",
         },
         credentials: "include",
+    }).then(response => {
+        window.location.href="highscore"
     })
-        .then(response => response.json())
-        .then(data => {
-            HomeController.renderHighscore(data);
-        })
-        .catch(error => console.error("Error:", error));
+        .catch(error => console.error(`Fehler bei der Serveranfrage:`, error));
 }
+
