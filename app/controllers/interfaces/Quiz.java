@@ -14,4 +14,7 @@ public interface Quiz {
     String getCorrectAnswer();
 
     void resetQuiz();
+
+    void setStartingQuestion(int questionIndex);
+
 }

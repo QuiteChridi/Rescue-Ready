@@ -1,18 +1,26 @@
-@()
-
+@(friendsList: List[User])
 
 @index("Profile") {
     @defining(play.core.PlayVersion.current) { version =>
     <body>
-        <section class="container">
+        <div class="container" id="profile-container">
             <div class="content">
                 <div class="profile-display">
                     <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
                     <h1 id="user-name">Franco Di Milano</h1>
                     <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
                     <button id="edit-button">Edit</button>
+                    <div class="friends-section">
+                        <h2 id="friends-title">Friends</h2>
+                        <ul class="friends-list">
+                        @for(friend <- friendsList) {
+                            <li><a href="@routes.HomeController.friendProfile(friend.getName)">@friend.getName</a></li>
+                        }
+                        </ul>
+                    </div>
                 </div>
-                <div class="profile-editor">
+            </div>
+            <div class="profile-editor">
                     <div class="profile-picture-edit-container">
                         <input type="file" id="file-input" accept="image/*" style="display: none">
                         <label for="file-input">

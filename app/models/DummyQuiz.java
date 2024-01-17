@@ -9,6 +9,7 @@ public class DummyQuiz implements Quiz {
     private Queue<QuizQuestion> questions;
     private QuizQuestion currentQuestion;
 
+
     private DummyQuiz(){
         generateDummyQuiz();
     }
@@ -48,6 +49,11 @@ public class DummyQuiz implements Quiz {
     @Override
     public void resetQuiz() {
         generateDummyQuiz();
+    }
+
+    @Override
+    public void setStartingQuestion(int questionIndex) {
+        resetQuiz();
     }
 
     private void generateDummyQuiz(){

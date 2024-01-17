@@ -14,6 +14,7 @@ import play.mvc.Result;
 import views.html.quiz.quizSelection;
 import views.html.quiz.quizView;
 
+
 public class QuizController extends Controller {
 
     Quiz quiz = DummyQuiz.getInstance();
@@ -32,6 +33,7 @@ public class QuizController extends Controller {
     }
 
     public Result quizView() {
+        quiz.setStartingQuestion(0);
         return ok(quizView.render());
     }
 

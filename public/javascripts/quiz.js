@@ -1,6 +1,4 @@
 let correctAnswerCount = 0;
-let quizStarted = false;
-
 let time = 0;
 let timerRunning = false;
 let timerInterval;
@@ -8,9 +6,6 @@ let timerInterval;
 function startQuiz() {
     getNextQuestion();
     startTimer();
-    document.getElementById('question-container').style.display = 'block';
-    document.getElementById('timer').style.display = 'block';
-    quizStarted = true;
 }
 
 function startTimer() {
@@ -21,32 +16,12 @@ function startTimer() {
             updateTimerDisplay();
         }, 1000);
     }
+    document.getElementById('timer').style.display = 'block';
 }
 
 function updateScore() {
     correctAnswerCount += 1;
     document.getElementById('current-score').innerText = "Richtige Antworten : " + correctAnswerCount;
-}
-
-function renderNextQuestion(question, answers, score) {
-    document.getElementById('start-quiz-container').innerText = "";
-    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
-    document.getElementById('question').innerHTML = question;
-
-    let answersContainer = document.getElementById('answer-form');
-    answersContainer.innerHTML = "";
-
-    answers.forEach(answer => {
-        let label = document.createElement('label');
-        label.innerHTML = `<input type="radio" name="answer" value="${answer}">${answer}`;
-        answersContainer.appendChild(label);
-        answersContainer.appendChild(document.createElement('br'));
-    });
-
-    document.getElementById('check-answer-button').style.display = 'block';
-    document.getElementById('next-question-button').style.display = 'none';
-    document.getElementById('end-quiz-container').style.display = 'none';
-    document.getElementById('result').innerText = "";
 }
 
 function getNextQuestion() {
@@ -72,12 +47,28 @@ function getNextQuestion() {
     }).catch(error => console.log(error.message));
 }
 
-///// nur zum Testen genutzt
-function displayConsoleMessage(message) {
-    let consoleOutput = document.getElementById('console');
-    consoleOutput.innerHTML += message + '<br>';
+function renderNextQuestion(question, answers, score) {
+    document.getElementById('start-quiz-container').innerText = "";
+    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
+    document.getElementById('question-container').style.display = 'block';
+    document.getElementById('question').innerHTML = question;
+
+    let answersContainer = document.getElementById('answer-form');
+    answersContainer.innerHTML = "";
+
+    answers.forEach(answer => {
+        let label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="answer" value="${answer}">${answer}`;
+        answersContainer.appendChild(label);
+        answersContainer.appendChild(document.createElement('br'));
+    });
+    document.getElementById('button-container').style.display = 'block';
+    document.getElementById('check-answer-button').style.display = 'block';
+    document.getElementById('next-question-button').style.display = 'none';
+    document.getElementById('end-quiz-container').style.display = 'none';
+    document.getElementById('result').innerText = "";
 }
-////
+
 
 function checkAnswer() {
     let selectedAnswerElement = document.querySelector('input[name="answer"]:checked');
@@ -160,7 +151,6 @@ function saveEndScore() {
 }
 
 function saveQuizResult(score) {
-    displayConsoleMessage("safeQuizResult wurde aufgerufen mit dem Highscore: " + score);
 
     fetch("/saveQuizResult", {
         method: "POST",
@@ -177,8 +167,6 @@ function saveQuizResult(score) {
         }
         return response.json();
     }).then(data => {
-        displayConsoleMessage("Test3 ")
         alert("Ergebnis gespeichert!");
     }).catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }
-

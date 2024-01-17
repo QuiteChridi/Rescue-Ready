@@ -1,0 +1,17 @@
+@(friendName: String)
+
+@index("FriendProfile") {
+    @defining(play.core.PlayVersion.current) { version =>
+    <body>
+        <div class="container" id="profile-container">
+            <div class="content">
+                <div class="profile-display">
+                    <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
+                    <h1 id="user-name">@friendName</h1>
+                    <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
+                </div>
+            </div>
+        </div>
+    </body>
+    }
+}
