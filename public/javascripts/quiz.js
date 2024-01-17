@@ -69,6 +69,7 @@ function renderNextQuestion(question, answers, score) {
     document.getElementById('result').innerText = "";
 }
 
+
 function checkAnswer() {
     let selectedAnswerElement = document.querySelector('input[name="answer"]:checked');
 
@@ -164,17 +165,7 @@ function saveQuizResult(score) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json();
-    }).then(data => {
         alert("Ergebnis gespeichert!");
-    }).catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
+    })
+    .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }
-
-
-
-///// nur zum Testen genutzt
-function displayConsoleMessage(message) {
-    let consoleOutput = document.getElementById('console');
-    consoleOutput.innerHTML += message + '<br>';
-}
-////

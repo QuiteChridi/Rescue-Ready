@@ -19,6 +19,7 @@ public class DummyScoreboard implements Scoreboard {
         return INSTANCE;
     }
 
+
     @Override
     public List<Highscore> getHighscores(){
         highscores.sort(Highscore::compareTo);

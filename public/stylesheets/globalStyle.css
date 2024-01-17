@@ -2,9 +2,9 @@
 
 /* Grundlegende Formatierung */
 body {
-    font-family: Arial, sans-serif; /* Moderne, gut lesbare Schriftart */
-    color: black; /* Grundfarbe für den Text */
-    background-color: darkgrey; /* Hintergrundfarbe der Website */
+    font-family: Arial, sans-serif;
+    color: black;
+    background-color: darkgrey;
     margin: 0;
     padding: 10%;
     line-height: 1.6;
@@ -32,13 +32,16 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
     height: 5%;
     display: flex;
 }
 .logo img, .nav-icons a{
     max-height: 40px;
     width: auto;
+    cursor: pointer;
+}
+li{
+
 }
 
 
@@ -54,6 +57,8 @@ ul {
     display: flex;
     margin: 0;
     padding: 0;
+    align-items: center;
+    text-align: right;
 }
 
 ul li {
@@ -68,7 +73,9 @@ ul li a {
     text-decoration: none;
     display: block;
     height: 100%;
+
 }
+
 
 
 /* Abschnittsüberschriften */

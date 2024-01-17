@@ -4,9 +4,11 @@
     margin: 25px 0;
     font-size: 0.9em;
     min-width: 400px;
-    border-radius: 5px 5px 0 0;
+    border-radius: 15px 15px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px black;
+    width: 609px;
+    height: 430px;
 }
 .content-table thead tr{
     background-color: #24265f;

@@ -1,4 +1,4 @@
-@(highscores: List[Highscore])
+@(highscores: List[Highscore], categories: List[String])
 
 @index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -20,6 +20,11 @@
                 }
             </tbody>
         </table>
+        <div>
+            @for(value <- categories ){
+                <button onclick="selectHighscore(this.id)" type="button" id=@value>@value</button>
+            }
+        </div>
     </body>
     }
-}
+} 
