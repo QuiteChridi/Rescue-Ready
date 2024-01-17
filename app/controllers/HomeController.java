@@ -14,7 +14,7 @@ public class HomeController extends Controller {
     }
 
     public Result profile() {
-        return ok(profile.render());
+        return ok(profile.render(DummyFriendList.getUserList()));
     }
 
     public Result highscore() {
@@ -28,5 +28,10 @@ public class HomeController extends Controller {
     public Result getHighscoreFromSession(Http.Request request) {
         String highscore = request.session().get("highscore").orElse("0");
         return ok(highscore);
+    }
+
+    public Result friendProfile(String name) {
+        String friendName = name;
+        return ok(friendProfile.render(friendName));
     }
 }
