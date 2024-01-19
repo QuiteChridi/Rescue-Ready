@@ -4,6 +4,7 @@ import controllers.interfaces.Scoreboard;
 
 import java.util.*;
 
+
 public class DummyScoreboard implements Scoreboard {
     private static DummyScoreboard INSTANCE;
     private List<Highscore> highscores;

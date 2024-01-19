@@ -19,7 +19,7 @@ POST        /highscoreByQuizName    controllers.HomeController.renderHighscore(r
 GET         /quizView               controllers.QuizController.quizView
 GET         /quizSelection          controllers.QuizController.quizSelection
 GET         /getNextQuestion        controllers.QuizController.getNextQuestion
-POST        /checkAnswer            controllers.QuizController.checkAnswer(request: play.mvc.Http.Request)
+POST        /checkAnswer            controllers.QuizController.checkAnswer(request:  play.mvc.Http.Request)
 POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
 POST        /selectQuiz             controllers.QuizController.selectQuiz(request: play.mvc.Http.Request)
 
