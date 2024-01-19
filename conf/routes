@@ -6,12 +6,14 @@
 GET         /                       controllers.LoginController.login
 POST        /login                  controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
 
+GET         /signup                 controllers.LoginController.signUp
+POST        /signup                 controllers.LoginController.createUser(request:  play.mvc.Http.Request)
+
 POST        /logout                 controllers.LoginController.logout
 
 GET         /profile                controllers.HomeController.profile
 GET         /highscore              controllers.HomeController.highscore()
 POST        /highscoreByQuizName    controllers.HomeController.renderHighscore(request: play.mvc.Http.Request)
-GET         /signup                 controllers.HomeController.signup()
 
 
 GET         /quizView               controllers.QuizController.quizView

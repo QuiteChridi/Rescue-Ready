@@ -31,7 +31,6 @@ public class HomeController extends Controller {
         String quizName = json.findPath("quizName").asText();
         currentHighscoreList= DummyScoreboard.getInstance().getHighscores();
 
-
         return ok(highscore.render(currentHighscoreList,QuizFactory.getPossibleQuizes()));
     }
 

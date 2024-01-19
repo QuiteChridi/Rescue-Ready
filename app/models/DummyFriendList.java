@@ -13,9 +13,8 @@ public class DummyFriendList {
 
     public static void generateUserList() {
         userList = new ArrayList<>();
-        userList.add(new User(1, "Alice"));
-        userList.add(new User(2, "Bob"));
-        userList.add(new User(3, "Charlie"));
-        userList.add(new User(4, "David"));
+        userList.add(new User(1, "Alice", "alice", "alice@alice.de"));
+        userList.add(new User(2, "Bob", "bob", "bob@bob.de"));
+        userList.add(new User(3, "Charlie", "charlie", "charlie@charlie.de"));
     }
 }
