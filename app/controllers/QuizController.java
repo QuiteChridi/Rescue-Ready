@@ -35,7 +35,7 @@ public class QuizController extends Controller {
     }
 
     public Result quizView() {
-        quiz.setStartingQuestion(0);
+        quiz.resetQuiz();
         return ok(quizView.render());
     }
 

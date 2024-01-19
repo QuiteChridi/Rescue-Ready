@@ -51,10 +51,6 @@ public class DummyQuiz implements Quiz {
         generateDummyQuiz();
     }
 
-    @Override
-    public void setStartingQuestion(int questionIndex) {
-        resetQuiz();
-    }
 
     private void generateDummyQuiz(){
         questions = new LinkedList<>();

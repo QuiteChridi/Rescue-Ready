@@ -15,6 +15,4 @@ public interface Quiz {
 
     void resetQuiz();
 
-    void setStartingQuestion(int questionIndex);
-
 }
