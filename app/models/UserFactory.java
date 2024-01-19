@@ -40,17 +40,18 @@ public class UserFactory {
     /**
      * Authenticates a user with the given credentials
      *
-     * @param name username from user input
+     * @param username username from user input
      * @param password password from user input
      * @return Found user or null if user not found
      */
-    public User authenticate(String name, String password) {
+    public User authenticate(String username, String password) {
         return db.withConnection(conn -> {
             User user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE name = ? AND password = ?");
-            stmt.setString(1, name);
+            stmt.setString(1, username);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
+            System.out.println(rs);
             if (rs.next()) {
                 user = new User(rs);
             }
@@ -70,7 +71,7 @@ public class UserFactory {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                int id = rs.getInt(1);
+                int id = rs.getInt(0);
                 user = new User(id, name, password, email);
             }
             stmt.close();
@@ -130,7 +131,7 @@ public class UserFactory {
         private String mail;
         //private int points;
 
-        private User(int id, String username, String mail, String password) {
+        private User(int id, String username, String password, String mail) {
             this.id = id;
             this.username = username;
             this.mail = mail;
@@ -138,10 +139,10 @@ public class UserFactory {
         }
 
         private User(ResultSet rs) throws SQLException {
-            this.id = rs.getInt("UserId");
-            this.username = rs.getString("Username");
-            this.mail = rs.getString("Email");
-            this.password = rs.getString("Password");
+            this.id = rs.getInt("iduser");
+            this.username = rs.getString("name");
+            this.mail = rs.getString("email");
+            this.password = rs.getString("password");
         }
 
         /**
