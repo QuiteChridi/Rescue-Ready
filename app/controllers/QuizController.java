@@ -1,12 +1,13 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.interfaces.Quiz;
+import com.google.inject.Inject;
+import controllers.interfaces.QuizInterface;
 import controllers.interfaces.Scoreboard;
 import models.DummyScoreboard;
-import models.DummyQuiz;
+import models.DummyQuizInterface;
 import models.QuizFactory;
-import models.QuizQuestion;
+import models.UserFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -17,11 +18,17 @@ import views.html.quiz.quizView;
 
 public class QuizController extends Controller {
 
-    Quiz quiz = DummyQuiz.getInstance();
-    Scoreboard scoreboard = DummyScoreboard.getInstance();
+    private final QuizInterface quiz = DummyQuizInterface.getInstance();
+    private final Scoreboard scoreboard = DummyScoreboard.getInstance();
+    private final QuizFactory quizes;
+
+    @Inject
+    public QuizController(QuizFactory quiz) {
+        this.quizes = quiz;
+    }
 
     public Result quizSelection() {
-        return ok(quizSelection.render(QuizFactory.getPossibleQuizes()));
+        return ok(quizes.getPossibleQuizes());
     }
 
     public Result selectQuiz(Http.Request request){
@@ -29,9 +36,8 @@ public class QuizController extends Controller {
         JsonNode json = request.body().asJson();
         String quizName = json.findPath("quizName").asText();
 
-        quiz = QuizFactory.getQuiz(quizName);
+        quiz = quizes.getQuiz(quizName);
         return ok();
-
     }
 
     public Result quizView() {
@@ -49,7 +55,7 @@ public class QuizController extends Controller {
         }
         quiz.nextQuestion();
 
-        QuizQuestion question = quiz.getCurrentQuestion();
+        QuizFactory.QuizQuestion question = quiz.getCurrentQuestion();
         JsonNode jsonQuestion = Json.newObject()
                 .put("question", question.getQuestionText())
                 .set("answers", Json.toJson(question.getAnswers()));

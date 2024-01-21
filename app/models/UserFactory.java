@@ -10,9 +10,7 @@ import java.util.List;
 
 @Singleton
 public class UserFactory {
-
     private Database db;
-
     @Inject
     UserFactory(Database db) {
         this.db = db;
@@ -32,7 +30,6 @@ public class UserFactory {
             stmt.setString(1, username);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-            System.out.println(rs);
             if (rs.next()) {
                 user = new User(rs);
             }
