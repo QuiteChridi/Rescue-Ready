@@ -1,4 +1,5 @@
-@(highscores: List[Highscore], categories: List[String])
+
+@(highscores: List[models.HighscoreFactory#Highscore], categories: Map[Integer, String])
 
 @index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -14,15 +15,15 @@
             <tbody id="highscoreTableBody">
                 @for(value <- highscores){
                     <tr>
-                        <td>@value.getName</td>
-                        <td>@value.getScore</td>
+                        <td>@value.getUserName</td>
+                        <td>@value.getScore<td>
                     </tr>
                 }
             </tbody>
         </table>
         <div>
             @for(value <- categories ){
-                <button onclick="selectHighscore(this.id)" type="button" id=@value>@value</button>
+                <button onclick="selectHighscore(this.id)" type="button" id=@value._1> @value._2 </button>
             }
         </div>
     </body>

@@ -1,4 +1,5 @@
-@(categories: List[String])
+@(categories: Map[Integer, String])
+
 @index("Selection") {
     @defining(play.core.PlayVersion.current) { version =>
         <body>
@@ -6,7 +7,7 @@
 
             <div class = "category-btns">
                 @for(value <- categories){
-                    <button onclick="selectQuiz(this.id)" type="button" id=@value >@value</button>
+                    <button onclick="selectQuiz(this.id)" type="button" id=@value._1 >@value._2 </button>
                 }
 
             </div>

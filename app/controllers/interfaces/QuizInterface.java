@@ -13,6 +13,7 @@ public interface QuizInterface {
 
     String getCorrectAnswer();
 
-    void resetQuiz();
+    int getId();
 
+    String getName();
 }

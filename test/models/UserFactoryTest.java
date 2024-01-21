@@ -6,9 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import play.test.WithApplication;
 
-import javax.inject.Inject;
-import javax.validation.constraints.AssertTrue;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -20,10 +17,10 @@ public class UserFactoryTest extends WithApplication {
     private Database db;
     private final String TEST_NAME = "test03945830958";
     private final String TEST_PASSWORD = "test";
-    private final String TEST_EMAIL= "test@test.de";
+    private final String TEST_EMAIL = "test@test.de";
 
     @Before
-    public void setUp(){
+    public void setUp() {
         users = provideApplication().injector().instanceOf(UserFactory.class);
         db = provideApplication().injector().instanceOf(Database.class);
 
@@ -49,35 +46,30 @@ public class UserFactoryTest extends WithApplication {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         db.withConnection(conn -> {
-                PreparedStatement stmt = conn.prepareStatement("DELETE FROM user WHERE name = ?");
-                stmt.setString(1, TEST_NAME);
-                stmt.executeUpdate();
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM user WHERE name = ?");
+            stmt.setString(1, TEST_NAME);
+            stmt.executeUpdate();
             stmt.close();
 
         });
     }
 
     @Test
-    public void authenticateWithTestNameAndPasswordShouldReturnAUser(){
+    public void authenticateWithTestNameAndPasswordShouldReturnAUser() {
         UserFactory.User user = users.authenticate(TEST_NAME, TEST_PASSWORD);
         assertNotNull(user);
     }
 
     @Test
-    public void authenticateNoneShouldReturnNoUser(){
+    public void authenticateNoneShouldReturnNoUser() {
         UserFactory.User user = users.authenticate("", "");
         assertNull(user);
     }
 
     @Test
-    public void authenticateWithoutPasswordShouldReturnNoUser(){
-        UserFactory.User user = users.authenticate(TEST_NAME, "");
-        assertNull(user);
-    }
-    @Test
-    public void authenticateWithoutPasswordShouldReturnNoUser(){
+    public void authenticateWithoutPasswordShouldReturnNoUser() {
         UserFactory.User user = users.authenticate(TEST_NAME, "");
         assertNull(user);
     }

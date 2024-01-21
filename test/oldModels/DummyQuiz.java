@@ -1,22 +1,22 @@
-package models;
+package oldModels;
 
 import controllers.interfaces.QuizInterface;
+import models.QuizFactory;
 
 import java.util.*;
 
-public class DummyQuizInterface implements QuizInterface {
-    private static DummyQuizInterface INSTANCE;
+public class DummyQuiz implements QuizInterface {
+    private static DummyQuiz INSTANCE;
     private Queue<QuizFactory.QuizQuestion> questions;
     private QuizFactory.QuizQuestion currentQuestion;
 
 
-    private DummyQuizInterface(){
-        generateDummyQuiz();
+    private DummyQuiz(){
     }
 
-    public synchronized static DummyQuizInterface getInstance(){
+    public synchronized static DummyQuiz getInstance(){
         if(INSTANCE == null){
-            INSTANCE = new DummyQuizInterface();
+            INSTANCE = new DummyQuiz();
         }
         return INSTANCE;
     }
@@ -47,11 +47,16 @@ public class DummyQuizInterface implements QuizInterface {
     }
 
     @Override
-    public void resetQuiz() {
-        generateDummyQuiz();
+    public int getId() {
+        return 0;
     }
 
+    @Override
+    public String getName() {
+        return null;
+    }
 
+/*
     private void generateDummyQuiz(){
         questions = new LinkedList<>();
         questions.add(new QuizFactory.QuizQuestion(
@@ -78,4 +83,5 @@ public class DummyQuizInterface implements QuizInterface {
                 "Brustkompressionen, Mund-zu-Mund-Beatmung"
         ));
     }
+    */
 }

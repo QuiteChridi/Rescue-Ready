@@ -4,44 +4,94 @@ import controllers.interfaces.QuizInterface;
 import play.db.Database;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.sql.SQLException;
+import java.util.*;
 
+@Singleton
 public class QuizFactory {
-    private Database db;
+    private final Database db;
     @Inject
     QuizFactory(Database db) {
         this.db = db;
     }
-    public Quiz getQuiz(String name){
+
+    public Quiz getQuiz(int id){
         return db.withConnection(conn -> {
-            UserFactory.User user = null;
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz WHERE idQser = ?");
+            QuizFactory.Quiz quiz = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz, questions WHERE idQuiz = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                user = new UserFactory.User(rs);
+
+                quiz = new QuizFactory.Quiz(rs);
             }
             stmt.close();
-            return user;
+            return quiz;
         });
     }
-    public List<String> getPossibleQuizes(){
-        List<String> possibleQuizes = new ArrayList<>();
-        possibleQuizes.add("FirstQuiz");
-        possibleQuizes.add("SecondQuiz");
-        possibleQuizes.add("ThirdQuiz");
 
-        return possibleQuizes;
+    private Queue<QuizQuestion> getQuizQuestions(int idQuiz){
+        return db.withConnection(conn -> {
+            Queue<QuizQuestion> questions = new LinkedList<>();
+
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM questions WHERE quiz_idQuiz = ?");
+            stmt.setInt(1, idQuiz);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                QuizQuestion question = new QuizQuestion(rs);
+                questions.add(question);
+            }
+            stmt.close();
+            return questions;
+        });
     }
 
-    public static class Quiz implements QuizInterface {
-        private static DummyQuizInterface INSTANCE;
+    public Map<Integer, String> getPossibleQuizNames(){
+        Map<Integer, String> quizes = new HashMap<>();
+        return db.withConnection(conn -> {
+            QuizFactory.Quiz quiz = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                quizes.put(rs.getInt("idQuiz"), rs.getString("name"));
+            }
+            stmt.close();
+            return quizes;
+        });
+    }
+
+    public class Quiz implements QuizInterface {
+        private int id;
+        private String name;
         private Queue<QuizQuestion> questions;
         private QuizFactory.QuizQuestion currentQuestion;
+
+        private Quiz(int id, String name, Queue<QuizQuestion> questions){
+            this.id = id;
+            this.name = name;
+            this.questions = questions;
+            this.currentQuestion = questions.peek();
+        }
+
+        private Quiz(ResultSet rs) throws SQLException {
+            this.id = rs.getInt("idQuiz");
+            this.name = rs.getString("name");
+            this.questions = getQuizQuestions(this.id);
+            this.currentQuestion = questions.peek();
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
 
         @Override
         public QuizFactory.QuizQuestion getCurrentQuestion() {
@@ -67,25 +117,27 @@ public class QuizFactory {
         public String getCorrectAnswer() {
             return currentQuestion.getCorrectAnswer();
         }
-
-        @Override
-        public void resetQuiz() {}
-
-        @Override
-        public void setStartingQuestion(int questionIndex) {
-            resetQuiz();
-        }
     }
 
-    public static class QuizQuestion {
+    public class QuizQuestion {
         private final String questionText;
         private final List<String> answers;
         private final String correctAnswer;
 
-        public QuizQuestion(String questionText, List<String> answers, String correctAnswer) {
+        private QuizQuestion(String questionText, List<String> answers, String correctAnswer) {
             this.questionText = questionText;
             this.answers = answers;
             this.correctAnswer = correctAnswer;
+        }
+
+        private QuizQuestion(ResultSet rs) throws SQLException {
+            this.questionText = rs.getString("question");
+            this.correctAnswer = rs.getString("correctAnswer");
+            this.answers = new ArrayList<>();
+            this.answers.add(this.correctAnswer);
+            this.answers.add(rs.getString("wrongAnswer1"));
+            this.answers.add(rs.getString("wrongAnswer2"));
+            this.answers.add(rs.getString("wrongAnswer3"));
         }
 
         public String getQuestionText() {

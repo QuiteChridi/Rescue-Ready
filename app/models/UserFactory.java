@@ -91,7 +91,7 @@ public class UserFactory {
     public List<User> getAllUsers() {
         return db.withConnection(conn -> {
             List<User> users = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 User user = new User(rs);
@@ -101,6 +101,8 @@ public class UserFactory {
             return users;
         });
     }
+
+
 
     public class User {
         private int id;
@@ -128,10 +130,11 @@ public class UserFactory {
          */
         public void save() {
             db.withConnection(conn -> {
-                String sql = "UPDATE User SET Username = ?, Points = ?, Email = ? WHERE UserId = ?";
+                String sql = "UPDATE User SET name = ?, email = ?, password = ? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, this.username);
                 stmt.setString(2, this.mail);
+                stmt.setString(3, this.password);
                 stmt.setInt(4, this.id);
                 stmt.executeUpdate();
                 stmt.close();
@@ -154,7 +157,7 @@ public class UserFactory {
         public List<User> getFriends() {
             return db.withConnection(conn -> {
                 List<User> result = new ArrayList<>();
-                String sql = "SELECT * FROM Friendship, User WHERE User1Id = ? AND Friendship.User2Id = UserId";
+                String sql = "SELECT * FROM friends, user WHERE id_user1 = ? AND friends.id_user2 = idUser";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setInt(1, this.id);
                 ResultSet rs = stmt.executeQuery();
@@ -171,9 +174,6 @@ public class UserFactory {
             return id;
         }
 
-        public void setId(int id) {
-            this.id = id;
-        }
 
         public String getName() {
             return username;
@@ -192,22 +192,6 @@ public class UserFactory {
             this.mail = mail;
         }
 
-        /*
-                public int getPoints() {
-                    return points;
-                }
-
-                public void setPoints(int points) {
-                    this.points = points;
-                }
-
-
-
-                public void addPoints(int points) {
-                    this.points += points;
-                    this.save();
-                }
-        */
         public String getPassword() {
             return password;
         }

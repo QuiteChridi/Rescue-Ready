@@ -1,6 +1,7 @@
 package models;
 
 import controllers.interfaces.QuizInterface;
+import oldModels.DummyQuiz;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ public class DummyQuizTest {
     private QuizInterface quiz;
     @Before
     public void setUp(){
-        quiz = DummyQuizInterface.getInstance();
+        quiz = DummyQuiz.getInstance();
         quiz.nextQuestion();
     }
     @Test
