@@ -13,7 +13,6 @@ public class HomeController extends Controller {
      Scoreboard scoreboard = DummyScoreboard.getInstance();
      private List<Highscore> currentHighscoreList;
 
-
     public Result main() {
         return ok(main.render());
     }

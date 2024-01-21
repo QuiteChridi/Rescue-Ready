@@ -16,26 +16,7 @@ public class UserFactory {
     @Inject
     UserFactory(Database db) {
         this.db = db;
-        testConnection();
     }
-
-    public boolean testConnection() {
-        try {
-            return db.withConnection(conn -> {
-                try (Statement stmt = conn.createStatement()) {
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM user WHERE iduser = 0");
-                    return rs.next();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 
     /**
      * Authenticates a user with the given credentials
@@ -129,7 +110,6 @@ public class UserFactory {
         private String username;
         private String password;
         private String mail;
-        //private int points;
 
         private User(int id, String username, String password, String mail) {
             this.id = id;
