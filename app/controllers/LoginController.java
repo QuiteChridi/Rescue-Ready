@@ -69,7 +69,7 @@ public class LoginController extends Controller {
         loginLogger.debug("Attempting sign up.");
         try {
             if (users.createUserInUsers(username, password, email) != null) {
-                result.put("response", "Sign up successful");
+                result.put("response", "Signup successful");
                 loginLogger.debug("Username: " + username);
                 loginLogger.debug("Password: " + password);
                 loginLogger.debug("Email: " + email);

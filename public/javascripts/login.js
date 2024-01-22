@@ -46,8 +46,8 @@ function logout() {
 }
 
 function signup() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+    let username = document.getElementById("newUsername").value;
+    let password = document.getElementById("newPassword").value;
     let email = document.getElementById("email").value;
 
     fetch("/signup", {
