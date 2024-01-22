@@ -60,10 +60,10 @@ public class UserFactory {
         });
     }
 
-    public User signUp(String name, String password, String email) {
+    public User createUserInUsers (String name, String password, String email) {
         return db.withConnection(conn -> {
             User user = null;
-            String sql = "INSERT INTO User (name, password, email) VALUES ( ?, ?, ?)";
+            String sql = "INSERT INTO user (name, password, email) VALUES ( ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, name);
             stmt.setString(2, password);
@@ -71,7 +71,7 @@ public class UserFactory {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                int id = rs.getInt(0);
+                int id = rs.getInt(1);
                 user = new User(id, name, password, email);
             }
             stmt.close();
