@@ -69,6 +69,11 @@ public class QuizController extends Controller {
     }
 
 
+    public Result getCorrectAnswer() {
+        String correctAnswer = quiz.getCorrectAnswer();
+        return ok(Json.newObject().put("correctAnswer", correctAnswer));
+    }
+
     public Result handleResult(Http.Request request) {
         /*
         JsonNode json = request.body().asJson();

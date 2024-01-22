@@ -2,10 +2,10 @@ let correctAnswerCount = 0;
 let time = 0;
 let timerRunning = false;
 let timerInterval;
+let doubleIt = false;
 
 function startQuiz() {
     getNextQuestion();
-    startTimer();
 }
 
 function startTimer() {
@@ -20,8 +20,13 @@ function startTimer() {
 }
 
 function updateScore() {
-    correctAnswerCount += 1;
-    document.getElementById('current-score').innerText = "Richtige Antworten : " + correctAnswerCount;
+    if (doubleIt === true) {
+        correctAnswerCount += 2;
+        doubleIt = false;
+    } else {
+        correctAnswerCount += 1;
+    }
+    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + correctAnswerCount;
 }
 
 function getNextQuestion() {
@@ -44,12 +49,14 @@ function getNextQuestion() {
         return response.json();
     }).then(data => {
         renderNextQuestion(data.question, data.answers, correctAnswerCount);
+        startTimer();
     }).catch(error => console.log(error.message));
 }
 
 function renderNextQuestion(question, answers, score) {
     document.getElementById('start-quiz-container').innerText = "";
     document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
+    document.getElementById('questionCoandJoker').style.display = 'block';
     document.getElementById('question-container').style.display = 'block';
     document.getElementById('question').innerHTML = question;
 
@@ -63,6 +70,7 @@ function renderNextQuestion(question, answers, score) {
         answersContainer.appendChild(document.createElement('br'));
     });
     document.getElementById('button-container').style.display = 'block';
+    document.getElementById('joker-container').style.display = 'block';
     document.getElementById('check-answer-button').style.display = 'block';
     document.getElementById('next-question-button').style.display = 'none';
     document.getElementById('end-quiz-container').style.display = 'none';
@@ -170,3 +178,68 @@ function saveQuizResult(score) {
     })
     .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }
+
+function getCorrectAnswer(callback) {
+    fetch("/getCorrectAnswer", {
+        method: "GET",
+        headers: {
+            "Content-Type": "text/json"
+        },
+        credentials: "include"
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    }).then(data => {
+        callback(data.correctAnswer);
+    }).catch(error => console.log(error.message));
+}
+
+function fiftyFiftyJoker() {
+    getCorrectAnswer(correctAnswer => {
+        let answerLabels = document.querySelectorAll('form#answer-form label');
+
+        let correctAnswerLabel = Array.from(answerLabels).find(label => {
+            return label.innerText.includes(correctAnswer);
+        });
+
+        let visibleAnswerCount = 0;
+        answerLabels.forEach(label => {
+            if (label.style.display !== 'none' && label !== correctAnswerLabel) {
+                visibleAnswerCount++;
+            }
+        });
+
+        if (visibleAnswerCount >= 2) {
+            let hiddenCount = 0;
+            while (hiddenCount < 2) {
+                let randomIndex = Math.floor(Math.random() * answerLabels.length);
+                let label = answerLabels[randomIndex];
+                if (label.style.display !== 'none' && label !== correctAnswerLabel) {
+                    label.style.display = 'none';
+                    hiddenCount++;
+                }
+            }
+        }
+
+        document.getElementById('5050Joker').disabled = true;
+    });
+}
+
+function pauseJoker() {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.getElementById('pauseJoker').disabled = true;
+}
+
+function doublePointsJoker() {
+    doubleIt = true;
+    document.getElementById('doublePointsJoker').disabled = true;
+}
+
+
+
+
+
+
