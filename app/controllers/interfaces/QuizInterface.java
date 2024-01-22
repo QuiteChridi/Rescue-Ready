@@ -1,9 +1,9 @@
 package controllers.interfaces;
 
-import models.QuizQuestion;
+import models.QuizFactory;
 
-public interface Quiz {
-    QuizQuestion getCurrentQuestion();
+public interface QuizInterface {
+    QuizFactory.QuizQuestion getCurrentQuestion();
 
     void nextQuestion();
 
@@ -13,8 +13,7 @@ public interface Quiz {
 
     String getCorrectAnswer();
 
-    void resetQuiz();
+    int getId();
 
-    void setStartingQuestion(int questionIndex);
-
+    String getName();
 }

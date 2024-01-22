@@ -8,13 +8,16 @@ POST        /login                  controllers.LoginController.authenticate(req
 
 GET         /signup                 controllers.LoginController.signUp
 POST        /signup                 controllers.LoginController.createUser(request:  play.mvc.Http.Request)
-
 POST        /logout                 controllers.LoginController.logout
 
-GET         /profile                controllers.HomeController.profile
-GET         /highscore              controllers.HomeController.highscore()
-POST        /highscoreByQuizName    controllers.HomeController.renderHighscore(request: play.mvc.Http.Request)
 
+GET         /profile                controllers.HomeController.profile
+GET         /friendProfile/:name    controllers.HomeController.friendProfile(name: String)
+
+
+GET         /highscore              controllers.ScoreboardController.highscore()
+GET         /getHighscore           controllers.ScoreboardController.getHighscoreFromSession(request:  play.mvc.Http.Request)
+POST        /highscoreByQuizName    controllers.ScoreboardController.renderHighscore(request: play.mvc.Http.Request)
 
 GET         /quizView               controllers.QuizController.quizView
 GET         /quizSelection          controllers.QuizController.quizSelection
@@ -22,10 +25,6 @@ GET         /getNextQuestion        controllers.QuizController.getNextQuestion
 POST        /checkAnswer            controllers.QuizController.checkAnswer(request:  play.mvc.Http.Request)
 POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
 POST        /selectQuiz             controllers.QuizController.selectQuiz(request: play.mvc.Http.Request)
-
-GET         /getHighscore           controllers.HomeController.getHighscoreFromSession(request:  play.mvc.Http.Request)
-
-GET         /friendProfile/:name    controllers.HomeController.friendProfile(name: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file           controllers.Assets.versioned(path="/public", file: Asset)

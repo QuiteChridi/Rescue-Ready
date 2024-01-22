@@ -1,8 +1,8 @@
-function selectQuiz(quizName){
+function selectQuiz(quizId){
     fetch("/selectQuiz", {
         method: "POST",
         body: JSON.stringify({
-            quizName: quizName,
+            quizId: quizId,
         }),
         headers: {
             "Content-Type": "application/json"

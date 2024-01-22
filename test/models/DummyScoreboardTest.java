@@ -1,6 +1,7 @@
 package models;
 
-import controllers.interfaces.Scoreboard;
+import controllers.interfaces.ScoreboardInterface;
+import oldModels.DummyScoreboard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.util.Comparator;
 import static org.junit.Assert.*;
 
 public class DummyScoreboardTest {
-    private Scoreboard scoreboard;
+    private ScoreboardInterface scoreboard;
 
     @Before
     public void setUp(){
@@ -20,17 +21,17 @@ public class DummyScoreboardTest {
     @Test
     public void getHighscoresShouldReturnACopyOfHighscores(){
         var highscores = scoreboard.getHighscores();
-        highscores.add(new Highscore("test", 123));
+        highscores.add(new HighscoreFactory.Highscore("test", 123));
         assertNotEquals(highscores, scoreboard.getHighscores());
     }
     @Test
     public void updateHighscoreShouldUpdateHighscoreInList() {
         var highscores = scoreboard.getHighscores();
         int randomHighscoreIndex = (int) (Math.random() * (highscores.size()-1));
-        Highscore usedHighscore = highscores.get(randomHighscoreIndex);
+        HighscoreFactory.Highscore usedHighscore = highscores.get(randomHighscoreIndex);
         int scoreToSet = usedHighscore.getScore() + 12;
-        scoreboard.updateHighscore(usedHighscore.getName(), scoreToSet);
-        assertEquals(scoreToSet, scoreboard.getHighscore(usedHighscore.getName()).getScore());
+        scoreboard.updateHighscore(usedHighscore.getUserName(), scoreToSet);
+        assertEquals(scoreToSet, scoreboard.getHighscore(usedHighscore.getUserName()).getScore());
     }
     @Test
     public void updateHighscoreShouldThrowIfHighscoreIsNotInList() {
@@ -41,8 +42,8 @@ public class DummyScoreboardTest {
     public void isInHighscoreListShouldReturnTrueForHighscoreInList() {
         var highscores = scoreboard.getHighscores();
         int randomHighscoreIndex = (int) (Math.random() * (highscores.size()-1));
-        Highscore usedHighscore = highscores.get(randomHighscoreIndex);
-        assertTrue(scoreboard.isInHighscoreList(usedHighscore.getName()));
+        HighscoreFactory.Highscore usedHighscore = highscores.get(randomHighscoreIndex);
+        assertTrue(scoreboard.isInHighscoreList(usedHighscore.getUserName()));
     }
 
     @Test
@@ -54,8 +55,8 @@ public class DummyScoreboardTest {
     public void getHighscoreShouldReturnTheHighscoreWithThePassedName(){
         var highscores = scoreboard.getHighscores();
         int randomHighscoreIndex = (int) (Math.random() * (highscores.size()-1));
-        Highscore usedHighscore = highscores.get(randomHighscoreIndex);
-        assertEquals(usedHighscore, scoreboard.getHighscore(usedHighscore.getName()));
+        HighscoreFactory.Highscore usedHighscore = highscores.get(randomHighscoreIndex);
+        assertEquals(usedHighscore, scoreboard.getHighscore(usedHighscore.getUserName()));
     }
 
     @Test
@@ -65,17 +66,17 @@ public class DummyScoreboardTest {
     @Test
     public void highscoreListShouldContainHighscoreAfterAdding() {
         scoreboard.addHighscore("test", 123);
-        assertTrue(scoreboard.getHighscores().contains(new Highscore("test", 123)));
+        assertTrue(scoreboard.getHighscores().contains(new HighscoreFactory.Highscore("test", 123)));
     }
 
     @Test
     public void getRankShouldReturnPositionInSortedHighscoreListPlusOne() {
         var highscores = scoreboard.getHighscores();
         int randomHighscoreIndex = (int) (Math.random() * (highscores.size()-1));
-        Highscore usedHighscore = highscores.get(randomHighscoreIndex);
-        highscores.sort(Comparator.comparingInt(Highscore::getScore));
+        HighscoreFactory.Highscore usedHighscore = highscores.get(randomHighscoreIndex);
+        highscores.sort(Comparator.comparingInt(HighscoreFactory.Highscore::getScore));
         Collections.reverse(highscores);
-        assertEquals(scoreboard.getRank(usedHighscore.getName()), highscores.indexOf(usedHighscore) + 1 );
+        assertEquals(scoreboard.getRank(usedHighscore.getUserName()), highscores.indexOf(usedHighscore) + 1 );
 
     }
 }

@@ -1,12 +1,11 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.interfaces.Quiz;
-import controllers.interfaces.Scoreboard;
-import models.DummyScoreboard;
-import models.DummyQuiz;
+import com.google.inject.Inject;
+import controllers.interfaces.QuizInterface;
+import models.HighscoreFactory;
+import models.UserFactory;
 import models.QuizFactory;
-import models.QuizQuestion;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -17,25 +16,27 @@ import views.html.quiz.quizView;
 
 public class QuizController extends Controller {
 
-    Quiz quiz = DummyQuiz.getInstance();
-    Scoreboard scoreboard = DummyScoreboard.getInstance();
+    private QuizInterface quiz;
+    private final QuizFactory quizes;
+
+    @Inject
+    public QuizController(QuizFactory quizes, UserFactory users, HighscoreFactory scoreboard) {
+        this.quizes = quizes;
+    }
 
     public Result quizSelection() {
-        return ok(quizSelection.render(QuizFactory.getPossibleQuizes()));
+        return ok(quizSelection.render(quizes.getPossibleQuizNames()));
     }
 
     public Result selectQuiz(Http.Request request){
-
         JsonNode json = request.body().asJson();
-        String quizName = json.findPath("quizName").asText();
-
-        quiz = QuizFactory.getQuiz(quizName);
+        int quizId = json.findPath("quizId").asInt();
+        System.out.println("test");
+        quiz = quizes.getQuiz(quizId);
         return ok();
-
     }
 
     public Result quizView() {
-        quiz.setStartingQuestion(0);
         return ok(quizView.render());
     }
 
@@ -49,7 +50,7 @@ public class QuizController extends Controller {
         }
         quiz.nextQuestion();
 
-        QuizQuestion question = quiz.getCurrentQuestion();
+        QuizFactory.QuizQuestion question = quiz.getCurrentQuestion();
         JsonNode jsonQuestion = Json.newObject()
                 .put("question", question.getQuestionText())
                 .set("answers", Json.toJson(question.getAnswers()));
@@ -67,21 +68,24 @@ public class QuizController extends Controller {
         return ok(Json.newObject().put("isCorrect", isCorrect).put("correctAnswer", correctAnswer));
     }
 
+
     public Result handleResult(Http.Request request) {
+        /*
         JsonNode json = request.body().asJson();
         int highscore = json.findPath("highscore").asInt();
 
-        String username = request.session().get("username").orElse("Guest");
+        int userID = Integer.parseInt(request.session().get("userId").get());
+        int quizId= quiz.getId();
 
-        if(scoreboard.isInHighscoreList(username)){
+        if(scoreboard.isInHighscoreList(quiz)){
             scoreboard.updateHighscore(username, highscore);
         } else {
             scoreboard.addHighscore(username, highscore);
         }
 
-        int rank = scoreboard.getRank(username);
-        quiz.resetQuiz();
+        int rank = scoreboard.getRank(username);*/
 
-        return ok().addingToSession(request, "highscore", String.valueOf(highscore)).addingToSession(request, "rank", String.valueOf(rank));
+        return ok();
     }
+
 }

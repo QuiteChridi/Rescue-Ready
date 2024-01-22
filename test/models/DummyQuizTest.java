@@ -1,13 +1,14 @@
 package models;
 
-import controllers.interfaces.Quiz;
+import controllers.interfaces.QuizInterface;
+import oldModels.DummyQuiz;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class DummyQuizTest {
-    private Quiz quiz;
+    private QuizInterface quiz;
     @Before
     public void setUp(){
         quiz = DummyQuiz.getInstance();
