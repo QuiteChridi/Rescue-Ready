@@ -18,7 +18,7 @@ public class QuizFactory {
         this.db = db;
     }
 
-    public Quiz getQuiz(int id){
+    public Quiz getQuizById(int id){
         return db.withConnection(conn -> {
             QuizFactory.Quiz quiz = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz, questions WHERE idQuiz = ?");

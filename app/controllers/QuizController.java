@@ -32,7 +32,7 @@ public class QuizController extends Controller {
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
         System.out.println("test");
-        quiz = quizes.getQuiz(quizId);
+        quiz = quizes.getQuizById(quizId);
         return ok();
     }
 

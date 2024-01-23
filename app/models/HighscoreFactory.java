@@ -10,17 +10,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Singleton
 public class HighscoreFactory implements ScoreboardInterface {
     private final Database db;
     private final UserFactory users;
+    private final QuizFactory quizes;
+
 
     @Inject
-    HighscoreFactory(Database db, UserFactory users) {
+    HighscoreFactory(Database db, UserFactory users, QuizFactory quizes) {
         this.db = db;
         this.users = users;
+        this.quizes = quizes;
     }
 
     @Override
@@ -29,6 +31,22 @@ public class HighscoreFactory implements ScoreboardInterface {
             List<Highscore> highscores = new ArrayList<>();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores WHERE quiz_idQuiz = ?");
             stmt.setInt(1, quizId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Highscore highscore = new Highscore(rs);
+                highscores.add(highscore);
+            }
+            stmt.close();
+            return highscores;
+        });
+    }
+
+    @Override
+    public List<Highscore> getHighscoresOfUser(int userId) {
+        return db.withConnection(conn -> {
+            List<Highscore> highscores = new ArrayList<>();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores WHERE user_idUser = ?");
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Highscore highscore = new Highscore(rs);
@@ -64,6 +82,10 @@ public class HighscoreFactory implements ScoreboardInterface {
 
         public String getUserName(){
             return users.getUserById(userId).getName();
+        }
+
+        public String getQuizName() {
+            return quizes.getQuizById(quizId).getName();
         }
 
         @Override
