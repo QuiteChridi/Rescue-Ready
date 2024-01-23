@@ -53,4 +53,8 @@ public class HomeController extends Controller {
             return notFound("Friend not found");
         }
     }
+
+    public Result shop() {
+        return ok(shop.render());
+    }
 }

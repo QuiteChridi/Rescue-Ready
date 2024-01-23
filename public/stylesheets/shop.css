@@ -1,0 +1,46 @@
+.joker-outer-container {
+    margin-bottom: 20px; /* Beispiel: Füge einen Abstand unter den äußeren Container hinzu */
+}
+
+.joker-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    width: 100%;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.joker-item {
+    width: 30%;
+    margin: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.joker-picture img {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+#buy-content {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#buy-text {
+    margin-right: 10px;
+}
+
+#buy-image img {
+    max-height: 30px;
+    max-width: 30px;
+}
