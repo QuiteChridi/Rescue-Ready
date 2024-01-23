@@ -24,14 +24,16 @@
         <nav>
             <div class="nav-icons">
                 <ul>
-                    <li><a href="quizSelection">quiz</a></li>
                     <li>
-                        <a href="profile" >
+                        <a href="@routes.QuizController.quizSelection">quiz</a>
+                    </li>
+                    <li>
+                        <a href="@routes.HomeController.profile()" >
                             <i class="fa-solid fa-user">profile</i>
                         </a>
                     </li>
                     <li>
-                        <a href="highscore" >
+                        <a href="@routes.ScoreboardController.highscore()" >
                             <i class="fa-solid fa-star">highscore</i>
                         </a>
                     </li>
@@ -43,6 +45,5 @@
                 </ul>
             </div>
         </nav>
-
     </body>
 }
