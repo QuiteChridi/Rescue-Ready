@@ -157,7 +157,7 @@ public class UserFactory {
         public List<User> getFriends() {
             return db.withConnection(conn -> {
                 List<User> result = new ArrayList<>();
-                String sql = "SELECT * FROM friends, user WHERE id_user1 = ? AND friends.id_user2 = idUser";
+                String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setInt(1, this.id);
                 ResultSet rs = stmt.executeQuery();

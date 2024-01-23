@@ -40,18 +40,19 @@ public class LoginController extends Controller {
 
         loginLogger.debug("Attempting login check.");
         try {
-            if (users.authenticate(username, password) != null) {
+            UserFactory.User user = users.authenticate(username, password);
+            if (user != null) {
                 result.put("response", "Login successful");
-                loginLogger.debug("Username: " + username);
-                loginLogger.debug("Password: " + password);
+                // Fügen Sie die Benutzer-ID zur Session hinzu, nicht den Benutzernamen
+                return ok(result).addingToSession(request, "userID", Integer.toString(user.getId()));
             } else {
-                result.put("response", "Wrong Password");
+                result.put("response", "Wrong username or password");
             }
-            System.out.println("Username: " + username + "\nPassword: " + password);
         } catch (Throwable t) {
-            loginLogger.error("Exception with username + password", t);
+            loginLogger.error("Exception during authentication", t);
+            result.put("response", "Login failed due to an error");
         }
-        return ok(result).addingToSession(request, "username", username);
+        return ok(result);
     }
 
     public Result logout () {

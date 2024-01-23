@@ -1,17 +1,61 @@
-@(friendName: String)
+@(user: UserFactory#User)
 
 @index("FriendProfile") {
     @defining(play.core.PlayVersion.current) { version =>
-    <body>
-        <div class="container" id="profile-container">
-            <div class="content">
-                <div class="profile-display">
-                    <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
-                    <h1 id="user-name">@friendName</h1>
-                    <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
+        <body>
+            <div class="container" id="profile-container">
+                <div class="content">
+                    <div class="profile-display">
+                        <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
+                        <h1 id="user-name">@user.getName</h1>
+                        <div class="highscores-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Quiz</th>
+                                        <th>Highscore</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Autounfälle</td>
+                                        <td>90</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wiederbelebung</td>
+                                        <td>85</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Der richtige Notruf</td>
+                                        <td>78</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <!--
+                    <div class="highscores-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Highscore</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            for((quizId, highscore) <- user.getHighscores()) {
+                                <tr>
+                                    <td>quizId</td>
+                                    <td>highscore</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    -->
+                    </div>
                 </div>
             </div>
-        </div>
-    </body>
+        </body>
     }
 }

@@ -11,9 +11,8 @@ POST        /signup                 controllers.LoginController.createUser(reque
 POST        /logout                 controllers.LoginController.logout
 
 
-GET         /profile                controllers.HomeController.profile
-GET         /friendProfile/:name    controllers.HomeController.friendProfile(name: String)
-
+GET         /profile                controllers.HomeController.profile(request: play.mvc.Http.Request)
+GET         /friendProfile/:id      controllers.HomeController.friendProfile(id: Int)
 
 GET         /highscore              controllers.ScoreboardController.highscore()
 GET         /getHighscore           controllers.ScoreboardController.getHighscoreFromSession(request:  play.mvc.Http.Request)
