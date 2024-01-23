@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import controllers.interfaces.QuizInterface;
 import models.HighscoreFactory;
@@ -45,9 +46,12 @@ public class QuizController extends Controller {
         System.out.println(quiz);
 
         if (!quiz.hasNextQuestion()) {
-            System.out.println("Hallo2");
-            return status(404, "Keine weiteren Fragen vorhanden");
+            System.out.println("Keine weiteren Fragen vorhanden");
+            ObjectNode result = Json.newObject();
+            result.put("endOfQuiz", true);
+            return ok(result);
         }
+
         quiz.nextQuestion();
 
         QuizFactory.QuizQuestion question = quiz.getCurrentQuestion();

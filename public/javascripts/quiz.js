@@ -37,19 +37,18 @@ function getNextQuestion() {
         },
         credentials: "include"
     }).then(response => {
-        if (response.status === 404) {
-            document.getElementById('end-quiz-container').style.display = 'block';
-            document.getElementById('next-question-button').style.display = 'none';
-            return;
-        }
-
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
     }).then(data => {
-        renderNextQuestion(data.question, data.answers, correctAnswerCount);
-        startTimer();
+        if (data.endOfQuiz) {
+            document.getElementById('end-quiz-container').style.display = 'block';
+            document.getElementById('next-question-button').style.display = 'none';
+        } else {
+            renderNextQuestion(data.question, data.answers, correctAnswerCount);
+            startTimer();
+        }
     }).catch(error => console.log(error.message));
 }
 
