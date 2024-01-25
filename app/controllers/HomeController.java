@@ -1,19 +1,26 @@
 package controllers;
 
-import akka.event.Logging;
 import com.google.inject.Inject;
 import models.*;
 import play.mvc.*;
 import views.html.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class HomeController extends Controller {
 
     UserFactory users;
+    private final HighscoreFactory highscoreFactory;
+    private final QuizFactory quizFactory;
 
     @Inject
-    public HomeController(UserFactory users) {
+    public HomeController(UserFactory users, final HighscoreFactory highscoreFactory, final QuizFactory quizFactory) {
         this.users = users;
+        this.highscoreFactory = highscoreFactory;
+        this.quizFactory = quizFactory;
     }
 
     public Result main() {
@@ -48,10 +55,23 @@ public class HomeController extends Controller {
         UserFactory.User friend = users.getUserById(friendUserId);
 
         if (friend != null) {
-            return ok(friendProfile.render(friend));
+            Map<String, Integer> quizHighscores = getQuizHighscoresForUser(friend);
+            return ok(friendProfile.render(friend, quizHighscores));
         } else {
             return notFound("Friend not found");
         }
+    }
+
+    private Map<String, Integer> getQuizHighscoresForUser(UserFactory.User user) {
+        Map<String, Integer> quizHighscores = new HashMap<>();
+        List<HighscoreFactory.Highscore> highscores = highscoreFactory.getHighscoresOfUser(user.getId());
+
+        for (HighscoreFactory.Highscore highscore : highscores) {
+            String quizName = quizFactory.getQuizById(highscore.getQuizId()).getName();
+            quizHighscores.put(quizName, highscore.getScore());
+        }
+
+        return quizHighscores;
     }
 
     public Result shop() {
