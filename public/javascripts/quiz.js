@@ -1,5 +1,5 @@
 let correctAnswerCount = 0;
-let time = 0;
+let questionTimer = 15;
 let timerRunning = false;
 let timerInterval;
 let doubleIt = false;
@@ -10,13 +10,20 @@ function startQuiz() {
 
 function startTimer() {
     if (!timerRunning) {
+        questionTimer = 15;
         timerRunning = true;
         timerInterval = setInterval(function () {
-            time++;
+            questionTimer--;
             updateTimerDisplay();
+
+            if (questionTimer <= 0) {
+                stopTimer();
+                submitAnswer(null);
+                document.getElementById('check-answer-button').style.display = 'none';
+                document.getElementById('next-question-button').style.display = 'flex';
+            }
         }, 1000);
     }
-    document.getElementById('timer').style.display = 'block';
 }
 
 function updateScore() {
@@ -43,39 +50,45 @@ function getNextQuestion() {
         return response.json();
     }).then(data => {
         if (data.endOfQuiz) {
-            document.getElementById('end-quiz-container').style.display = 'block';
+            document.getElementById('end-quiz-container').style.display = 'flex';
             document.getElementById('next-question-button').style.display = 'none';
         } else {
-            renderNextQuestion(data.question, data.answers, correctAnswerCount);
             startTimer();
+            renderNextQuestion(data.question, data.answers, correctAnswerCount);
         }
     }).catch(error => console.log(error.message));
 }
 
 function renderNextQuestion(question, answers, score) {
     document.getElementById('start-quiz-container').innerText = "";
-    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
-    document.getElementById('questionCoandJoker').style.display = 'block';
-    document.getElementById('question-container').style.display = 'block';
-    document.getElementById('question').innerHTML = question;
 
+    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
+    document.getElementById('timer-bar-container').style.display = 'flex';
+    updateTimerDisplay();
+
+    document.getElementById('questionCoandJoker').style.display = 'flex';
+
+    document.getElementById('question-container').style.display = 'flex';
+    document.getElementById('question').innerHTML = question;
     let answersContainer = document.getElementById('answer-form');
     answersContainer.innerHTML = "";
-
+    shuffleAnswers(answers);
     answers.forEach(answer => {
         let label = document.createElement('label');
         label.innerHTML = `<input type="radio" name="answer" value="${answer}">${answer}`;
         answersContainer.appendChild(label);
         answersContainer.appendChild(document.createElement('br'));
     });
-    document.getElementById('button-container').style.display = 'block';
-    document.getElementById('joker-container').style.display = 'block';
-    document.getElementById('check-answer-button').style.display = 'block';
+
+    document.getElementById('button-container').style.display = 'flex';
+    document.getElementById('check-answer-button').style.display = 'flex';
     document.getElementById('next-question-button').style.display = 'none';
     document.getElementById('end-quiz-container').style.display = 'none';
+
+    document.getElementById('joker-container').style.display = 'flex';
+
     document.getElementById('result').innerText = "";
 }
-
 
 function checkAnswer() {
     let selectedAnswerElement = document.querySelector('input[name="answer"]:checked');
@@ -106,8 +119,9 @@ function submitAnswer(selectedAnswerElement) {
         return response.json();
     }).then(data => {
         renderResult(data.isCorrect, data.correctAnswer);
+        stopTimer();
         document.getElementById('check-answer-button').style.display = 'none';
-        document.getElementById('next-question-button').style.display = 'block';
+        document.getElementById('next-question-button').style.display = 'flex';
     }).catch(error => console.log(error.message));
 }
 
@@ -127,8 +141,26 @@ function renderResult(isCorrect, correctAnswer) {
 }
 
 function updateTimerDisplay() {
-    const timerElement = document.getElementById('timer');
-    timerElement.innerText = formatTime(time);
+    const timerBar = document.getElementById('timer-bar');
+    const timerText = document.getElementById('timer-text');
+
+    const percentage = (questionTimer / 15) * 100;
+
+    const maxWidth = window.innerWidth * 0.70;
+    const barWidth = Math.min((percentage / 100) * maxWidth, maxWidth);
+
+    timerBar.style.width = barWidth + 'px';
+
+    if (questionTimer <= 5) {
+        timerBar.style.backgroundColor = 'red';
+    } else {
+        timerBar.style.backgroundColor = 'green';
+    }
+
+    timerText.innerText = formatTime(questionTimer);
+    if (questionTimer <= 0) {
+        timerBar.style.width = maxWidth + 'px';
+    }
 }
 
 function formatTime(seconds) {
@@ -153,12 +185,10 @@ function calculateHighscore() {
 }
 
 function saveEndScore() {
-    stopTimer();
     saveQuizResult(calculateHighscore())
 }
 
 function saveQuizResult(score) {
-
     fetch("/saveQuizResult", {
         method: "POST",
         body: JSON.stringify({
@@ -175,7 +205,7 @@ function saveQuizResult(score) {
         window.location.href="quizSelection"
         alert("Ergebnis gespeichert!");
     })
-    .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
+        .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
 }
 
 function getCorrectAnswer(callback) {
@@ -193,6 +223,13 @@ function getCorrectAnswer(callback) {
     }).then(data => {
         callback(data.correctAnswer);
     }).catch(error => console.log(error.message));
+}
+
+function shuffleAnswers(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
 function fiftyFiftyJoker() {
@@ -221,7 +258,7 @@ function fiftyFiftyJoker() {
                 }
             }
         }
-
+        document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
         document.getElementById('5050Joker').disabled = true;
     });
 }
@@ -229,11 +266,13 @@ function fiftyFiftyJoker() {
 function pauseJoker() {
     clearInterval(timerInterval);
     timerRunning = false;
+    document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
     document.getElementById('pauseJoker').disabled = true;
 }
 
 function doublePointsJoker() {
     doubleIt = true;
+    document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
     document.getElementById('doublePointsJoker').disabled = true;
 }
 

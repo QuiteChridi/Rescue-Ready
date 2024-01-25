@@ -1,20 +1,28 @@
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =>
+
         <body>
             <h1>Quiz</h1>
-            <span id="timer" style="display: none;">0:00</span>
+
             <h3 id="current-score" style="font-size: 18px; color: #333;"></h3>
+
+            <div id="timer-bar-container" style="display: none;">
+                <div id="timer-bar" class="timer-bar">
+                    <span id="timer-text"></span>
+                </div>
+            </div>
 
             <div id="start-quiz-container">
                 <button onclick="startQuiz()">Quiz starten</button>
             </div>
+            <div id="questionCoandJoker" class="questionCoandJoker" style="display: none;">
+                <div id="question-container" class="column-container" style="display: none;">
+                    <div>
+                        <h3 id="question" style="font-size: 18px; color: black;"></h3>
+                        <form id="answer-form"></form>
+                    </div>
 
-            <div id="questionCoandJoker" style="display: none;">
-                <div id="question-container" style="display: none;">
-                    <p id="question"></p>
-                    <form id="answer-form"></form>
-
-                    <div id="button-container" style="display: none;">
+                    <div id="button-container" class="row-container" style="display: none;">
                         <button id="check-answer-button" onclick="checkAnswer()">Antwort überprüfen</button>
                         <button id="next-question-button" onclick="getNextQuestion()">Nächste Frage</button>
                         <button id="end-quiz-container" onclick="saveEndScore()">Quiz beenden</button>
@@ -23,12 +31,19 @@
                     <div id="result"></div>
                 </div>
 
-                <div id="joker-container" style="display: none;">
-                    <button id="5050Joker" onclick="fiftyFiftyJoker()">50:50</button>
-                    <br>
-                    <button id="pauseJoker" onclick="pauseJoker()">Pause</button>
-                    <br>
-                    <button id="doublePointsJoker" onclick="doublePointsJoker()">DoubleIt</button>
+                <div id="joker-container" class="column-container" style="display: none;">
+                    <div id="button-container" class="row-container">
+                        <p>1 left </p>
+                        <img id="5050Joker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="fiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                    </div>
+                    <div id="button-container" class="row-container">
+                        <p>2 left </p>
+                        <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="pauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                    </div>
+                    <div id="button-container" class="row-container">
+                        <p>0 left </p>
+                        <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="doublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                    </div>
                 </div>
             </div>
         </body>

@@ -1,15 +1,29 @@
 @index("Shop") {
     @defining(play.core.PlayVersion.current) { version =>
-        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/shop.css")">
+        <div id="shop-container">
+            <div id="shop-header">
+                <div id="placeholder">
+                </div>
 
-        <h1>Shop</h1>
+                <div id="shop">
+                    <h1>Shop</h1>
+                </div>
 
-                <!-- Fifty-Fifty Joker -->
+                <div id="owned-coins">
+                    <div id="stock-text">
+                        <p>99</p>
+                    </div>
+                    <div id="buy-image">
+                        <img src="@routes.Assets.versioned("../../../play-server/public/images/coin.png")" alt="Coin">
+                    </div>
+                </div>
+            </div>
+
             <div id="fiftyFiftyJoker-container" class="joker-container">
                 <div id="fiftyFiftyJoker-picture" class="joker-item joker-picture">
                     <img src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="Fifty-Fifty Joker">
                 </div>
-                <div id="fiftyFiftyJoker-text" class="joker-item joker-text">
+                <div id="fiftyFiftyJoker-text" class="joker-text">
                     <h3>50:50 Joker</h3>
                     <h4>Entfernt zwei falsche Antworten für die aktuelle Frage</h4>
                 </div>
@@ -19,21 +33,18 @@
                             <p>5</p>
                         </div>
                         <div id="buy-image">
-                            <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
+                            <img src="@routes.Assets.versioned("../../../play-server/public/images/coin.png")" alt="Coin">
                         </div>
                     </div>
                     <button onclick="buyFiftyFiftyJoker()">Buy</button>
                 </div>
-
             </div>
 
-            <br>
-                <!-- Pause Joker -->
             <div id="pauseJoker-container" class="joker-container">
                 <div id="pauseJoker-picture" class="joker-item joker-picture">
                     <img src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker">
                 </div>
-                <div id="pauseJoker-text" class="joker-item joker-text">
+                <div id="pauseJoker-text" class="joker-text">
                     <h3>Pause Joker</h3>
                     <h4>Pausiert die Zeit für die aktuelle Frage</h4>
                 </div>
@@ -43,19 +54,18 @@
                             <p>7</p>
                         </div>
                         <div id="buy-image">
-                            <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
+                            <img src="@routes.Assets.versioned("../../../play-server/public/images/coin.png")" alt="Coin">
                         </div>
                     </div>
                     <button onclick="buyPauseJoker()">Buy</button>
                 </div>
             </div>
-        <br>
-                <!-- Double It Joker -->
+
             <div id="doubleItJoker-container" class="joker-container">
                 <div id="doubleItJoker-picture" class="joker-item joker-picture">
                     <img src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker">
                 </div>
-                <div id="doubleItJoker-text" class="joker-item joker-text">
+                <div id="doubleItJoker-text" class="joker-text">
                     <h3>Double It Joker</h3>
                     <h4>Verdoppelt die Punkte für die aktuelle Frage</h4>
                 </div>
@@ -65,12 +75,12 @@
                             <p>9</p>
                         </div>
                         <div id="buy-image">
-                            <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
+                            <img src="@routes.Assets.versioned("../../../play-server/public/images/coin.png")" alt="Coin">
                         </div>
                     </div>
                     <button onclick="buyDoubleItJokerJoker()">Buy</button>
                 </div>
             </div>
-        </body>
+        </div>
     }
 }
