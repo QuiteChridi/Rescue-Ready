@@ -11,6 +11,7 @@ import java.util.List;
 @Singleton
 public class UserFactory {
     private Database db;
+    private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePic.png";
     @Inject
     UserFactory(Database db) {
         this.db = db;
@@ -109,12 +110,23 @@ public class UserFactory {
         private String username;
         private String password;
         private String mail;
+        private int coins;
+        private int fiftyFiftyJoker;
+        private int doublePointsJoker;
+        private int pauseJoker;
+        private String profilePicPath;
+
 
         private User(int id, String username, String password, String mail) {
             this.id = id;
             this.username = username;
             this.mail = mail;
             this.password = password;
+            this.coins = 0;
+            this.fiftyFiftyJoker = 0;
+            this.doublePointsJoker = 0;
+            this.pauseJoker = 0;
+            this.profilePicPath = DEFAULT_PROFILE_PIC_PATH;
         }
 
         private User(ResultSet rs) throws SQLException {
@@ -122,6 +134,11 @@ public class UserFactory {
             this.username = rs.getString("name");
             this.mail = rs.getString("email");
             this.password = rs.getString("password");
+            this.coins = rs.getInt("coins");
+            this.fiftyFiftyJoker = rs.getInt("fifty_fifty_joker");
+            this.doublePointsJoker = rs.getInt("double_points_joker");
+            this.pauseJoker = rs.getInt("pause_joker");
+            this.profilePicPath = rs.getString("profile_pic_path");
         }
 
         /**
@@ -130,12 +147,18 @@ public class UserFactory {
          */
         public void save() {
             db.withConnection(conn -> {
-                String sql = "UPDATE User SET name = ?, email = ?, password = ? WHERE idUser = ?";
+                String sql = "UPDATE User SET name = ?, email = ?, password = ?, coins = ?, fifty_fifty_joker = ?, double_points_joker = ?, pause_joker = ?, profile_pic_path = ? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, this.username);
                 stmt.setString(2, this.mail);
                 stmt.setString(3, this.password);
-                stmt.setInt(4, this.id);
+                stmt.setInt(4, this.coins);
+                stmt.setInt(5, this.fiftyFiftyJoker);
+                stmt.setInt(6, this.doublePointsJoker);
+                stmt.setInt(7, this.pauseJoker);
+                stmt.setString(8, this.profilePicPath);
+                stmt.setInt(9, this.id);
+
                 stmt.executeUpdate();
                 stmt.close();
             });
@@ -170,6 +193,50 @@ public class UserFactory {
             });
         }
 
+        public int getCoins() {
+            return coins;
+        }
+
+        public void setCoins(int coins) {
+            this.coins = coins;
+            save();
+        }
+
+        public int getFiftyFiftyJoker() {
+            return fiftyFiftyJoker;
+        }
+
+        public void setFiftyFiftyJoker(int fiftyFiftyJoker) {
+            this.fiftyFiftyJoker = fiftyFiftyJoker;
+            save();
+        }
+
+        public int getDoublePointsJoker() {
+            return doublePointsJoker;
+        }
+
+        public void setDoublePointsJoker(int doublePointsJoker) {
+            this.doublePointsJoker = doublePointsJoker;
+            save();
+        }
+
+        public int getPauseJoker() {
+            return pauseJoker;
+        }
+
+        public void setPauseJoker(int pauseJoker) {
+            this.pauseJoker = pauseJoker;
+            save();
+        }
+
+        public String getProfilePicPath() {
+            return profilePicPath;
+        }
+
+        public void setProfilePicPath(String profilePicPath) {
+            this.profilePicPath = profilePicPath;
+        }
+
         public int getId() {
             return id;
         }
@@ -190,6 +257,7 @@ public class UserFactory {
 
         public void setMail(String mail) {
             this.mail = mail;
+            save();
         }
 
         public String getPassword() {
