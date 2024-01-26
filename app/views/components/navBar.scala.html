@@ -17,6 +17,7 @@
                     <li><a href="login">Login</a></li>
                     <li><a href="profile">Profile</a></li>
                     <li><a href="shop">Shop</a></li>
+                    <li><a href="friends">Freunde</a></li>
                     <li><a href="highscore">Highscore</a></li>
                     <li><a class="cta" href="#"><button onclick="logout()">Logout</button></a></li>
                 </ul>
@@ -26,26 +27,37 @@
             <div class="nav-icons">
                 <ul>
                     <li>
-                        <a href="@routes.QuizController.quizSelection">quiz</a>
-                    </li>
-                    <li>
-                        <a href="@routes.HomeController.profile()" >
-                            <i class="fa-solid fa-user">profile</i>
+                        <a href="@routes.QuizController.quizSelection">
+                            <div class="icon-container">
+                                <img src="@routes.Assets.versioned("images/rescueReadyMain.png")" alt="Quiz" class="icon-image">
+                                <span class="icon-text fa-solid fa-user">Quiz</span>
+                            </div>
                         </a>
+
                     </li>
                     <li>
                         <a href="@routes.ShopController.shop" >
-                            <i class="fa-solid fa-user">shop</i>
+                            <i class="fa-solid fa-user">Shop</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@routes.HomeController.friends" >
+                            <i class="fa-solid fa-star">Freunde</i>
                         </a>
                     </li>
                     <li>
                         <a href="@routes.ScoreboardController.highscore()" >
-                            <i class="fa-solid fa-star">highscore</i>
+                            <i class="fa-solid fa-star">Highscores</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@routes.HomeController.profile()" >
+                            <i class="fa-solid fa-user">Profil</i>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" onclick="logout()" >
-                            <i class="fa-solid fa-arrow-right-from-bracket">logout</i>
+                            <i class="fa-solid fa-arrow-right-from-bracket">LogOut</i>
                         </a>
                     </li>
                 </ul>

@@ -3,19 +3,21 @@
 @index("Shop") {
     @defining(play.core.PlayVersion.current) { version =>
         <div id="shop-container">
-            <div id="shop-header">
-                <div id="placeholder"></div>
+            <div class="shop-header">
+                <div class="left"></div>
 
-                <div id="shop">
+                <div class="center">
                     <h1>Shop</h1>
                 </div>
 
-                <div id="owned-coins">
-                    <div id="stock-text">
-                        @user.getCoins
-                    </div>
-                    <div id="buy-image">
-                        <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
+                <div class="right" id="owned-coins" >
+                    <div class="white-box-container align-right">
+                        <div class="white-box-item" id="stock-text" >
+                            @user.getCoins
+                        </div>
+                        <div id="buy-image">
+                            <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -24,12 +26,14 @@
                 <div id="fiftyFiftyJoker-picture" class="joker-item joker-picture">
                     <img src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="Fifty-Fifty Joker">
                 </div>
-                <div id="fiftyFiftyJoker-text" class="joker-text">
+                <div id="fiftyFiftyJoker-text" class="joker-item">
                     <h3>50:50 Joker</h3>
                     <h4>Entfernt zwei falsche Antworten für die aktuelle Frage</h4>
                 </div>
                 <div id="fiftyFiftyJoker-buy" class="joker-item joker-buy">
-                    <p>In Besitz: @user.getFiftyFiftyJoker</p>
+                    <div class="custom-text1">
+                        In Besitz: @user.getFiftyFiftyJoker
+                    </div>
                     <div id="buy-content">
                         <div id="buy-text">
                             <p>2</p>
@@ -46,12 +50,14 @@
                 <div id="pauseJoker-picture" class="joker-item joker-picture">
                     <img src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker">
                 </div>
-                <div id="pauseJoker-text" class="joker-text">
+                <div id="pauseJoker-text" class="joker-item">
                     <h3>Pause Joker</h3>
                     <h4>Pausiert die Zeit für die aktuelle Frage</h4>
                 </div>
                 <div id="pauseJoker-buy" class="joker-item joker-buy">
-                    <p>In Besitz: @user.getPauseJoker</p>
+                    <div class="custom-text1">
+                        In Besitz: @user.getPauseJoker
+                    </div>
                     <div id="buy-content">
                         <div id="buy-text">
                             <p>3</p>
@@ -68,12 +74,14 @@
                 <div id="doubleItJoker-picture" class="joker-item joker-picture">
                     <img src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker">
                 </div>
-                <div id="doubleItJoker-text" class="joker-text">
+                <div id="doubleItJoker-text" class="joker-item">
                     <h3>Double It Joker</h3>
                     <h4>Verdoppelt die Punkte für die aktuelle Frage</h4>
                 </div>
                 <div id="doubleItJoker-buy" class="joker-item joker-buy">
-                    <p>In Besitz: @user.getDoublePointsJoker</p>
+                    <div class="custom-text1">
+                        In Besitz: @user.getPauseJoker
+                    </div>
                     <div id="buy-content">
                         <div id="buy-text">
                             <p>4</p>

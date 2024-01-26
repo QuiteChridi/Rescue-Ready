@@ -62,6 +62,9 @@ public class HomeController extends Controller {
         }
     }
 
+    public Result friends() {
+        return ok(friends.render());
+    }
     private Map<String, Integer> getQuizHighscoresForUser(UserFactory.User user) {
         Map<String, Integer> quizHighscores = new HashMap<>();
         List<HighscoreFactory.Highscore> highscores = highscoreFactory.getHighscoresOfUser(user.getId());

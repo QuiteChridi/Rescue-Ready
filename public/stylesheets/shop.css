@@ -10,27 +10,61 @@
     gap: 10px;
 }
 
-#shop-header {
-    width: 95%;
+.shop-header {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin: 10px;
+    justify-content: center;
 }
 
-#shop-header div:first-child {
+.left,
+.center,
+.right {
+    flex: 0 0 30%;
+    padding: 10px;
+    text-align: center;
+}
+
+.shop-header .left {
+    visibility: hidden;
     margin-right: auto;
+}
+
+.shop-header .center {
+}
+
+.shop-header .right {
+    margin-left: auto;
 }
 
 #owned-coins {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.align-right {
     margin-left: auto;
 }
 
+.white-box-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: white;
+}
+
+.white-box-item {
+    margin: 10px; /* Hier den gewünschten Abstand setzen */
+}
+
 #stock-text {
-    margin-bottom: 7px;
+    margin-bottom: 15px;
 }
 
 .joker-container {
@@ -40,10 +74,16 @@
     flex-wrap: wrap;
     box-sizing: border-box;
     width: 100%;
-    border: 3px solid black;
+    border: 2px solid black;
     border-radius: 10px;
     padding: 10px;
-    background-color: rgba(239, 239, 239, 1);
+    background-color: white;
+}
+
+.custom-text1 {
+    text-decoration: underline;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .joker-item {
@@ -56,20 +96,10 @@
 }
 
 .joker-picture img {
-    max-width: 150px;
+    max-width: 42%;
     height: auto;
     display: block;
     margin: 0 auto;
-}
-
-.joker-text {
-    width: 30%;
-    padding: 10px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 35px;
 }
 
 #buy-content {
@@ -87,3 +117,4 @@
     max-height: 30px;
     max-width: 30px;
 }
+

@@ -1,0 +1,28 @@
+.friends-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: rgba(239, 239, 239, 1);
+}
+
+.friends-container .left,
+.friends-container .center,
+.friends-container .right {
+    flex: 0 0 30%;
+    padding: 10px;
+    text-align: center;
+}
+
+.friends-container .left {
+    margin-right: auto; /* Mehr Abstand zum linken Bildschirmrand */
+}
+
+.friends-container .center {
+}
+
+.friends-container .right {
+    margin-left: auto; /* Mehr Abstand zum rechten Bildschirmrand */
+}
