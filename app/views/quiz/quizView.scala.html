@@ -1,3 +1,5 @@
+@(user: UserFactory#User)
+
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =>
 
@@ -33,16 +35,16 @@
 
                 <div id="joker-container" class="column-container" style="display: none;">
                     <div id="button-container" class="row-container">
-                        <p>1 left </p>
-                        <img id="5050Joker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="fiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                        @user.getFiftyFiftyJoker
+                    <img id="5050Joker" data-fifty-fifty-joker-count="@user.getFiftyFiftyJoker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="useFiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                     </div>
                     <div id="button-container" class="row-container">
-                        <p>2 left </p>
-                        <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="pauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                        @user.getPauseJoker
+                        <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="usePauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                     </div>
                     <div id="button-container" class="row-container">
-                        <p>0 left </p>
-                        <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="doublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                        @user.getDoublePointsJoker
+                        <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="useDoublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                     </div>
                 </div>
             </div>

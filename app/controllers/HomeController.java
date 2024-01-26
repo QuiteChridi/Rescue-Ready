@@ -74,7 +74,5 @@ public class HomeController extends Controller {
         return quizHighscores;
     }
 
-    public Result shop() {
-        return ok(shop.render());
-    }
+
 }

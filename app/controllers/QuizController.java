@@ -13,16 +13,29 @@ import play.mvc.Http;
 import play.mvc.Result;
 import views.html.quiz.quizSelection;
 import views.html.quiz.quizView;
+import views.html.shop;
 
 
 public class QuizController extends Controller {
 
     private QuizInterface quiz;
     private final QuizFactory quizes;
+    UserFactory users;
 
     @Inject
     public QuizController(QuizFactory quizes, UserFactory users, HighscoreFactory scoreboard) {
         this.quizes = quizes;
+        this.users = users;
+    }
+
+    private int getUserIdFromSession(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
+    }
+
+    private UserFactory.User getUserFromSession(Http.Request request) {
+        int userID = getUserIdFromSession(request);
+        return (userID != -1) ? users.getUserById(userID) : null;
     }
 
     public Result quizSelection() {
@@ -37,8 +50,24 @@ public class QuizController extends Controller {
         return ok();
     }
 
-    public Result quizView() {
-        return ok(quizView.render());
+    public Result quizView(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+
+        if (userIDString == null || userIDString.equals("leer")) {
+            return redirect(routes.LoginController.login());
+        }
+
+        try {
+            int userID = Integer.parseInt(userIDString);
+            UserFactory.User user = users.getUserById(userID);
+            if (user != null) {
+                return ok(quizView.render(user));
+            } else {
+                return redirect(routes.LoginController.login());
+            }
+        } catch (NumberFormatException e) {
+            return redirect(routes.LoginController.login());
+        }
     }
 
     public Result getNextQuestion() {
@@ -72,10 +101,42 @@ public class QuizController extends Controller {
         return ok(Json.newObject().put("isCorrect", isCorrect).put("correctAnswer", correctAnswer));
     }
 
-
     public Result getCorrectAnswer() {
         String correctAnswer = quiz.getCorrectAnswer();
         return ok(Json.newObject().put("correctAnswer", correctAnswer));
+    }
+
+    public Result useFiftyFiftyJoker(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            int availableFiftyFiftyJoker = user.getFiftyFiftyJoker();
+            return ok(Json.newObject().put("availableFiftyFiftyJoker", availableFiftyFiftyJoker));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
+    public Result usePauseJoker(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            int availablePauseJoker = user.getPauseJoker();
+            return ok(Json.newObject().put("availablePauseJoker", availablePauseJoker));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
+    public Result useDoublePointsJoker(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            int availableDoublePointsJoker = user.getDoublePointsJoker();
+            return ok(Json.newObject().put("availableDoublePointsJoker", availableDoublePointsJoker));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
     }
 
     public Result handleResult(Http.Request request) {

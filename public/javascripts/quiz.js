@@ -86,6 +86,12 @@ function renderNextQuestion(question, answers, score) {
     document.getElementById('end-quiz-container').style.display = 'none';
 
     document.getElementById('joker-container').style.display = 'flex';
+    document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyJoker.png";
+    document.getElementById('pauseJoker').src = "/assets/images/pauseJoker.png";
+    document.getElementById('doublePointsJoker').src = "/assets/images/doubleItJoker.png";
+    document.getElementById('5050Joker').disabled = false;
+    document.getElementById('pauseJoker').disabled = false;
+    document.getElementById('doublePointsJoker').disabled = false;
 
     document.getElementById('result').innerText = "";
 }
@@ -232,6 +238,23 @@ function shuffleAnswers(array) {
     }
 }
 
+function useFiftyFiftyJoker() {
+    console.log("FiftyFifty Joker Test")
+    fetch("/useFiftyFiftyJoker", {
+        method:"GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    })
+        .then(response => response.json())
+        .then(data => {
+            let availableFiftyFiftyJoker = data.availableFiftyFiftyJoker;
+            console.log("Verfügbare Joker: " + availableFiftyFiftyJoker)
+            fiftyFiftyJoker();
+        })
+        .catch(error => console.error("Fehler beim Abrufen der verfügbaren FiftyFifty-Joker:", error));
+}
 function fiftyFiftyJoker() {
     getCorrectAnswer(correctAnswer => {
         let answerLabels = document.querySelectorAll('form#answer-form label');
@@ -263,6 +286,24 @@ function fiftyFiftyJoker() {
     });
 }
 
+function usePauseJoker() {
+    console.log("Pause Joker Test")
+    fetch("/usePauseJoker", {
+        method:"GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    })
+        .then(response => response.json())
+        .then(data => {
+            let availablePauseJoker = data.availablePauseJoker;
+            console.log("Verfügbare Joker: " + availablePauseJoker)
+            pauseJoker();
+        })
+        .catch(error => console.error("Fehler beim Abrufen der verfügbaren Pause-Joker:", error));
+}
+
 function pauseJoker() {
     clearInterval(timerInterval);
     timerRunning = false;
@@ -270,14 +311,27 @@ function pauseJoker() {
     document.getElementById('pauseJoker').disabled = true;
 }
 
+function useDoublePointsJoker() {
+    console.log("DoublePoints Joker Test")
+    fetch("/useDoublePointsJoker", {
+        method:"GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    })
+        .then(response => response.json())
+        .then(data => {
+            let availableDoublePointsJoker = data.availableDoublePointsJoker;
+            console.log("Verfügbare Joker: " + availableDoublePointsJoker)
+            doublePointsJoker();
+        })
+        .catch(error => console.error("Fehler beim Abrufen der verfügbaren DoublePoints-Joker:", error));
+}
+
 function doublePointsJoker() {
     doubleIt = true;
+
     document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
     document.getElementById('doublePointsJoker').disabled = true;
 }
-
-
-
-
-
-
