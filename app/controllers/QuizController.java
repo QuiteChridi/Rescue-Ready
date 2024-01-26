@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import controllers.interfaces.QuizInterface;
-import models.HighscoreFactory;
 import models.UserFactory;
 import models.QuizFactory;
 import play.libs.Json;
@@ -13,7 +12,6 @@ import play.mvc.Http;
 import play.mvc.Result;
 import views.html.quiz.quizSelection;
 import views.html.quiz.quizView;
-import views.html.shop;
 
 
 public class QuizController extends Controller {
@@ -23,7 +21,7 @@ public class QuizController extends Controller {
     UserFactory users;
 
     @Inject
-    public QuizController(QuizFactory quizes, UserFactory users, HighscoreFactory scoreboard) {
+    public QuizController(QuizFactory quizes, UserFactory users) {
         this.quizes = quizes;
         this.users = users;
     }
