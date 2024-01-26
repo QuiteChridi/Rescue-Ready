@@ -49,23 +49,13 @@ public class QuizController extends Controller {
     }
 
     public Result quizView(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
+            UserFactory.User user = getUserFromSession(request);
 
-        if (userIDString == null || userIDString.equals("leer")) {
-            return redirect(routes.LoginController.login());
-        }
-
-        try {
-            int userID = Integer.parseInt(userIDString);
-            UserFactory.User user = users.getUserById(userID);
             if (user != null) {
                 return ok(quizView.render(user));
             } else {
                 return redirect(routes.LoginController.login());
             }
-        } catch (NumberFormatException e) {
-            return redirect(routes.LoginController.login());
-        }
     }
 
     public Result getNextQuestion() {
