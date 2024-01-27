@@ -94,7 +94,7 @@ public class QuizController extends Controller {
         return ok(Json.newObject().put("correctAnswer", correctAnswer));
     }
 
-    public Result useFiftyFiftyJoker(Http.Request request) {
+    public Result getFiftyFiftyJoker(Http.Request request) {
         UserFactory.User user = getUserFromSession(request);
 
         if (user != null) {
@@ -111,7 +111,6 @@ public class QuizController extends Controller {
         if (user != null) {
             JsonNode json = request.body().asJson();
             int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            System.out.println("Neue Anzahl: " + newAmountOfJokers);
             user.setFiftyFiftyJoker(newAmountOfJokers);
 
             ObjectNode result = Json.newObject();
@@ -123,7 +122,7 @@ public class QuizController extends Controller {
         }
     }
 
-    public Result usePauseJoker(Http.Request request) {
+    public Result getPauseJoker(Http.Request request) {
         UserFactory.User user = getUserFromSession(request);
 
         if (user != null) {
@@ -151,7 +150,7 @@ public class QuizController extends Controller {
         }
     }
 
-    public Result useDoublePointsJoker(Http.Request request) {
+    public Result getDoublePointsJoker(Http.Request request) {
         UserFactory.User user = getUserFromSession(request);
 
         if (user != null) {

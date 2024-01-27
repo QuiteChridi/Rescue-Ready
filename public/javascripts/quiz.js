@@ -1,5 +1,5 @@
 let correctAnswerCount = 0;
-let questionTimer = 15;
+let questionTimer = 20;
 let timerRunning = false;
 let timerInterval;
 let doubleIt = false;
@@ -10,7 +10,7 @@ function startQuiz() {
 
 function startTimer() {
     if (!timerRunning) {
-        questionTimer = 15;
+        questionTimer = 20;
         timerRunning = true;
         timerInterval = setInterval(function () {
             questionTimer--;
@@ -150,7 +150,7 @@ function updateTimerDisplay() {
     const timerBar = document.getElementById('timer-bar');
     const timerText = document.getElementById('timer-text');
 
-    const percentage = (questionTimer / 15) * 100;
+    const percentage = (questionTimer / 20) * 100;
 
     const maxWidth = window.innerWidth * 0.70;
     const barWidth = Math.min((percentage / 100) * maxWidth, maxWidth);
@@ -239,8 +239,7 @@ function shuffleAnswers(array) {
 }
 
 function useFiftyFiftyJoker() {
-    console.log("FiftyFifty Joker Test")
-    fetch("/useFiftyFiftyJoker", {
+    fetch("/getFiftyFiftyJoker", {
         method:"GET",
         headers: {
             "Content-Type": "application/json"
@@ -251,22 +250,7 @@ function useFiftyFiftyJoker() {
         .then(data => {
             let availableFiftyFiftyJoker = data.availableFiftyFiftyJoker;
             if (availableFiftyFiftyJoker >= 1) {
-                fetch("/setFiftyFiftyJoker", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({ newAmountOfJokers: availableFiftyFiftyJoker - 1})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        let newAmountOfJokers = data.newAmountOfJokers;
-                        fiftyFiftyJoker();
-                        document.getElementById("fiftyFiftyJokerAmount").innerText = newAmountOfJokers;
-                    })
-                    .catch(error => console.error("Fehler beim Setzen der neuen Anzahl FiftyFiftyJoker:", error));
+                fiftyFiftyJoker(availableFiftyFiftyJoker);
             } else {
                 console.log("Nicht genügend FiftyFiftyJoker verfügbar.");
             }
@@ -274,7 +258,8 @@ function useFiftyFiftyJoker() {
         })
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren FiftyFifty-Joker:", error));
 }
-function fiftyFiftyJoker() {
+
+function fiftyFiftyJoker(availableFiftyFiftyJoker) {
     getCorrectAnswer(correctAnswer => {
         let answerLabels = document.querySelectorAll('form#answer-form label');
 
@@ -290,6 +275,8 @@ function fiftyFiftyJoker() {
         });
 
         if (visibleAnswerCount >= 2) {
+            console.log("fiftyfifty2 angewendet")
+            setFiftyFiftyJoker(availableFiftyFiftyJoker);
             let hiddenCount = 0;
             while (hiddenCount < 2) {
                 let randomIndex = Math.floor(Math.random() * answerLabels.length);
@@ -299,15 +286,31 @@ function fiftyFiftyJoker() {
                     hiddenCount++;
                 }
             }
+            document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
+
         }
-        document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
-        document.getElementById('5050Joker').disabled = true;
     });
+}
+
+function setFiftyFiftyJoker(availableFiftyFiftyJoker) {
+    fetch("/setFiftyFiftyJoker", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ newAmountOfJokers: availableFiftyFiftyJoker - 1})
+    })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers;
+        })
+        .catch(error => console.error("Fehler beim Setzen der neuen Anzahl FiftyFiftyJoker:", error));
 }
 
 function usePauseJoker() {
     console.log("Pause Joker Test")
-    fetch("/usePauseJoker", {
+    fetch("/getPauseJoker", {
         method:"GET",
         headers: {
             "Content-Type": "application/json"
@@ -318,22 +321,7 @@ function usePauseJoker() {
         .then(data => {
             let availablePauseJoker = data.availablePauseJoker;
             if (availablePauseJoker >= 1) {
-                fetch("/setPauseJoker", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({ newAmountOfJokers: availablePauseJoker - 1})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        let newAmountOfJokers = data.newAmountOfJokers;
-                        pauseJoker();
-                        document.getElementById("pauseJokerAmount").innerText = newAmountOfJokers;
-                    })
-                    .catch(error => console.error("Fehler beim Setzen der neuen Anzahl PauseJoker:", error));
+                pauseJoker(availablePauseJoker);
             } else {
                 console.log("Nicht genügend PauseJoker verfügbar.");
             }
@@ -341,16 +329,35 @@ function usePauseJoker() {
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren Pause-Joker:", error));
 }
 
-function pauseJoker() {
-    clearInterval(timerInterval);
-    timerRunning = false;
-    document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
-    document.getElementById('pauseJoker').disabled = true;
+function pauseJoker(availablePauseJoker) {
+    if (timerRunning === true) {
+        setPauseJoker(availablePauseJoker)
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
+    }
+}
+
+function setPauseJoker(availablePauseJoker) {
+    fetch("/setPauseJoker", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ newAmountOfJokers: availablePauseJoker - 1})
+    })
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
+        })
+        .catch(error => console.error("Fehler beim Setzen der neuen Anzahl PauseJoker:", error));
 }
 
 function useDoublePointsJoker() {
     console.log("DoublePoints Joker Test")
-    fetch("/useDoublePointsJoker", {
+    fetch("/getDoublePointsJoker", {
         method:"GET",
         headers: {
             "Content-Type": "application/json"
@@ -361,22 +368,7 @@ function useDoublePointsJoker() {
         .then(data => {
             let availableDoublePointsJoker = data.availableDoublePointsJoker;
             if (availableDoublePointsJoker >= 1) {
-                fetch("/setDoublePointsJoker", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({ newAmountOfJokers: availableDoublePointsJoker - 1})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        let newAmountOfJokers = data.newAmountOfJokers;
-                        doublePointsJoker();
-                        document.getElementById("doublePointsJokerAmount").innerText = newAmountOfJokers;
-                    })
-                    .catch(error => console.error("Fehler beim Setzen der neuen Anzahl DoublePointsJoker:", error));
+                doublePointsJoker(availableDoublePointsJoker)
             } else {
                 console.log("Nicht genügend DoublePointsJoker verfügbar.");
             }
@@ -384,9 +376,29 @@ function useDoublePointsJoker() {
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren DoublePoints-Joker:", error));
 }
 
-function doublePointsJoker() {
-    doubleIt = true;
+function doublePointsJoker(availableDoublePointsJoker) {
+    if (doubleIt === false) {
+        setDoublePointsJoker(availableDoublePointsJoker)
+        doubleIt = true;
+        document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
+    }
+}
 
-    document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
-    document.getElementById('doublePointsJoker').disabled = true;
+function setDoublePointsJoker(availableDoublePointsJoker) {
+    fetch("/setDoublePointsJoker", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ newAmountOfJokers: availableDoublePointsJoker - 1})
+    })
+        .then(response => response.json())
+        .then(data => {
+
+            let newAmountOfJokers = data.newAmountOfJokers;
+            doublePointsJoker();
+            document.getElementById("doublePointsJokerAmount").innerText = newAmountOfJokers;
+        })
+        .catch(error => console.error("Fehler beim Setzen der neuen Anzahl DoublePointsJoker:", error));
 }

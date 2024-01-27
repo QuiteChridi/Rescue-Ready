@@ -45,7 +45,6 @@ public class ShopController extends Controller {
 
         if (user != null) {
             int availableCoins = user.getCoins();
-            System.out.println(availableCoins);
             return ok(Json.newObject().put("availableCoins", availableCoins));
         } else {
             return redirect(routes.LoginController.login());
@@ -64,7 +63,6 @@ public class ShopController extends Controller {
                 result.put("success", true);
                 result.put("newCoins", newCoins);
 
-                System.out.println("Result: " + result);
                 return ok(result);
             } else {
                 return redirect(routes.LoginController.login());

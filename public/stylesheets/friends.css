@@ -17,12 +17,12 @@
 }
 
 .friends-container .left {
-    margin-right: auto; /* Mehr Abstand zum linken Bildschirmrand */
+    margin-right: auto;
 }
 
 .friends-container .center {
 }
 
 .friends-container .right {
-    margin-left: auto; /* Mehr Abstand zum rechten Bildschirmrand */
+    margin-left: auto;
 }

@@ -37,6 +37,7 @@ function buyFiftyFiftyJoker() {
 
                         let availableFiftyFiftyJoker =  document.getElementById("fiftyFiftyJokerAmount").innerText;
                         availableFiftyFiftyJoker++;
+
                         fetch("/setFiftyFiftyJoker", {
                             method: "POST",
                             headers: {
@@ -47,7 +48,6 @@ function buyFiftyFiftyJoker() {
                         })
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data)
                                 document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers;
                             })
                             .catch(error => console.error("Fehler beim Setzen der neuen Anzahl FiftyFiftyJoker:", error));
@@ -83,6 +83,7 @@ function buyPauseJoker() {
 
                         let availablePauseJoker =  document.getElementById("pauseJokerAmount").innerText;
                         availablePauseJoker++;
+
                         fetch("/setPauseJoker", {
                             method: "POST",
                             headers: {
@@ -93,7 +94,6 @@ function buyPauseJoker() {
                         })
                             .then(response => response.json())
                             .then(data => {
-                                console.log(data)
                                 document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
                             })
                             .catch(error => console.error("Fehler beim Setzen der neuen Anzahl PauseJoker:", error));
@@ -129,6 +129,7 @@ function buyDoublePointsJoker() {
 
                         let availableDoublePointsJoker =  document.getElementById("doublePointsJokerAmount").innerText;
                         availableDoublePointsJoker++;
+
                         fetch("/setDoublePointsJoker", {
                             method: "POST",
                             headers: {

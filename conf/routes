@@ -31,11 +31,11 @@ GET         /getCorrectAnswer       controllers.QuizController.getCorrectAnswer
 POST        /checkAnswer            controllers.QuizController.checkAnswer(request:  play.mvc.Http.Request)
 POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
 POST        /selectQuiz             controllers.QuizController.selectQuiz(request: play.mvc.Http.Request)
-GET         /useFiftyFiftyJoker     controllers.QuizController.useFiftyFiftyJoker(request: play.mvc.Http.Request)
+GET         /getFiftyFiftyJoker     controllers.QuizController.getFiftyFiftyJoker(request: play.mvc.Http.Request)
 POST        /setFiftyFiftyJoker     controllers.QuizController.setFiftyFiftyJoker(request: play.mvc.Http.Request)
-GET         /usePauseJoker          controllers.QuizController.usePauseJoker(request: play.mvc.Http.Request)
+GET         /getPauseJoker          controllers.QuizController.getPauseJoker(request: play.mvc.Http.Request)
 POST        /setPauseJoker          controllers.QuizController.setPauseJoker(request: play.mvc.Http.Request)
-GET         /useDoublePointsJoker   controllers.QuizController.useDoublePointsJoker(request: play.mvc.Http.Request)
+GET         /getDoublePointsJoker   controllers.QuizController.getDoublePointsJoker(request: play.mvc.Http.Request)
 POST        /setDoublePointsJoker   controllers.QuizController.setDoublePointsJoker(request: play.mvc.Http.Request)
 
 # Map static resources from the /public folder to the /assets URL path
