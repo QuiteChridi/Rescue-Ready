@@ -35,15 +35,21 @@
 
                 <div id="joker-container" class="column-container" style="display: none;">
                     <div id="button-container" class="row-container">
-                        @user.getFiftyFiftyJoker
+                        <div id="fiftyFiftyJokerAmount">
+                            @user.getFiftyFiftyJoker
+                        </div>
                     <img id="5050Joker" data-fifty-fifty-joker-count="@user.getFiftyFiftyJoker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="useFiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                     </div>
                     <div id="button-container" class="row-container">
+                        <div id="pauseJokerAmount">
                         @user.getPauseJoker
+                        </div>
                         <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="usePauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                     </div>
                     <div id="button-container" class="row-container">
+                        <div id="doublePointsJokerAmount">
                         @user.getDoublePointsJoker
+                        </div>
                         <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="useDoublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                     </div>
                 </div>

@@ -31,8 +31,11 @@
                     <h4>Entfernt zwei falsche Antworten für die aktuelle Frage</h4>
                 </div>
                 <div id="fiftyFiftyJoker-buy" class="joker-item joker-buy">
-                    <div class="custom-text1">
-                        In Besitz: @user.getFiftyFiftyJoker
+                    <div id="amount">
+                        <div class="custom-text1">In Besitz: </div>
+                        <div class="custom-text2" id="fiftyFiftyJokerAmount" >
+                        @user.getFiftyFiftyJoker
+                        </div>
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">
@@ -55,8 +58,11 @@
                     <h4>Pausiert die Zeit für die aktuelle Frage</h4>
                 </div>
                 <div id="pauseJoker-buy" class="joker-item joker-buy">
-                    <div class="custom-text1">
-                        In Besitz: @user.getPauseJoker
+                    <div id="amount">
+                        <div class="custom-text1">In Besitz: </div>
+                        <div class="custom-text2" id="pauseJokerAmount" >
+                        @user.getPauseJoker
+                        </div>
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">
@@ -78,9 +84,12 @@
                     <h3>Double It Joker</h3>
                     <h4>Verdoppelt die Punkte für die aktuelle Frage</h4>
                 </div>
-                <div id="doubleItJoker-buy" class="joker-item joker-buy">
-                    <div class="custom-text1">
-                        In Besitz: @user.getPauseJoker
+                <div id="doublePointsJoker-buy" class="joker-item joker-buy">
+                    <div id="amount">
+                        <div class="custom-text1">In Besitz: </div>
+                        <div class="custom-text2" id="doublePointsJokerAmount">
+                        @user.getDoublePointsJoker
+                        </div>
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">

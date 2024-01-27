@@ -10,13 +10,15 @@ function getAvailableCoins() {
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren Coins", error));
 }
 
+function updateCoinsDisplay(newCoins) {
+    document.getElementById("stock-text").innerText = newCoins;
+}
+
 function buyFiftyFiftyJoker() {
     getAvailableCoins()
         .then(data => {
 
             let availableCoins = data.availableCoins;
-            console.log("Verfügbare Coins: " + availableCoins);
-
             let fiftyfiftyPrice = 2;
 
             if (availableCoins >= fiftyfiftyPrice) {
@@ -30,9 +32,25 @@ function buyFiftyFiftyJoker() {
                 })
                     .then(response => response.json())
                     .then(data => {
-
                         let newCoins = data.newCoins;
-                        console.log("Neue Anzahl an Coins:", newCoins);
+                        updateCoinsDisplay(newCoins);
+
+                        let availableFiftyFiftyJoker =  document.getElementById("fiftyFiftyJokerAmount").innerText;
+                        availableFiftyFiftyJoker++;
+                        fetch("/setFiftyFiftyJoker", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            credentials: "include",
+                            body: JSON.stringify({ newAmountOfJokers: availableFiftyFiftyJoker})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                                document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers;
+                            })
+                            .catch(error => console.error("Fehler beim Setzen der neuen Anzahl FiftyFiftyJoker:", error));
                     })
                     .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
             } else {
@@ -46,8 +64,6 @@ function buyPauseJoker() {
         .then(data => {
 
             let availableCoins = data.availableCoins;
-            console.log("Verfügbare Coins: " + availableCoins);
-
             let pausePrice = 3;
 
             if (availableCoins >= pausePrice) {
@@ -63,7 +79,24 @@ function buyPauseJoker() {
                     .then(data => {
 
                         let newCoins = data.newCoins;
-                        console.log("Neue Anzahl an Coins:", newCoins);
+                        updateCoinsDisplay(newCoins);
+
+                        let availablePauseJoker =  document.getElementById("pauseJokerAmount").innerText;
+                        availablePauseJoker++;
+                        fetch("/setPauseJoker", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            credentials: "include",
+                            body: JSON.stringify({ newAmountOfJokers: availablePauseJoker})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                                document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
+                            })
+                            .catch(error => console.error("Fehler beim Setzen der neuen Anzahl PauseJoker:", error));
                     })
                     .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
             } else {
@@ -77,8 +110,6 @@ function buyDoublePointsJoker() {
         .then(data => {
 
             let availableCoins = data.availableCoins;
-            console.log("Verfügbare Coins: " + availableCoins);
-
             let doublePointsPrice = 4;
 
             if (availableCoins >= doublePointsPrice) {
@@ -94,7 +125,24 @@ function buyDoublePointsJoker() {
                     .then(data => {
 
                         let newCoins = data.newCoins;
-                        console.log("Neue Anzahl an Coins:", newCoins);
+                        updateCoinsDisplay(newCoins);
+
+                        let availableDoublePointsJoker =  document.getElementById("doublePointsJokerAmount").innerText;
+                        availableDoublePointsJoker++;
+                        fetch("/setDoublePointsJoker", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            credentials: "include",
+                            body: JSON.stringify({ newAmountOfJokers: availableDoublePointsJoker})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                                document.getElementById("doublePointsJokerAmount").innerText = data.newAmountOfJokers;
+                            })
+                            .catch(error => console.error("Fehler beim Setzen der neuen Anzahl DoublePointsJoker:", error));
                     })
                     .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
             } else {

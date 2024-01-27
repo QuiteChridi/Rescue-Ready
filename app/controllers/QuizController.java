@@ -105,6 +105,24 @@ public class QuizController extends Controller {
         }
     }
 
+    public Result setFiftyFiftyJoker(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            JsonNode json = request.body().asJson();
+            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
+            System.out.println("Neue Anzahl: " + newAmountOfJokers);
+            user.setFiftyFiftyJoker(newAmountOfJokers);
+
+            ObjectNode result = Json.newObject();
+            result.put("success", true);
+            result.put("newAmountOfJokers", newAmountOfJokers);
+            return ok(result);
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
     public Result usePauseJoker(Http.Request request) {
         UserFactory.User user = getUserFromSession(request);
 
@@ -116,12 +134,46 @@ public class QuizController extends Controller {
         }
     }
 
+    public Result setPauseJoker(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            JsonNode json = request.body().asJson();
+            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
+            user.setPauseJoker(newAmountOfJokers);
+
+            ObjectNode result = Json.newObject();
+            result.put("success", true);
+            result.put("newAmountOfJokers", newAmountOfJokers);
+            return ok(result);
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
     public Result useDoublePointsJoker(Http.Request request) {
         UserFactory.User user = getUserFromSession(request);
 
         if (user != null) {
             int availableDoublePointsJoker = user.getDoublePointsJoker();
             return ok(Json.newObject().put("availableDoublePointsJoker", availableDoublePointsJoker));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
+    public Result setDoublePointsJoker(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            JsonNode json = request.body().asJson();
+            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
+            user.setDoublePointsJoker(newAmountOfJokers);
+
+            ObjectNode result = Json.newObject();
+            result.put("success", true);
+            result.put("newAmountOfJokers", newAmountOfJokers);
+            return ok(result);
         } else {
             return redirect(routes.LoginController.login());
         }

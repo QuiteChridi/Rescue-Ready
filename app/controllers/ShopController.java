@@ -53,13 +53,11 @@ public class ShopController extends Controller {
     }
 
     public Result setNewCoins(Http.Request request) {
-        try {
             UserFactory.User user = getUserFromSession(request);
 
             if (user != null) {
                 JsonNode json = request.body().asJson();
                 int newCoins = json.findPath("newCoins").intValue();
-                System.out.println("Neue Anzahl Coins" + newCoins);
                 user.setCoins(newCoins);
 
                 ObjectNode result = Json.newObject();
@@ -71,8 +69,8 @@ public class ShopController extends Controller {
             } else {
                 return redirect(routes.LoginController.login());
             }
-        } catch (NumberFormatException e) {
-            return redirect(routes.LoginController.login());
-        }
     }
+
+
+
 }

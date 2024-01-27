@@ -250,8 +250,27 @@ function useFiftyFiftyJoker() {
         .then(response => response.json())
         .then(data => {
             let availableFiftyFiftyJoker = data.availableFiftyFiftyJoker;
-            console.log("Verfügbare Joker: " + availableFiftyFiftyJoker)
-            fiftyFiftyJoker();
+            if (availableFiftyFiftyJoker >= 1) {
+                fetch("/setFiftyFiftyJoker", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ newAmountOfJokers: availableFiftyFiftyJoker - 1})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        let newAmountOfJokers = data.newAmountOfJokers;
+                        fiftyFiftyJoker();
+                        document.getElementById("fiftyFiftyJokerAmount").innerText = newAmountOfJokers;
+                    })
+                    .catch(error => console.error("Fehler beim Setzen der neuen Anzahl FiftyFiftyJoker:", error));
+            } else {
+                console.log("Nicht genügend FiftyFiftyJoker verfügbar.");
+            }
+
         })
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren FiftyFifty-Joker:", error));
 }
@@ -298,8 +317,26 @@ function usePauseJoker() {
         .then(response => response.json())
         .then(data => {
             let availablePauseJoker = data.availablePauseJoker;
-            console.log("Verfügbare Joker: " + availablePauseJoker)
-            pauseJoker();
+            if (availablePauseJoker >= 1) {
+                fetch("/setPauseJoker", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ newAmountOfJokers: availablePauseJoker - 1})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        let newAmountOfJokers = data.newAmountOfJokers;
+                        pauseJoker();
+                        document.getElementById("pauseJokerAmount").innerText = newAmountOfJokers;
+                    })
+                    .catch(error => console.error("Fehler beim Setzen der neuen Anzahl PauseJoker:", error));
+            } else {
+                console.log("Nicht genügend PauseJoker verfügbar.");
+            }
         })
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren Pause-Joker:", error));
 }
@@ -323,8 +360,26 @@ function useDoublePointsJoker() {
         .then(response => response.json())
         .then(data => {
             let availableDoublePointsJoker = data.availableDoublePointsJoker;
-            console.log("Verfügbare Joker: " + availableDoublePointsJoker)
-            doublePointsJoker();
+            if (availableDoublePointsJoker >= 1) {
+                fetch("/setDoublePointsJoker", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ newAmountOfJokers: availableDoublePointsJoker - 1})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        let newAmountOfJokers = data.newAmountOfJokers;
+                        doublePointsJoker();
+                        document.getElementById("doublePointsJokerAmount").innerText = newAmountOfJokers;
+                    })
+                    .catch(error => console.error("Fehler beim Setzen der neuen Anzahl DoublePointsJoker:", error));
+            } else {
+                console.log("Nicht genügend DoublePointsJoker verfügbar.");
+            }
         })
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren DoublePoints-Joker:", error));
 }

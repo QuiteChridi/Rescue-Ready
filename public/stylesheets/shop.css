@@ -60,7 +60,7 @@
 }
 
 .white-box-item {
-    margin: 10px; /* Hier den gewünschten Abstand setzen */
+    margin: 10px;
 }
 
 #stock-text {
@@ -80,8 +80,23 @@
     background-color: white;
 }
 
+#amount {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#amount > div:first-child {
+    margin-right: 10px;
+}
+
 .custom-text1 {
     text-decoration: underline;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.custom-text2 {
     font-size: 17px;
     font-weight: bold;
 }
