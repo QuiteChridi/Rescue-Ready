@@ -178,6 +178,35 @@ public class QuizController extends Controller {
         }
     }
 
+    public Result getCoins(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            int availableCoins = user.getCoins();
+            return ok(Json.newObject().put("availableCoins", availableCoins));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
+    public Result setCoins(Http.Request request) {
+        UserFactory.User user = getUserFromSession(request);
+
+        if (user != null) {
+            JsonNode json = request.body().asJson();
+            int newAmountOfCoins = json.findPath("newAmountOfCoins").intValue();
+            user.setCoins(newAmountOfCoins);
+
+            ObjectNode result = Json.newObject();
+            result.put("success", true);
+            result.put("newAmountOfCoins", newAmountOfCoins);
+
+            return ok(result);
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
     public Result handleResult(Http.Request request) {
         /*
         JsonNode json = request.body().asJson();

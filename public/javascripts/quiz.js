@@ -1,4 +1,5 @@
 let correctAnswerCount = 0;
+let scoreCount = 0;
 let questionTimer = 20;
 let timerRunning = false;
 let timerInterval;
@@ -124,8 +125,11 @@ function submitAnswer(selectedAnswerElement) {
         }
         return response.json();
     }).then(data => {
-        renderResult(data.isCorrect, data.correctAnswer);
+        if (data.isCorrect === true) {
+            calculateHighscore(questionTimer);
+        }
         stopTimer();
+        renderResult(data.isCorrect, data.correctAnswer);
         document.getElementById('check-answer-button').style.display = 'none';
         document.getElementById('next-question-button').style.display = 'flex';
     }).catch(error => console.log(error.message));
@@ -182,16 +186,50 @@ function stopTimer() {
     }
 }
 
-function calculateHighscore() {
-    if (correctAnswerCount === 0 ){
-        return 0;
-    }else{
-        return Math.round(10*(correctAnswerCount+(1/time)*100));
+function calculateHighscore(questionTimer) {
+    if (doubleIt === true) {
+        scoreCount += (2*questionTimer);
+    } else {
+        scoreCount += questionTimer;
     }
 }
 
 function saveEndScore() {
-    saveQuizResult(calculateHighscore())
+    getCoins()
+}
+
+function getCoins() {
+    fetch("/getCoins", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    })
+        .then(response => response.json())
+        .then(data => {
+            setNewAmountOfCoins(data.availableCoins)
+        })
+        .catch(error => console.error("Fehler beim Abrufen der verfügbaren Coins", error));
+}
+
+function setNewAmountOfCoins(availableCoins) {
+    let newAmountOfCoins = Math.floor(scoreCount/10);
+    newAmountOfCoins += availableCoins;
+
+    fetch("/setCoins", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({ newAmountOfCoins: newAmountOfCoins})
+    })
+        .then(response => response.json())
+        .then(data => {
+            saveQuizResult(scoreCount);
+        })
+        .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
 }
 
 function saveQuizResult(score) {
