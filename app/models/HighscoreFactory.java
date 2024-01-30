@@ -9,12 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controllers.interfaces.ScoreboardInterface;
+import controllers.interfaces.UserFactoryInterface;
 import play.db.Database;
 
 @Singleton
 public class HighscoreFactory implements ScoreboardInterface {
     private final Database db;
-    private final UserFactory users;
+    private final UserFactoryInterface users;
     private final QuizFactory quizes;
 
 

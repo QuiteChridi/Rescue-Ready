@@ -1,5 +1,6 @@
 package models;
 
+import controllers.interfaces.UserFactoryInterface;
 import play.db.Database;
 
 import javax.inject.Inject;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class UserFactory {
+public class UserFactory implements UserFactoryInterface {
     private Database db;
 
     @Inject
@@ -19,11 +20,11 @@ public class UserFactory {
 
     /**
      * Authenticates a user with the given credentials
-     *
      * @param username username from user input
      * @param password password from user input
      * @return Found user or null if user not found
      */
+    @Override
     public User authenticate(String username, String password) {
         return db.withConnection(conn -> {
             User user = null;
@@ -39,7 +40,8 @@ public class UserFactory {
         });
     }
 
-    public User createUserInUsers (String name, String password, String email) {
+    @Override
+    public User createUserInUsers(String name, String password, String email) {
         return db.withConnection(conn -> {
             User user = null;
             String sql = "INSERT INTO user (name, password, email) VALUES ( ?, ?, ?)";
@@ -65,6 +67,7 @@ public class UserFactory {
      * @param id id of user to find
      * @return User if found, else null
      */
+    @Override
     public User getUserById(int id) {
         return db.withConnection(conn -> {
             User user = null;
@@ -85,10 +88,12 @@ public class UserFactory {
      * @param id String of id
      * @return User if found, else null
      */
+    @Override
     public User getUserById(String id) {
         return getUserById(Integer.parseInt(id));
     }
 
+    @Override
     public List<User> getAllUsers() {
         return db.withConnection(conn -> {
             List<User> users = new ArrayList<>();

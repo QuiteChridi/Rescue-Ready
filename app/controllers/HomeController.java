@@ -2,6 +2,7 @@ package controllers;
 
 import com.google.inject.Inject;
 import controllers.interfaces.ScoreboardInterface;
+import controllers.interfaces.UserFactoryInterface;
 import models.*;
 
 import play.mvc.*;
@@ -14,12 +15,12 @@ import java.util.Map;
 
 public class HomeController extends Controller {
 
-    private final UserFactory users;
+    private final UserFactoryInterface users;
     private final ScoreboardInterface scoreboard;
     private final QuizFactory quizFactory;
 
     @Inject
-    public HomeController(UserFactory users, final HighscoreFactory scoreboard, final QuizFactory quizFactory) {
+    public HomeController(UserFactory users, HighscoreFactory scoreboard, QuizFactory quizFactory) {
         this.users = users;
         this.scoreboard = scoreboard;
         this.quizFactory = quizFactory;

@@ -1,5 +1,6 @@
 package models;
 
+import controllers.interfaces.UserFactoryInterface;
 import org.junit.After;
 import play.db.Database;
 import org.junit.Before;
@@ -13,7 +14,7 @@ import static org.junit.Assert.*;
 
 public class UserFactoryTest extends WithApplication {
 
-    private UserFactory users;
+    private UserFactoryInterface users;
     private Database db;
     private final String TEST_NAME = "test03945830958";
     private final String TEST_PASSWORD = "test";
