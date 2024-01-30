@@ -1,7 +1,9 @@
 package controllers;
 
 import com.google.inject.Inject;
+import controllers.interfaces.ScoreboardInterface;
 import models.*;
+
 import play.mvc.*;
 import views.html.*;
 
@@ -12,14 +14,14 @@ import java.util.Map;
 
 public class HomeController extends Controller {
 
-    UserFactory users;
-    private final HighscoreFactory highscoreFactory;
+    private final UserFactory users;
+    private final ScoreboardInterface scoreboard;
     private final QuizFactory quizFactory;
 
     @Inject
-    public HomeController(UserFactory users, final HighscoreFactory highscoreFactory, final QuizFactory quizFactory) {
+    public HomeController(UserFactory users, final HighscoreFactory scoreboard, final QuizFactory quizFactory) {
         this.users = users;
-        this.highscoreFactory = highscoreFactory;
+        this.scoreboard = scoreboard;
         this.quizFactory = quizFactory;
     }
 
@@ -67,7 +69,7 @@ public class HomeController extends Controller {
     }
     private Map<String, Integer> getQuizHighscoresForUser(UserFactory.User user) {
         Map<String, Integer> quizHighscores = new HashMap<>();
-        List<HighscoreFactory.Highscore> highscores = highscoreFactory.getHighscoresOfUser(user.getId());
+        List<HighscoreFactory.Highscore> highscores = this.scoreboard.getHighscoresOfUser(user.getId());
 
         for (HighscoreFactory.Highscore highscore : highscores) {
             String quizName = quizFactory.getQuizById(highscore.getQuizId()).getName();

@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 public class ShopController extends Controller {
 
-    UserFactory users;
+    private final UserFactory users;
 
     @Inject
     public ShopController(UserFactory users) {

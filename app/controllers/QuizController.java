@@ -3,13 +3,14 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
+
+import play.libs.Json;
+import play.mvc.*;
+
+
 import controllers.interfaces.QuizInterface;
 import models.UserFactory;
 import models.QuizFactory;
-import play.libs.Json;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
 import views.html.quiz.quizSelection;
 import views.html.quiz.quizView;
 
@@ -17,12 +18,12 @@ import views.html.quiz.quizView;
 public class QuizController extends Controller {
 
     private QuizInterface quiz;
-    private final QuizFactory quizes;
-    UserFactory users;
+    private final QuizFactory quizzes;
+    private final UserFactory users;
 
     @Inject
-    public QuizController(QuizFactory quizes, UserFactory users) {
-        this.quizes = quizes;
+    public QuizController(QuizFactory quizzes, UserFactory users) {
+        this.quizzes = quizzes;
         this.users = users;
     }
 
@@ -37,14 +38,14 @@ public class QuizController extends Controller {
     }
 
     public Result quizSelection() {
-        return ok(quizSelection.render(quizes.getPossibleQuizNames()));
+        return ok(quizSelection.render(quizzes.getPossibleQuizNames()));
     }
 
     public Result selectQuiz(Http.Request request){
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
         System.out.println("test");
-        quiz = quizes.getQuizById(quizId);
+        quiz = quizzes.getQuizById(quizId);
         return ok();
     }
 

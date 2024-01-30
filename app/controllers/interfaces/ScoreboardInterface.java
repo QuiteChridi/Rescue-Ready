@@ -1,10 +1,9 @@
 package controllers.interfaces;
 
-import models.HighscoreFactory;
-
+import models.HighscoreFactory.Highscore;
 import java.util.List;
 
 public interface ScoreboardInterface {
-    List<HighscoreFactory.Highscore> getHighscoresOfQuiz(int quizId);
-    List<HighscoreFactory.Highscore> getHighscoresOfUser(int userId);
+    List<Highscore> getHighscoresOfQuiz(int quizId);
+    List<Highscore> getHighscoresOfUser(int userId);
 }

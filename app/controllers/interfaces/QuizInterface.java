@@ -1,9 +1,9 @@
 package controllers.interfaces;
 
-import models.QuizFactory;
+import models.QuizFactory.QuizQuestion;
 
 public interface QuizInterface {
-    QuizFactory.QuizQuestion getCurrentQuestion();
+    QuizQuestion getCurrentQuestion();
 
     void nextQuestion();
 

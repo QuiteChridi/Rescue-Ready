@@ -1,8 +1,5 @@
 package models;
 
-import controllers.interfaces.ScoreboardInterface;
-import play.db.Database;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.sql.PreparedStatement;
@@ -10,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import controllers.interfaces.ScoreboardInterface;
+import play.db.Database;
 
 @Singleton
 public class HighscoreFactory implements ScoreboardInterface {

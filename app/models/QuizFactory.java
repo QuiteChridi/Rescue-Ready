@@ -1,14 +1,14 @@
 package models;
 
-import controllers.interfaces.QuizInterface;
-import play.db.Database;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
+import controllers.interfaces.QuizInterface;
+import play.db.Database;
 
 @Singleton
 public class QuizFactory {
@@ -123,12 +123,6 @@ public class QuizFactory {
         private final String questionText;
         private final List<String> answers;
         private final String correctAnswer;
-
-        private QuizQuestion(String questionText, List<String> answers, String correctAnswer) {
-            this.questionText = questionText;
-            this.answers = answers;
-            this.correctAnswer = correctAnswer;
-        }
 
         private QuizQuestion(ResultSet rs) throws SQLException {
             this.questionText = rs.getString("question");

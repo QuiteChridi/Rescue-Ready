@@ -11,7 +11,7 @@ import java.util.List;
 @Singleton
 public class UserFactory {
     private Database db;
-    private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePic.png";
+
     @Inject
     UserFactory(Database db) {
         this.db = db;
@@ -106,7 +106,9 @@ public class UserFactory {
 
 
     public class User {
-        private int id;
+        private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePic.png";
+
+        private final int id;
         private String username;
         private String password;
         private String mail;
@@ -115,7 +117,6 @@ public class UserFactory {
         private int doublePointsJoker;
         private int pauseJoker;
         private String profilePicPath;
-
 
         private User(int id, String username, String password, String mail) {
             this.id = id;

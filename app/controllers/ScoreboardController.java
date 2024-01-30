@@ -2,15 +2,14 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
+import java.util.List;
+import play.mvc.*;
+
 import controllers.interfaces.ScoreboardInterface;
+import views.html.highscore;
 import models.HighscoreFactory;
 import models.QuizFactory;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
-import views.html.highscore;
 
-import java.util.List;
 
 
 public class ScoreboardController extends Controller {
@@ -34,7 +33,7 @@ public class ScoreboardController extends Controller {
         int quizId = json.findPath("quizId").asInt();
         currentHighscoreList = scoreboard.getHighscoresOfQuiz(quizId);
 
-        return ok(highscore.render(currentHighscoreList,quizes.getPossibleQuizNames()));
+        return ok(highscore.render(currentHighscoreList, quizes.getPossibleQuizNames()));
     }
 
     public Result getHighscoreFromSession(Http.Request request) {
