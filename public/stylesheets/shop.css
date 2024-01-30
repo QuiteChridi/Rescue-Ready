@@ -2,12 +2,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%;
-    border: 3px solid black;
+    width: 65vw;
+    max-width: 100%;
+    border: 2px solid black;
     border-radius: 10px;
     padding: 10px;
     background-color: rgba(239, 239, 239, 1);
     gap: 10px;
+    margin-top: 2.5%;
 }
 
 .shop-header {
@@ -16,6 +18,12 @@
     align-items: center;
     justify-content: center;
 }
+
+.shop-header h1 {
+    margin: 0;
+    padding: 0;
+}
+
 
 .left,
 .center,
@@ -76,8 +84,22 @@
     width: 100%;
     border: 2px solid black;
     border-radius: 10px;
-    padding: 10px;
     background-color: white;
+}
+
+.joker-item {
+    width: 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.joker-picture img {
+    max-width: 42%;
+    height: auto;
+    display: block;
+    margin: 5px;
 }
 
 #amount {
@@ -101,22 +123,6 @@
     font-weight: bold;
 }
 
-.joker-item {
-    width: 30%;
-    padding: 10px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.joker-picture img {
-    max-width: 42%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
 #buy-content {
     display: flex;
     align-items: center;
@@ -132,4 +138,12 @@
     max-height: 30px;
     max-width: 30px;
 }
+
+#fiftyFiftyJoker-buy button,
+#pauseJoker-buy button,
+#doublePointsJoker-buy button {
+    width: 80%;
+    margin-bottom: 5px;
+}
+
 

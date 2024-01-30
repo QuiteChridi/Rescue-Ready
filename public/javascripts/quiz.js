@@ -292,7 +292,6 @@ function useFiftyFiftyJoker() {
             } else {
                 console.log("Nicht genügend FiftyFiftyJoker verfügbar.");
             }
-
         })
         .catch(error => console.error("Fehler beim Abrufen der verfügbaren FiftyFifty-Joker:", error));
 }
@@ -313,7 +312,6 @@ function fiftyFiftyJoker(availableFiftyFiftyJoker) {
         });
 
         if (visibleAnswerCount >= 2) {
-            console.log("fiftyfifty2 angewendet")
             setFiftyFiftyJoker(availableFiftyFiftyJoker);
             let hiddenCount = 0;
             while (hiddenCount < 2) {
@@ -394,7 +392,6 @@ function setPauseJoker(availablePauseJoker) {
 }
 
 function useDoublePointsJoker() {
-    console.log("DoublePoints Joker Test")
     fetch("/getDoublePointsJoker", {
         method:"GET",
         headers: {

@@ -1,28 +1,7 @@
 @()
 
 @defining(play.core.PlayVersion.current) { version =>
-    <head>
-            <!--<link rel="stylesheet" media="screen" href=> -->
-        <title>NavBar</title>
-        <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/Menu")">
-
-    </head>
     <body>
-            <!--
-        <header>
-            <img class="logo" src="../../../public/images/RescueReadyIcon.png" alt="logo">
-            <nav>
-                <ul class="nac__links">
-                    <li><a href="quizSelection">Quiz</a></li>
-                    <li><a href="login">Login</a></li>
-                    <li><a href="profile">Profile</a></li>
-                    <li><a href="shop">Shop</a></li>
-                    <li><a href="friends">Freunde</a></li>
-                    <li><a href="highscore">Highscore</a></li>
-                    <li><a class="cta" href="#"><button onclick="logout()">Logout</button></a></li>
-                </ul>
-            </nav> -->
-
         <nav>
             <div class="nav-icons">
                 <ul>
@@ -30,34 +9,41 @@
                         <a href="@routes.QuizController.quizSelection">
                             <div class="icon-container">
                                 <img src="@routes.Assets.versioned("images/rescueReadyMain.png")" alt="Quiz" class="icon-image">
-                                <span class="icon-text fa-solid fa-user">Quiz</span>
+                                <p class="nav-text">Rescue Ready Quiz</p>
                             </div>
                         </a>
-
                     </li>
+                </ul>
+            </div>
+            <div id="navbar-right">
+                <ul>
                     <li>
                         <a href="@routes.ShopController.shop" >
-                            <i class="fa-solid fa-user">Shop</i>
+                            <p class="nav-text">Shop</p>
                         </a>
                     </li>
                     <li>
                         <a href="@routes.HomeController.friends" >
-                            <i class="fa-solid fa-star">Freunde</i>
+                            <p class="nav-text">Freunde</p>
                         </a>
                     </li>
                     <li>
                         <a href="@routes.ScoreboardController.highscore()" >
-                            <i class="fa-solid fa-star">Highscores</i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@routes.HomeController.profile()" >
-                            <i class="fa-solid fa-user">Profil</i>
+                            <p class="nav-text">Highscores</p>
                         </a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" onclick="logout()" >
-                            <i class="fa-solid fa-arrow-right-from-bracket">LogOut</i>
+                            <p class="nav-text">LogOut</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@routes.HomeController.profile()" >
+                            <div class="icon-container">
+                                <p class="nav-text">Profil</p>
+                                <img src="@routes.Assets.versioned("images/profilePic.png")" alt="ProfilePic" id="profileImg">
+                            </div>
+
                         </a>
                     </li>
                 </ul>
