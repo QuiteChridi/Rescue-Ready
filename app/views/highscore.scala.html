@@ -1,5 +1,5 @@
 
-@(highscores: List[models.HighscoreFactory#Highscore], categories: Map[Integer, String])
+@(highscores: List[interfaces.Highscore], categories: Map[Integer, String])
 
 @index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>

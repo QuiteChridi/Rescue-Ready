@@ -33,7 +33,7 @@ public class QuizController extends Controller {
         return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
     }
 
-    private UserFactory.UserImplementation getUserFromSession(Http.Request request) {
+    private User getUserFromSession(Http.Request request) {
         int userID = getUserIdFromSession(request);
         return (userID != -1) ? users.getUserById(userID) : null;
     }
@@ -51,13 +51,13 @@ public class QuizController extends Controller {
     }
 
     public Result quizView(Http.Request request) {
-            UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
-            if (user != null) {
-                return ok(quizView.render(user));
-            } else {
-                return redirect(routes.LoginController.login());
-            }
+        if (user != null) {
+            return ok(quizView.render(user));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
     }
 
     public Result getNextQuestion() {
@@ -73,7 +73,7 @@ public class QuizController extends Controller {
 
         quiz.nextQuestion();
 
-        QuizFactory.QuizQuestionImplementation question = quiz.getCurrentQuestion();
+        QuizQuestion question = quiz.getCurrentQuestion();
         JsonNode jsonQuestion = Json.newObject()
                 .put("question", question.getQuestionText())
                 .set("answers", Json.toJson(question.getAnswers()));
@@ -97,7 +97,7 @@ public class QuizController extends Controller {
     }
 
     public Result getFiftyFiftyJoker(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             int availableFiftyFiftyJoker = user.getFiftyFiftyJoker();
@@ -108,7 +108,7 @@ public class QuizController extends Controller {
     }
 
     public Result setFiftyFiftyJoker(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -125,7 +125,7 @@ public class QuizController extends Controller {
     }
 
     public Result getPauseJoker(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             int availablePauseJoker = user.getPauseJoker();
@@ -136,7 +136,7 @@ public class QuizController extends Controller {
     }
 
     public Result setPauseJoker(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -153,7 +153,7 @@ public class QuizController extends Controller {
     }
 
     public Result getDoublePointsJoker(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             int availableDoublePointsJoker = user.getDoublePointsJoker();
@@ -164,7 +164,7 @@ public class QuizController extends Controller {
     }
 
     public Result setDoublePointsJoker(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -181,7 +181,7 @@ public class QuizController extends Controller {
     }
 
     public Result getCoins(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             int availableCoins = user.getCoins();
@@ -192,7 +192,7 @@ public class QuizController extends Controller {
     }
 
     public Result setCoins(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();

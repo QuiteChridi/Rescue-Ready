@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import controllers.interfaces.User;
 import models.UserFactory;
 import controllers.interfaces.AbstractUserFactory;
 import play.libs.Json;
@@ -26,13 +27,13 @@ public class ShopController extends Controller {
         return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
     }
 
-    private UserFactory.UserImplementation getUserFromSession(Http.Request request) {
+    private User getUserFromSession(Http.Request request) {
         int userID = getUserIdFromSession(request);
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
     public Result shop(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             return ok(shop.render(user));
@@ -42,7 +43,7 @@ public class ShopController extends Controller {
     }
 
     public Result getAvailableCoins(Http.Request request) {
-        UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             int availableCoins = user.getCoins();
@@ -53,21 +54,21 @@ public class ShopController extends Controller {
     }
 
     public Result setNewCoins(Http.Request request) {
-            UserFactory.UserImplementation user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
-            if (user != null) {
-                JsonNode json = request.body().asJson();
-                int newCoins = json.findPath("newCoins").intValue();
-                user.setCoins(newCoins);
+        if (user != null) {
+            JsonNode json = request.body().asJson();
+            int newCoins = json.findPath("newCoins").intValue();
+            user.setCoins(newCoins);
 
-                ObjectNode result = Json.newObject();
-                result.put("success", true);
-                result.put("newCoins", newCoins);
+            ObjectNode result = Json.newObject();
+            result.put("success", true);
+            result.put("newCoins", newCoins);
 
-                return ok(result);
-            } else {
-                return redirect(routes.LoginController.login());
-            }
+            return ok(result);
+        } else {
+            return redirect(routes.LoginController.login());
+        }
     }
 
 

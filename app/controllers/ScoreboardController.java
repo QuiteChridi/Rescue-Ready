@@ -6,9 +6,9 @@ import com.google.inject.Inject;
 import controllers.interfaces.*;
 import play.mvc.*;
 
-import views.html.highscore;
 import models.HighscoreFactory;
 import models.QuizFactory;
+import views.html.highscore;
 
 import java.util.List;
 

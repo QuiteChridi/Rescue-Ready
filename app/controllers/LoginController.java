@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import controllers.interfaces.AbstractUserFactory;
+import controllers.interfaces.User;
 import play.libs.Json;
 import play.mvc.*;
 
@@ -42,7 +43,7 @@ public class LoginController extends Controller {
 
         loginLogger.debug("Attempting login check.");
         try {
-            UserFactory.UserImplementation user = users.authenticate(username, password);
+            User user = users.authenticate(username, password);
             if (user != null) {
                 result.put("response", "Login successful");
                 // Fügen Sie die Benutzer-ID zur Session hinzu, nicht den Benutzernamen

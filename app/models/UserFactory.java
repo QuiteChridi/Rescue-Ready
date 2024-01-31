@@ -95,9 +95,9 @@ public class UserFactory implements AbstractUserFactory {
     }
 
     @Override
-    public List<UserImplementation> getAllUsers() {
+    public List<User> getAllUsers() {
         return db.withConnection(conn -> {
-            List<UserImplementation> users = new ArrayList<>();
+            List<User> users = new ArrayList<>();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

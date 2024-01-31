@@ -1,4 +1,4 @@
-@(user: UserFactory#UserImplementation, quizHighscores: Map[String, Integer])
+@(user: interfaces.User, quizHighscores: Map[String, Integer])
 
 @index("FriendProfile") {
     @defining(play.core.PlayVersion.current) { version =>

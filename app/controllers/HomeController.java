@@ -38,7 +38,7 @@ public class HomeController extends Controller {
 
         try {
             int userID = Integer.parseInt(userIDString);
-            UserFactory.UserImplementation user = users.getUserById(userID);
+            User user = users.getUserById(userID);
             if (user != null) {
                 return ok(profile.render(user));
             } else {
@@ -54,7 +54,7 @@ public class HomeController extends Controller {
     }
 
     public Result friendProfile(int friendUserId) {
-        UserFactory.UserImplementation friend = users.getUserById(friendUserId);
+        User friend = users.getUserById(friendUserId);
 
         if (friend != null) {
             Map<String, Integer> quizHighscores = getQuizHighscoresForUser(friend);
@@ -67,7 +67,7 @@ public class HomeController extends Controller {
     public Result friends() {
         return ok(friends.render());
     }
-    private Map<String, Integer> getQuizHighscoresForUser(UserFactory.UserImplementation user) {
+    private Map<String, Integer> getQuizHighscoresForUser(User user) {
         Map<String, Integer> quizHighscores = new HashMap<>();
         List<Highscore> highscores = this.scoreboard.getHighscoresOfUser(user.getId());
 
