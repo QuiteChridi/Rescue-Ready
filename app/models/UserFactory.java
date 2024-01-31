@@ -1,6 +1,7 @@
 package models;
 
 import controllers.interfaces.AbstractUserFactory;
+import controllers.interfaces.User;
 import play.db.Database;
 
 import javax.inject.Inject;
@@ -25,15 +26,15 @@ public class UserFactory implements AbstractUserFactory {
      * @return Found user or null if user not found
      */
     @Override
-    public User authenticate(String username, String password) {
+    public UserImplementation authenticate(String username, String password) {
         return db.withConnection(conn -> {
-            User user = null;
+            UserImplementation user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE name = ? AND password = ?");
             stmt.setString(1, username);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                user = new User(rs);
+                user = new UserImplementation(rs);
             }
             stmt.close();
             return user;
@@ -41,9 +42,9 @@ public class UserFactory implements AbstractUserFactory {
     }
 
     @Override
-    public User createUserInUsers(String name, String password, String email) {
+    public UserImplementation createUserInUsers(String name, String password, String email) {
         return db.withConnection(conn -> {
-            User user = null;
+            UserImplementation user = null;
             String sql = "INSERT INTO user (name, password, email) VALUES ( ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, name);
@@ -53,7 +54,7 @@ public class UserFactory implements AbstractUserFactory {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int id = rs.getInt(1);
-                user = new User(id, name, password, email);
+                user = new UserImplementation(id, name, password, email);
             }
             stmt.close();
             return user;
@@ -68,14 +69,14 @@ public class UserFactory implements AbstractUserFactory {
      * @return User if found, else null
      */
     @Override
-    public User getUserById(int id) {
+    public UserImplementation getUserById(int id) {
         return db.withConnection(conn -> {
-            User user = null;
+            UserImplementation user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE iduser = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                user = new User(rs);
+                user = new UserImplementation(rs);
             }
             stmt.close();
             return user;
@@ -89,18 +90,18 @@ public class UserFactory implements AbstractUserFactory {
      * @return User if found, else null
      */
     @Override
-    public User getUserById(String id) {
+    public UserImplementation getUserById(String id) {
         return getUserById(Integer.parseInt(id));
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<UserImplementation> getAllUsers() {
         return db.withConnection(conn -> {
-            List<User> users = new ArrayList<>();
+            List<UserImplementation> users = new ArrayList<>();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                User user = new User(rs);
+                UserImplementation user = new UserImplementation(rs);
                 users.add(user);
             }
             stmt.close();
@@ -110,7 +111,7 @@ public class UserFactory implements AbstractUserFactory {
 
 
 
-    public class User {
+    public class UserImplementation extends User {
         private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePic.png";
 
         private final int id;
@@ -123,7 +124,7 @@ public class UserFactory implements AbstractUserFactory {
         private int pauseJoker;
         private String profilePicPath;
 
-        private User(int id, String username, String password, String mail) {
+        private UserImplementation(int id, String username, String password, String mail) {
             this.id = id;
             this.username = username;
             this.mail = mail;
@@ -135,7 +136,7 @@ public class UserFactory implements AbstractUserFactory {
             this.profilePicPath = DEFAULT_PROFILE_PIC_PATH;
         }
 
-        private User(ResultSet rs) throws SQLException {
+        private UserImplementation(ResultSet rs) throws SQLException {
             this.id = rs.getInt("iduser");
             this.username = rs.getString("name");
             this.mail = rs.getString("email");
@@ -151,6 +152,7 @@ public class UserFactory implements AbstractUserFactory {
          * Updates the user if it already exists and creates it otherwise. Assumes an
          * autoincrement id column.
          */
+        @Override
         public void save() {
             db.withConnection(conn -> {
                 String sql = "UPDATE user SET name = ?, email = ?, password = ?, coins = ?, fifty_fifty_joker = ?, double_points_joker = ?, pause_joker = ?, profile_pic_path = ? WHERE idUser = ?";
@@ -173,6 +175,7 @@ public class UserFactory implements AbstractUserFactory {
         /**
          * Delete the user from the database
          */
+        @Override
         public void delete() {
             db.withConnection(conn -> {
                 String sql = "DELETE FROM user WHERE UserId = ?";
@@ -183,15 +186,16 @@ public class UserFactory implements AbstractUserFactory {
             });
         }
 
-        public List<User> getFriends() {
+        @Override
+        public List<UserImplementation> getFriends() {
             return db.withConnection(conn -> {
-                List<User> result = new ArrayList<>();
+                List<UserImplementation> result = new ArrayList<>();
                 String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setInt(1, this.id);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    User user = new User(rs);
+                    UserImplementation user = new UserImplementation(rs);
                     result.add(user);
                 }
                 stmt.close();
@@ -199,77 +203,94 @@ public class UserFactory implements AbstractUserFactory {
             });
         }
 
+        @Override
         public int getCoins() {
             return coins;
         }
 
+        @Override
         public void setCoins(int coins) {
             this.coins = coins;
             save();
         }
 
+        @Override
         public int getFiftyFiftyJoker() {
             return fiftyFiftyJoker;
         }
 
+        @Override
         public void setFiftyFiftyJoker(int fiftyFiftyJoker) {
             this.fiftyFiftyJoker = fiftyFiftyJoker;
             save();
         }
 
+        @Override
         public int getDoublePointsJoker() {
             return doublePointsJoker;
         }
 
+        @Override
         public void setDoublePointsJoker(int doublePointsJoker) {
             this.doublePointsJoker = doublePointsJoker;
             save();
         }
 
+        @Override
         public int getPauseJoker() {
             return pauseJoker;
         }
 
+        @Override
         public void setPauseJoker(int pauseJoker) {
             this.pauseJoker = pauseJoker;
             save();
         }
 
+        @Override
         public String getProfilePicPath() {
             return profilePicPath;
         }
 
+        @Override
         public void setProfilePicPath(String profilePicPath) {
             this.profilePicPath = profilePicPath;
         }
 
+        @Override
         public int getId() {
             return id;
         }
 
 
+        @Override
         public String getName() {
             return username;
         }
 
+        @Override
         public void setName(String username) {
             this.username = username;
             this.save();
         }
 
+        @Override
         public String getMail() {
             return mail;
         }
 
+        @Override
         public void setMail(String mail) {
             this.mail = mail;
             save();
         }
 
+        @Override
         public String getPassword() {
             return password;
         }
 
+        @Override
         public void setPassword(String password) {
             this.password = password;
             this.save();

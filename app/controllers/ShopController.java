@@ -26,13 +26,13 @@ public class ShopController extends Controller {
         return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
     }
 
-    private UserFactory.User getUserFromSession(Http.Request request) {
+    private UserFactory.UserImplementation getUserFromSession(Http.Request request) {
         int userID = getUserIdFromSession(request);
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
     public Result shop(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             return ok(shop.render(user));
@@ -42,7 +42,7 @@ public class ShopController extends Controller {
     }
 
     public Result getAvailableCoins(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             int availableCoins = user.getCoins();
@@ -53,7 +53,7 @@ public class ShopController extends Controller {
     }
 
     public Result setNewCoins(Http.Request request) {
-            UserFactory.User user = getUserFromSession(request);
+            UserFactory.UserImplementation user = getUserFromSession(request);
 
             if (user != null) {
                 JsonNode json = request.body().asJson();

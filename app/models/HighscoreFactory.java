@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controllers.interfaces.AbstractHighscoreFactory;
+import controllers.interfaces.Highscore;
+import models.QuizFactory;
+import models.UserFactory;
 import play.db.Database;
 
 @Singleton
@@ -33,7 +36,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
             stmt.setInt(1, quizId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Highscore highscore = new Highscore(rs);
+                Highscore highscore = new HighscoreImplementation(rs);
                 highscores.add(highscore);
             }
             stmt.close();
@@ -49,7 +52,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Highscore highscore = new Highscore(rs);
+                Highscore highscore = new HighscoreImplementation(rs);
                 highscores.add(highscore);
             }
             stmt.close();
@@ -57,40 +60,45 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
         });
     }
 
-    public class Highscore implements Comparable<Highscore> {
+    public class HighscoreImplementation extends Highscore {
         private final int score;
         private final int quizId;
         private final int userId;
 
-        private Highscore(ResultSet rs) throws SQLException {
+        private HighscoreImplementation(ResultSet rs) throws SQLException {
             this.score = rs.getInt("highscore");
             this.quizId = rs.getInt("quiz_idQuiz");
             this.userId = rs.getInt("user_iduser");
         }
 
+        @Override
         public int getQuizId() {
             return quizId;
         }
 
+        @Override
         public int getUserId() {
             return userId;
         }
 
+        @Override
         public int getScore() {
             return score;
         }
 
+        @Override
         public String getUserName(){
             return users.getUserById(userId).getName();
         }
 
+        @Override
         public String getQuizName() {
             return quizes.getQuizById(quizId).getName();
         }
 
         @Override
         public int compareTo(Highscore that) {
-            return that.score - this.score;
+            return that.getScore() - this.score;
         }
     }
 }

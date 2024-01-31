@@ -26,7 +26,7 @@ public class UserFactoryTest extends WithApplication {
         db = provideApplication().injector().instanceOf(Database.class);
 
         db.withConnection(conn -> {
-            UserFactory.User user = null;
+            UserFactory.UserImplementation user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE name = ? AND password = ?");
             stmt.setString(1, TEST_NAME);
             stmt.setString(2, TEST_PASSWORD);
@@ -59,19 +59,19 @@ public class UserFactoryTest extends WithApplication {
 
     @Test
     public void authenticateWithTestNameAndPasswordShouldReturnAUser() {
-        UserFactory.User user = users.authenticate(TEST_NAME, TEST_PASSWORD);
+        UserFactory.UserImplementation user = users.authenticate(TEST_NAME, TEST_PASSWORD);
         assertNotNull(user);
     }
 
     @Test
     public void authenticateNoneShouldReturnNoUser() {
-        UserFactory.User user = users.authenticate("", "");
+        UserFactory.UserImplementation user = users.authenticate("", "");
         assertNull(user);
     }
 
     @Test
     public void authenticateWithoutPasswordShouldReturnNoUser() {
-        UserFactory.User user = users.authenticate(TEST_NAME, "");
+        UserFactory.UserImplementation user = users.authenticate(TEST_NAME, "");
         assertNull(user);
     }
 }

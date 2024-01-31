@@ -2,20 +2,21 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
-import java.util.List;
+
+import controllers.interfaces.*;
 import play.mvc.*;
 
-import controllers.interfaces.AbstractHighscoreFactory;
 import views.html.highscore;
 import models.HighscoreFactory;
 import models.QuizFactory;
 
+import java.util.List;
 
 
 public class ScoreboardController extends Controller {
-    private final QuizFactory quizes;
+    private final AbstractQuizFactory quizes;
     private final AbstractHighscoreFactory scoreboard;
-    private List<HighscoreFactory.Highscore> currentHighscoreList;
+    private List<Highscore> currentHighscoreList;
 
     @Inject
     public ScoreboardController(QuizFactory quizes, HighscoreFactory scoreboard) {

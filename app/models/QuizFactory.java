@@ -7,11 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import controllers.interfaces.QuizInterface;
+import controllers.interfaces.AbstractQuizFactory;
+import controllers.interfaces.Quiz;
+import controllers.interfaces.QuizQuestion;
 import play.db.Database;
 
 @Singleton
-public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
+public class QuizFactory implements AbstractQuizFactory {
     private final Database db;
     @Inject
     QuizFactory(Database db) {
@@ -19,31 +21,31 @@ public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
     }
 
     @Override
-    public Quiz getQuizById(int id){
+    public QuizImplementation getQuizById(int id){
         return db.withConnection(conn -> {
-            QuizFactory.Quiz quiz = null;
+            QuizImplementation quiz = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz, questions WHERE idQuiz = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
 
-                quiz = new QuizFactory.Quiz(rs);
+                quiz = new QuizImplementation(rs);
             }
             stmt.close();
             return quiz;
         });
     }
 
-    private Queue<QuizQuestion> getQuizQuestions(int idQuiz){
+    private Queue<QuizQuestionImplementation> getQuizQuestions(int idQuiz){
         return db.withConnection(conn -> {
-            Queue<QuizQuestion> questions = new LinkedList<>();
+            Queue<QuizQuestionImplementation> questions = new LinkedList<>();
 
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM questions WHERE quiz_idQuiz = ?");
             stmt.setInt(1, idQuiz);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                QuizQuestion question = new QuizQuestion(rs);
+                QuizQuestionImplementation question = new QuizQuestionImplementation(rs);
                 questions.add(question);
             }
             stmt.close();
@@ -55,7 +57,7 @@ public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
     public Map<Integer, String> getPossibleQuizNames(){
         Map<Integer, String> quizes = new HashMap<>();
         return db.withConnection(conn -> {
-            QuizFactory.Quiz quiz = null;
+            QuizImplementation quiz = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz");
             ResultSet rs = stmt.executeQuery();
 
@@ -67,20 +69,20 @@ public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
         });
     }
 
-    public class Quiz implements QuizInterface {
+    public class QuizImplementation extends Quiz {
         private int id;
         private String name;
-        private Queue<QuizQuestion> questions;
-        private QuizFactory.QuizQuestion currentQuestion;
+        private Queue<QuizQuestionImplementation> questions;
+        private QuizQuestionImplementation currentQuestion;
 
-        private Quiz(int id, String name, Queue<QuizQuestion> questions){
+        private QuizImplementation(int id, String name, Queue<QuizQuestionImplementation> questions){
             this.id = id;
             this.name = name;
             this.questions = questions;
             this.currentQuestion = questions.peek();
         }
 
-        private Quiz(ResultSet rs) throws SQLException {
+        private QuizImplementation(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idQuiz");
             this.name = rs.getString("name");
             this.questions = getQuizQuestions(this.id);
@@ -96,7 +98,7 @@ public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
         }
 
         @Override
-        public QuizFactory.QuizQuestion getCurrentQuestion() {
+        public QuizQuestionImplementation getCurrentQuestion() {
             return currentQuestion;
         }
 
@@ -121,12 +123,12 @@ public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
         }
     }
 
-    public class QuizQuestion {
+    public class QuizQuestionImplementation extends QuizQuestion {
         private final String questionText;
         private final List<String> answers;
         private final String correctAnswer;
 
-        private QuizQuestion(ResultSet rs) throws SQLException {
+        private QuizQuestionImplementation(ResultSet rs) throws SQLException {
             this.questionText = rs.getString("question");
             this.correctAnswer = rs.getString("correctAnswer");
             this.answers = new ArrayList<>();
@@ -136,18 +138,22 @@ public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
             this.answers.add(rs.getString("wrongAnswer3"));
         }
 
+        @Override
         public String getQuestionText() {
             return questionText;
         }
 
+        @Override
         public List<String> getAnswers() {
             return answers;
         }
 
+        @Override
         public String getCorrectAnswer() {
             return correctAnswer;
         }
 
+        @Override
         public boolean isCorrectAnswer(String answer){
             return answer.equals(correctAnswer);
         }

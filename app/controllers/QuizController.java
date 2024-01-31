@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
+import controllers.interfaces.AbstractQuizFactory;
 import controllers.interfaces.AbstractUserFactory;
 import play.libs.Json;
 import play.mvc.*;
 
-
-import controllers.interfaces.QuizInterface;
+import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
 import views.html.quiz.quizSelection;
@@ -18,8 +18,8 @@ import views.html.quiz.quizView;
 
 public class QuizController extends Controller {
 
-    private QuizInterface quiz;
-    private final QuizFactory quizzes;
+    private Quiz quiz;
+    private final AbstractQuizFactory quizzes;
     private final AbstractUserFactory users;
 
     @Inject
@@ -33,7 +33,7 @@ public class QuizController extends Controller {
         return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
     }
 
-    private UserFactory.User getUserFromSession(Http.Request request) {
+    private UserFactory.UserImplementation getUserFromSession(Http.Request request) {
         int userID = getUserIdFromSession(request);
         return (userID != -1) ? users.getUserById(userID) : null;
     }
@@ -51,7 +51,7 @@ public class QuizController extends Controller {
     }
 
     public Result quizView(Http.Request request) {
-            UserFactory.User user = getUserFromSession(request);
+            UserFactory.UserImplementation user = getUserFromSession(request);
 
             if (user != null) {
                 return ok(quizView.render(user));
@@ -73,7 +73,7 @@ public class QuizController extends Controller {
 
         quiz.nextQuestion();
 
-        QuizFactory.QuizQuestion question = quiz.getCurrentQuestion();
+        QuizFactory.QuizQuestionImplementation question = quiz.getCurrentQuestion();
         JsonNode jsonQuestion = Json.newObject()
                 .put("question", question.getQuestionText())
                 .set("answers", Json.toJson(question.getAnswers()));
@@ -97,7 +97,7 @@ public class QuizController extends Controller {
     }
 
     public Result getFiftyFiftyJoker(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             int availableFiftyFiftyJoker = user.getFiftyFiftyJoker();
@@ -108,7 +108,7 @@ public class QuizController extends Controller {
     }
 
     public Result setFiftyFiftyJoker(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -125,7 +125,7 @@ public class QuizController extends Controller {
     }
 
     public Result getPauseJoker(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             int availablePauseJoker = user.getPauseJoker();
@@ -136,7 +136,7 @@ public class QuizController extends Controller {
     }
 
     public Result setPauseJoker(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -153,7 +153,7 @@ public class QuizController extends Controller {
     }
 
     public Result getDoublePointsJoker(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             int availableDoublePointsJoker = user.getDoublePointsJoker();
@@ -164,7 +164,7 @@ public class QuizController extends Controller {
     }
 
     public Result setDoublePointsJoker(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -181,7 +181,7 @@ public class QuizController extends Controller {
     }
 
     public Result getCoins(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             int availableCoins = user.getCoins();
@@ -192,7 +192,7 @@ public class QuizController extends Controller {
     }
 
     public Result setCoins(Http.Request request) {
-        UserFactory.User user = getUserFromSession(request);
+        UserFactory.UserImplementation user = getUserFromSession(request);
 
         if (user != null) {
             JsonNode json = request.body().asJson();

@@ -1,8 +1,7 @@
 package controllers;
 
 import com.google.inject.Inject;
-import controllers.interfaces.AbstractHighscoreFactory;
-import controllers.interfaces.AbstractUserFactory;
+import controllers.interfaces.*;
 import models.*;
 
 import play.mvc.*;
@@ -17,7 +16,7 @@ public class HomeController extends Controller {
 
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scoreboard;
-    private final QuizFactory quizFactory;
+    private final AbstractQuizFactory quizFactory;
 
     @Inject
     public HomeController(UserFactory users, HighscoreFactory scoreboard, QuizFactory quizFactory) {
@@ -39,7 +38,7 @@ public class HomeController extends Controller {
 
         try {
             int userID = Integer.parseInt(userIDString);
-            UserFactory.User user = users.getUserById(userID);
+            UserFactory.UserImplementation user = users.getUserById(userID);
             if (user != null) {
                 return ok(profile.render(user));
             } else {
@@ -55,7 +54,7 @@ public class HomeController extends Controller {
     }
 
     public Result friendProfile(int friendUserId) {
-        UserFactory.User friend = users.getUserById(friendUserId);
+        UserFactory.UserImplementation friend = users.getUserById(friendUserId);
 
         if (friend != null) {
             Map<String, Integer> quizHighscores = getQuizHighscoresForUser(friend);
@@ -68,11 +67,11 @@ public class HomeController extends Controller {
     public Result friends() {
         return ok(friends.render());
     }
-    private Map<String, Integer> getQuizHighscoresForUser(UserFactory.User user) {
+    private Map<String, Integer> getQuizHighscoresForUser(UserFactory.UserImplementation user) {
         Map<String, Integer> quizHighscores = new HashMap<>();
-        List<HighscoreFactory.Highscore> highscores = this.scoreboard.getHighscoresOfUser(user.getId());
+        List<Highscore> highscores = this.scoreboard.getHighscoresOfUser(user.getId());
 
-        for (HighscoreFactory.Highscore highscore : highscores) {
+        for (Highscore highscore : highscores) {
             String quizName = quizFactory.getQuizById(highscore.getQuizId()).getName();
             quizHighscores.put(quizName, highscore.getScore());
         }

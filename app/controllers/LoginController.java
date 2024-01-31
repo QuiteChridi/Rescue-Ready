@@ -42,7 +42,7 @@ public class LoginController extends Controller {
 
         loginLogger.debug("Attempting login check.");
         try {
-            UserFactory.User user = users.authenticate(username, password);
+            UserFactory.UserImplementation user = users.authenticate(username, password);
             if (user != null) {
                 result.put("response", "Login successful");
                 // Fügen Sie die Benutzer-ID zur Session hinzu, nicht den Benutzernamen
