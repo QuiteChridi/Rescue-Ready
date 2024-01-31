@@ -1,8 +1,8 @@
 package controllers;
 
 import com.google.inject.Inject;
-import controllers.interfaces.ScoreboardInterface;
-import controllers.interfaces.UserFactoryInterface;
+import controllers.interfaces.AbstractHighscoreFactory;
+import controllers.interfaces.AbstractUserFactory;
 import models.*;
 
 import play.mvc.*;
@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class HomeController extends Controller {
 
-    private final UserFactoryInterface users;
-    private final ScoreboardInterface scoreboard;
+    private final AbstractUserFactory users;
+    private final AbstractHighscoreFactory scoreboard;
     private final QuizFactory quizFactory;
 
     @Inject

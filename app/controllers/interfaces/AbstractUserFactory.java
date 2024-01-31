@@ -4,7 +4,7 @@ import models.UserFactory;
 
 import java.util.List;
 
-public interface UserFactoryInterface {
+public interface AbstractUserFactory {
     UserFactory.User authenticate(String username, String password);
 
     UserFactory.User createUserInUsers(String name, String password, String email);

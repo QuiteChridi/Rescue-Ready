@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import java.util.List;
 import play.mvc.*;
 
-import controllers.interfaces.ScoreboardInterface;
+import controllers.interfaces.AbstractHighscoreFactory;
 import views.html.highscore;
 import models.HighscoreFactory;
 import models.QuizFactory;
@@ -14,7 +14,7 @@ import models.QuizFactory;
 
 public class ScoreboardController extends Controller {
     private final QuizFactory quizes;
-    private final ScoreboardInterface scoreboard;
+    private final AbstractHighscoreFactory scoreboard;
     private List<HighscoreFactory.Highscore> currentHighscoreList;
 
     @Inject

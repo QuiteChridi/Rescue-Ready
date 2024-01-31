@@ -3,7 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.UserFactory;
-import controllers.interfaces.UserFactoryInterface;
+import controllers.interfaces.AbstractUserFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 public class ShopController extends Controller {
 
-    private final UserFactoryInterface users;
+    private final AbstractUserFactory users;
 
     @Inject
     public ShopController(UserFactory users) {

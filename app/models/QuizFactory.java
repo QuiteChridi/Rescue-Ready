@@ -11,13 +11,14 @@ import controllers.interfaces.QuizInterface;
 import play.db.Database;
 
 @Singleton
-public class QuizFactory {
+public class QuizFactory implements controllers.interfaces.AbstractQuizFactory {
     private final Database db;
     @Inject
     QuizFactory(Database db) {
         this.db = db;
     }
 
+    @Override
     public Quiz getQuizById(int id){
         return db.withConnection(conn -> {
             QuizFactory.Quiz quiz = null;
@@ -50,6 +51,7 @@ public class QuizFactory {
         });
     }
 
+    @Override
     public Map<Integer, String> getPossibleQuizNames(){
         Map<Integer, String> quizes = new HashMap<>();
         return db.withConnection(conn -> {

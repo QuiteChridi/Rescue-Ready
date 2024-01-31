@@ -1,6 +1,6 @@
 package models;
 
-import controllers.interfaces.UserFactoryInterface;
+import controllers.interfaces.AbstractUserFactory;
 import play.db.Database;
 
 import javax.inject.Inject;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class UserFactory implements UserFactoryInterface {
+public class UserFactory implements AbstractUserFactory {
     private Database db;
 
     @Inject

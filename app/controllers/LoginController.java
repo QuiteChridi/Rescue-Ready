@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.google.inject.Inject;
 
-import controllers.interfaces.UserFactoryInterface;
+import controllers.interfaces.AbstractUserFactory;
 import play.libs.Json;
 import play.mvc.*;
 
@@ -18,7 +18,7 @@ import views.html.login;
 
 public class LoginController extends Controller {
 
-    private final UserFactoryInterface users;
+    private final AbstractUserFactory users;
     final Logger loginLogger = LoggerFactory.getLogger(this.getClass());
 
     @Inject

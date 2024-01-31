@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
-import controllers.interfaces.UserFactoryInterface;
+import controllers.interfaces.AbstractUserFactory;
 import play.libs.Json;
 import play.mvc.*;
 
@@ -20,7 +20,7 @@ public class QuizController extends Controller {
 
     private QuizInterface quiz;
     private final QuizFactory quizzes;
-    private final UserFactoryInterface users;
+    private final AbstractUserFactory users;
 
     @Inject
     public QuizController(QuizFactory quizzes, UserFactory users) {

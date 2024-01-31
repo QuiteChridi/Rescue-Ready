@@ -8,14 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import controllers.interfaces.ScoreboardInterface;
-import controllers.interfaces.UserFactoryInterface;
+import controllers.interfaces.AbstractHighscoreFactory;
 import play.db.Database;
 
 @Singleton
-public class HighscoreFactory implements ScoreboardInterface {
+public class HighscoreFactory implements AbstractHighscoreFactory {
     private final Database db;
-    private final UserFactoryInterface users;
+    private final UserFactory users;
     private final QuizFactory quizes;
 
 
