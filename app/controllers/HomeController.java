@@ -64,8 +64,24 @@ public class HomeController extends Controller {
         }
     }
 
-    public Result friends() {
-        return ok(friends.render());
+    public Result friends(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+
+        if (userIDString == null || userIDString.equals("leer")) {
+            return redirect(routes.LoginController.login());
+        }
+
+        try {
+            int userID = Integer.parseInt(userIDString);
+            User user = users.getUserById(userID);
+            if (user != null) {
+                return ok(friends.render(user));
+            } else {
+                return redirect(routes.LoginController.login());
+            }
+        } catch (NumberFormatException e) {
+            return redirect(routes.LoginController.login());
+        }
     }
     private Map<String, Integer> getQuizHighscoresForUser(User user) {
         Map<String, Integer> quizHighscores = new HashMap<>();

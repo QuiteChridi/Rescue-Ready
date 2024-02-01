@@ -8,16 +8,7 @@
                 <div class="profile-display">
                     <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
                     <h1 id="user-name">@user.getName</h1>
-                    <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
                     <button id="edit-button">Edit</button>
-                    <div class="friends-section">
-                        <h2 id="friends-title">Friends</h2>
-                        <ul class="friends-list">
-                        @for(friend <- user.getFriends()) {
-                            <li><a href="@routes.HomeController.friendProfile(friend.getId)">@friend.getName</a></li>
-                        }
-                        </ul>
-                    </div>
                 </div>
             </div>
             <div class="profile-editor">
