@@ -1,9 +1,18 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import play.libs.Files.TemporaryFile;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import com.google.inject.Inject;
 import controllers.interfaces.*;
 import models.*;
 
+import play.api.libs.Files;
+import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
@@ -17,6 +26,7 @@ public class HomeController extends Controller {
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scoreboard;
     private final AbstractQuizFactory quizFactory;
+    private User currentUser;
 
     @Inject
     public HomeController(UserFactory users, HighscoreFactory scoreboard, QuizFactory quizFactory) {
@@ -30,20 +40,11 @@ public class HomeController extends Controller {
     }
 
     public Result profile(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-
-        if (userIDString == null || userIDString.equals("leer")) {
-            return redirect(routes.LoginController.login());
-        }
-
         try {
-            int userID = Integer.parseInt(userIDString);
-            User user = users.getUserById(userID);
-            if (user != null) {
-                return ok(profile.render(user));
-            } else {
-                return redirect(routes.LoginController.login());
-            }
+            int userId = Integer.parseInt(request.session().get("userID").orElse(null));
+
+            return ok(profile.render(users.getUserById(userId), scoreboard.getHighscoresOfUser(userId)));
+
         } catch (NumberFormatException e) {
             return redirect(routes.LoginController.login());
         }
@@ -93,6 +94,57 @@ public class HomeController extends Controller {
         }
 
         return quizHighscores;
+    }
+
+    public Result saveChangesToProfilePic(Http.Request request){
+        User user = getUserFromSession(request);
+
+        if (user != null) {
+            Http.MultipartFormData<TemporaryFile> body = request.body().asMultipartFormData();
+
+            Http.MultipartFormData.FilePart<TemporaryFile> picture = body.getFile("picture");
+            if (picture != null) {
+                String fileName = picture.getFilename();
+                TemporaryFile file = picture.getRef();
+
+                file.copyTo(Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics", fileName), true);
+                user.setProfilePicPath(fileName);
+
+                return redirect(routes.HomeController.profile());
+            }
+        }
+        return redirect(routes.HomeController.profile());
+    }
+
+    public Result saveChangesToUser(Http.Request request) {
+        User user = getUserFromSession(request);
+        if (user != null) {
+            JsonNode json = request.body().asJson();
+            String newUsername = json.findPath("username").textValue();
+            String newPassword = json.findPath("password").textValue();
+            String newEmail = json.findPath("email").textValue();
+
+            user.setMail(newEmail);
+            user.setName(newUsername);
+            user.setPassword(newPassword);
+
+            ObjectNode result = Json.newObject();
+            result.put("success", true);
+
+            return ok(result);
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
+    private int getUserIdFromSession(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
+    }
+
+    private User getUserFromSession(Http.Request request) {
+        int userID = getUserIdFromSession(request);
+        return (userID != -1) ? users.getUserById(userID) : null;
     }
 
 

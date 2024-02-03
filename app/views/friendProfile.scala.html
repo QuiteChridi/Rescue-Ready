@@ -1,4 +1,4 @@
-@(user: interfaces.User, quizHighscores: Map[String, Integer])
+@(friend: interfaces.User, quizHighscores: Map[String, Integer])
 
 @index("FriendProfile") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -6,8 +6,8 @@
             <div class="container" id="profile-container">
                 <div class="content">
                     <div class="profile-display">
-                        <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned(user.getProfilePicPath)" alt="Profilbild">
-                        <h1 id="user-name">@user.getName</h1>
+                        <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePics/" + friend.getProfilePicPath)" alt="Profilbild">
+                        <h1 id="user-name">@friend.getName</h1>
                         <div class="highscores-table">
                         @if(quizHighscores.isEmpty) {
                             <p>Keine Highscores verfügbar.</p>

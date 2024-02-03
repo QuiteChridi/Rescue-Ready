@@ -13,6 +13,9 @@ POST        /logout                 controllers.LoginController.logout
 
 GET         /profile                controllers.HomeController.profile(request: play.mvc.Http.Request)
 GET         /friendProfile/:id      controllers.HomeController.friendProfile(id: Int)
+POST        /saveUser               controllers.HomeController.saveChangesToUser(request: play.mvc.Http.Request)
+POST        /saveProfilePic         controllers.HomeController.saveChangesToProfilePic(request: play.mvc.Http.Request)
+
 
 GET         /shop                   controllers.ShopController.shop(request: play.mvc.Http.Request)
 GET         /getAvailableCoins      controllers.ShopController.getAvailableCoins(request: play.mvc.Http.Request)

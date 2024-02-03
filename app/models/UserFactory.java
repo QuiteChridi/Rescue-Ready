@@ -112,7 +112,7 @@ public class UserFactory implements AbstractUserFactory {
 
 
     public class UserImplementation extends User {
-        private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePic.png";
+        private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/profilePic.png";
 
         private final int id;
         private String username;
@@ -164,7 +164,7 @@ public class UserFactory implements AbstractUserFactory {
                 stmt.setInt(5, this.fiftyFiftyJoker);
                 stmt.setInt(6, this.doublePointsJoker);
                 stmt.setInt(7, this.pauseJoker);
-                stmt.setString(8, this.profilePicPath);
+                stmt.setString(8, profilePicPath);
                 stmt.setInt(9, this.id);
 
                 stmt.executeUpdate();
@@ -255,6 +255,7 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setProfilePicPath(String profilePicPath) {
             this.profilePicPath = profilePicPath;
+            this.save();
         }
 
         @Override

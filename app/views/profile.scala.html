@@ -1,4 +1,4 @@
-@(user: interfaces.User)
+@(user: interfaces.User, highscores: List[interfaces.Highscore])
 
 @index("Profile") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -6,26 +6,55 @@
         <div class="container" id="profile-container">
             <div class="content">
                 <div class="profile-display">
-                    <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
+                    <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePics/" + user.getProfilePicPath)" alt="Profilbild">
                     <h1 id="user-name">@user.getName</h1>
-                    <button id="edit-button">Edit</button>
+                    <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
+                    <button id="edit-button" onclick = "editProfile()">Edit</button>
+                    <div class="friends-section">
+                        <h2 id="friends-title">Friends</h2>
+                        <ul class="friends-list">
+                        @for(friend <- user.getFriends()) {
+                            <li><a href="@routes.HomeController.friendProfile(friend.getId)">@friend.getName</a></li>
+                        }
+                        </ul>
+                        <h1>Highscore</h1>
+                        <table class="content-table">
+                            <thead id="highscoreTableHead">
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Score</td>
+                                </tr>
+                            </thead>
+                            <tbody id="highscoreTableBody">
+                            @for(value <- highscores){
+                                <tr>
+                                    <td>@value.getQuizName</td>
+                                    <td>@value.getScore<td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="profile-editor">
-                    <div class="profile-picture-edit-container">
-                        <input type="file" id="file-input" accept="image/*" style="display: none">
-                        <label for="file-input">
-                            <img id="profile-picture-edit" class="profile-picture" src="@routes.Assets.versioned("images/profilePic.png")" alt="Profilbild">
-                        </label>
-                        <button id="change-pic-button">Edit Picture</button>
-                    </div>
-                    <div class="edit-name-container">
-                        <p id="name-label">Name:</p>
-                        <label for="name-input"></label><input type="text" id="name-input">
-                    </div>
-                    <button id="save-button">Save</button>
+                <div class="edit-profile-pic-container">
+                    @helper.form(action = routes.HomeController.saveChangesToProfilePic(), Symbol("enctype") -> "multipart/form-data") {
+                        <p id="profilePic-label">Profilbild:</p>
+                        <input type="file" name="picture">
+                    }
                 </div>
+                <div class ="edit-profile-data-container">
+                    <p id="name-label">Name:</p>
+                    <input type="text" id="name-input" value = @user.getName>
+                    <p id="password-label">Password:</p>
+                    <input type="text" id="password-input" value = @user.getPassword>
+                    <p id="email-label">Email:</p>
+                    <input type="text" id="email-input" value = @user.getMail>
+                </div>
+                <button onclick="saveChanges()"> Änderungen speichern</button>
             </div>
+        </div>
     </body>
     }
 }

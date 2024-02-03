@@ -1,56 +1,40 @@
-document.addEventListener("DOMContentLoaded", function() {
 
-    const profileDisplay = document.querySelector(".profile-display");
-    const profileEditor = document.querySelector(".profile-editor");
-    const userNameDisplay = document.getElementById("user-name");
-    const editButton = document.getElementById("edit-button");
-    const nameInput = document.getElementById("name-input");
-    const saveButton = document.getElementById("save-button");
-    const fileInput = document.getElementById("file-input");
-    const profilePictureEdit = document.getElementById("profile-picture-edit");
-    const profilePictureDisplay = document.getElementById("profile-picture");
+function editProfile(){
+    document.querySelector(".profile-display").style.display = "none";
+    document.querySelector(".profile-editor").style.display = "inline-block"
+}
 
-    let originalName = userNameDisplay.textContent;
-    let originalImageUrl = profilePictureDisplay.src;
+function saveChanges(){
+    saveChangesToUserData();
+    document.getElementsByTagName("form").item(0).submit();
+}
 
-    document.getElementById("change-pic-button").addEventListener("click", () => {
-        fileInput.click();
-    });
+function saveChangesToUserData() {
+    let username = document.getElementById("name-input").value;
+    let password = document.getElementById("password-input").value;
+    let email = document.getElementById("email-input").value;
+    let profilePicPath = document.getElementById("profile-picture-edit");
 
-    fileInput.addEventListener("change", () => {
-        const selectedFile = fileInput.files[0];
-        if (selectedFile) {
-            profilePictureEdit.src = URL.createObjectURL(selectedFile);
+    fetch("/saveUser", {
+        method: "POST",
+        body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password,
+            profilePicPath: profilePicPath
+        }),
+        headers: {
+            "Content-Type": "text/json"
+        },
+        credentials: "include"
+    }).then(response  => {
+        if (!response.ok){
+            throw new Error('HTTP error! Status: ${result.status}')
         }
-    });
-
-    editButton.addEventListener("click", () => {
-        profileDisplay.style.display = "none";
-        profileEditor.style.display = "inline-block"
-        nameInput.value = originalName;
-    });
-
-    saveButton.addEventListener("click", () => {
-
-        const newName = nameInput.value;
-        userNameDisplay.textContent = newName;
-        originalName = newName;
-
-        profilePictureDisplay.src = profilePictureEdit.src || originalImageUrl;
-        originalImageUrl = profilePictureDisplay.src;
-
-        profileDisplay.style.display = "inline-block";
-        profileEditor.style.display = "none";
-    });
-
-    function fetchHighscore() {
-        fetch('/getHighscore')
-            .then(response => response.text())
-            .then(highscore => {
-                document.getElementById("points").textContent = highscore;
-            })
-            .catch(error => console.error('Fehler beim Abrufen des Highscores:', error));
-    }
-
-    fetchHighscore();
-});
+        return response.json()
+    }).then(data => {
+        if(data.success !== true){
+            alert("something went wrong")
+        }
+    }).catch(error => console.log(error.message))
+}
