@@ -12,9 +12,6 @@ import play.mvc.*;
 import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
-import views.html.quizGame.quizSelection;
-import views.html.quizGame.quizView;
-import views.html.quiz;
 
 import java.util.Map;
 
