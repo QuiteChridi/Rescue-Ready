@@ -35,10 +35,6 @@ public class HomeController extends Controller {
         this.quizFactory = quizFactory;
     }
 
-    public Result main() {
-        return ok(main.render());
-    }
-
     public Result profile(Http.Request request) {
         try {
             int userId = Integer.parseInt(request.session().get("userID").orElse(null));

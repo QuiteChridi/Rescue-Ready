@@ -27,13 +27,13 @@ GET         /highscore              controllers.ScoreboardController.highscore()
 GET         /getHighscore           controllers.ScoreboardController.getHighscoreFromSession(request:  play.mvc.Http.Request)
 POST        /highscoreByQuizName    controllers.ScoreboardController.renderHighscore(request: play.mvc.Http.Request)
 
-GET         /quizView               controllers.QuizController.quizView(request: play.mvc.Http.Request)
-GET         /quizSelection          controllers.QuizController.quizSelection
+GET         /quiz                   controllers.QuizController.quiz(request: play.mvc.Http.Request)
+
 GET         /getNextQuestion        controllers.QuizController.getNextQuestion
 GET         /getCorrectAnswer       controllers.QuizController.getCorrectAnswer
 POST        /checkAnswer            controllers.QuizController.checkAnswer(request:  play.mvc.Http.Request)
 POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
-POST        /selectQuiz             controllers.QuizController.selectQuiz(request: play.mvc.Http.Request)
+POST        /selectQuizAndGetName   controllers.QuizController.selectQuizAndGetName(request: play.mvc.Http.Request)
 GET         /getFiftyFiftyJoker     controllers.QuizController.getFiftyFiftyJoker(request: play.mvc.Http.Request)
 POST        /setFiftyFiftyJoker     controllers.QuizController.setFiftyFiftyJoker(request: play.mvc.Http.Request)
 GET         /getPauseJoker          controllers.QuizController.getPauseJoker(request: play.mvc.Http.Request)

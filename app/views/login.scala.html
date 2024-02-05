@@ -1,32 +1,31 @@
 @index("Login") {
     @defining(play.core.PlayVersion.current) { version =>
-    <body>
-        <section class="container">
-            <div class="content">
-                <!--<img class= "profile-picture" src="@routes.Assets.versioned("images/rescueReadyIcon.png")" alt="Rescue Ready Logo" width="250" height="250"> -->
+        <body>
+            <section class="container">
+                <h1>Login</h1>
+                <form id="loginForm" onsubmit="event.preventDefault(); checkLogin();">
+                    <div class="input-container">
+                        <h4>Benutzername:</h4>
+                        <input type="text" id="username" name="username"  placeholder="Ihr Benutzername" required>
 
-                    <h2>Login</h2>
-                    <form id="loginForm" onsubmit="event.preventDefault(); checkLogin();">
-                        <label for="username"></label>
-                        <input type="text" id="username" name="username"  placeholder="Benutzername" required><br><br>
+                        <h4>Passwort:</h4>
+                        <input type="password" id="password" name="password" placeholder="Ihr Passwort"  required >
+                    </div>
 
-                        <label for="password"></label>
-                        <input type="password" id="password" name="password" placeholder="Passwort"  required ><br><br>
+                    <div class="middle">
+                        <input type="submit" value="Login" class="button-signup-registration medium-button">
 
-                        <input type="submit" value="Login" class="button-signup-registration">
+                        <div class="signupOption">
+                            <a class="link" href="@routes.LoginController.signUp">Noch kein Konto?</a>
+                        </div>
+                    </div>
 
-                    </form>
-
-            </div>
-
-        </section>
-
-                <div class="signupOption">
-                    <span>Noch keinen Account?</span>
-                    <a class="link" href="@routes.LoginController.signUp">SignUp</a>
-                </div>
-    </body>
+                    <div id="hidden">
+                        <button id="hidden-button">1</button>
+                        <button id="hidden-button">2</button>
+                    </div>
+                </form>
+            </section>
+        </body>
     }
 }
-
-

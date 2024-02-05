@@ -1,94 +1,35 @@
 #shop-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 65vw;
-    max-width: 100%;
-    border: 2px solid black;
-    border-radius: 10px;
-    padding: 10px;
-    background-color: rgba(239, 239, 239, 1);
     gap: 10px;
-    margin-top: 2.5%;
 }
 
-.shop-header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.shop-header h1 {
-    margin: 0;
-    padding: 0;
-}
-
-
-.left,
-.center,
-.right {
-    flex: 0 0 30%;
-    padding: 10px;
-    text-align: center;
-}
-
-.shop-header .left {
-    visibility: hidden;
-    margin-right: auto;
-}
-
-.shop-header .center {
-}
-
-.shop-header .right {
-    margin-left: auto;
-}
-
-#owned-coins {
+#header-inner-container {
+    width: 80px;
     display: flex;
     flex-direction: row;
     align-items: center;
-}
-
-.align-right {
+    justify-content: center;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    gap: 10px;
     margin-left: auto;
 }
 
-.white-box-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    border: 2px solid black;
-    border-radius: 10px;
+#stock-image img {
+    max-height: 30px;
+    max-width: 30px;
+    margin-top: 5px;
+}
+
+#fiftyFiftyJoker-container, #pauseJoker-container, #doubleItJoker-container {
+    flex-direction: row;
     padding: 5px;
-    background-color: white;
-}
-
-.white-box-item {
-    margin: 10px;
-}
-
-#stock-text {
-    margin-bottom: 15px;
-}
-
-.joker-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    width: 100%;
-    border: 2px solid black;
-    border-radius: 10px;
-    background-color: white;
+    gap: unset;
 }
 
 .joker-item {
-    width: 30%;
+    width: 33%;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -102,25 +43,17 @@
     margin: 5px;
 }
 
-#amount {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+#fiftyFiftyJoker-text, #pauseJoker-text, #doubleItJoker-text {
+    gap: 10px;
 }
 
-#amount > div:first-child {
-    margin-right: 10px;
-}
-
-.custom-text1 {
+#shop-h4 {
+    font-size: 1.1em;
     text-decoration: underline;
-    font-size: 17px;
-    font-weight: bold;
 }
 
-.custom-text2 {
-    font-size: 17px;
-    font-weight: bold;
+#golden-text {
+    color: #a48f38;
 }
 
 #buy-content {
@@ -142,7 +75,7 @@
 #fiftyFiftyJoker-buy button,
 #pauseJoker-buy button,
 #doublePointsJoker-buy button {
-    width: 80%;
+    width: 75%;
     margin-bottom: 5px;
 }
 
