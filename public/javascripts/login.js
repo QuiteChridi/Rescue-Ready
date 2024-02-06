@@ -2,7 +2,7 @@ function checkLogin() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
-    fetch("/login", {
+    fetch("/authenticate", {
         method: "POST",
         body: JSON.stringify({
 

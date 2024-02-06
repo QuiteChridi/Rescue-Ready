@@ -4,24 +4,23 @@
 
 # An example controller showing a sample home page
 GET         /                       controllers.LoginController.login
-POST        /login                  controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
+POST        /authenticate           controllers.LoginController.authenticate(request:  play.mvc.Http.Request)
 
 GET         /signup                 controllers.LoginController.signUp
 POST        /signup                 controllers.LoginController.createUser(request:  play.mvc.Http.Request)
 POST        /logout                 controllers.LoginController.logout
 
 
-GET         /profile                controllers.HomeController.profile(request: play.mvc.Http.Request)
-GET         /friendProfile/:id      controllers.HomeController.friendProfile(id: Int)
-POST        /saveUser               controllers.HomeController.saveChangesToUser(request: play.mvc.Http.Request)
-POST        /saveProfilePic         controllers.HomeController.saveChangesToProfilePic(request: play.mvc.Http.Request)
+GET         /profile                controllers.ProfileController.profile(request: play.mvc.Http.Request)
+GET         /friendProfile/:id      controllers.ProfileController.friendProfile(id: Int)
+GET         /friends                controllers.ProfileController.friends(request: play.mvc.Http.Request)
+POST        /saveUser               controllers.ProfileController.saveChangesToUser(request: play.mvc.Http.Request)
+POST        /saveProfilePic         controllers.ProfileController.saveChangesToProfilePic(request: play.mvc.Http.Request)
 
 
 GET         /shop                   controllers.ShopController.shop(request: play.mvc.Http.Request)
 GET         /getAvailableCoins      controllers.ShopController.getAvailableCoins(request: play.mvc.Http.Request)
 POST        /setNewCoins            controllers.ShopController.setNewCoins(request: play.mvc.Http.Request)
-
-GET         /friends                controllers.HomeController.friends(request: play.mvc.Http.Request)
 
 GET         /highscore              controllers.ScoreboardController.highscore()
 GET         /getHighscore           controllers.ScoreboardController.getHighscoreFromSession(request:  play.mvc.Http.Request)

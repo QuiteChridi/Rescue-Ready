@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.google.inject.Inject;
 import controllers.interfaces.*;
 import models.*;
 
-import play.api.libs.Files;
 import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
@@ -21,37 +19,29 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HomeController extends Controller {
+public class ProfileController extends Controller {
 
     private final AbstractUserFactory users;
-    private final AbstractHighscoreFactory scoreboard;
-    private final AbstractQuizFactory quizFactory;
+    private final AbstractHighscoreFactory scores;
+    private final AbstractQuizFactory quizzes;
     private User currentUser;
 
     @Inject
-    public HomeController(UserFactory users, HighscoreFactory scoreboard, QuizFactory quizFactory) {
+    public ProfileController(UserFactory users, HighscoreFactory scores, QuizFactory quizzes) {
         this.users = users;
-        this.scoreboard = scoreboard;
-        this.quizFactory = quizFactory;
-    }
-
-    public Result main() {
-        return ok(main.render());
+        this.scores = scores;
+        this.quizzes = quizzes;
     }
 
     public Result profile(Http.Request request) {
         try {
             int userId = Integer.parseInt(request.session().get("userID").orElse(null));
 
-            return ok(profile.render(users.getUserById(userId), scoreboard.getHighscoresOfUser(userId)));
+            return ok(profile.render(users.getUserById(userId), scores.getHighscoresOfUser(userId)));
 
         } catch (NumberFormatException e) {
             return redirect(routes.LoginController.login());
         }
-    }
-
-    public Result signup() {
-        return ok(signup.render());
     }
 
     public Result friendProfile(int friendUserId) {
@@ -86,10 +76,10 @@ public class HomeController extends Controller {
     }
     private Map<String, Integer> getQuizHighscoresForUser(User user) {
         Map<String, Integer> quizHighscores = new HashMap<>();
-        List<Highscore> highscores = this.scoreboard.getHighscoresOfUser(user.getId());
+        List<Highscore> highscores = this.scores.getHighscoresOfUser(user.getId());
 
         for (Highscore highscore : highscores) {
-            String quizName = quizFactory.getQuizById(highscore.getQuizId()).getName();
+            String quizName = quizzes.getQuizById(highscore.getQuizId()).getName();
             quizHighscores.put(quizName, highscore.getScore());
         }
 

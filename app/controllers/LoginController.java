@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import models.UserFactory;
 import views.html.login;
+import views.html.signup;
 
 
 public class LoginController extends Controller {
@@ -32,11 +33,12 @@ public class LoginController extends Controller {
     }
 
     public Result signUp() {
-        return ok(views.html.signup.render());
+        return ok(signup.render());
     }
 
     public Result authenticate(Http.Request request) {
         JsonNode json = request.body().asJson();
+
         String username = json.findPath("username").textValue();
         String password = json.findPath("password").textValue();
         ObjectNode result = Json.newObject();
@@ -68,22 +70,24 @@ public class LoginController extends Controller {
         String username = json.findPath("username").textValue();
         String password = json.findPath("password").textValue();
         String email = json.findPath("email").textValue();
-        ObjectNode result = Json.newObject();
+        ObjectNode resultBody = Json.newObject();
 
-        loginLogger.debug("Attempting sign up.");
         try {
             if (users.createUserInUsers(username, password, email) != null) {
-                result.put("response", "Signup successful");
+                resultBody.put("response", "Signup successful");
                 loginLogger.debug("Username: " + username);
                 loginLogger.debug("Password: " + password);
                 loginLogger.debug("Email: " + email);
+                return ok().addingToSession(request, "username", username);
+
             } else {
-                result.put("response", "Username already exists");
+                resultBody.put("response", "Username already exists");
+                return notAcceptable(resultBody);
             }
-            System.out.println("Username: " + username + "\nPassword: " + password + "\nEmail: " + email);
+
         } catch (Throwable t) {
-            loginLogger.error("Exception with username + password", t);
+            return internalServerError("Exception with username + password");
         }
-        return ok(result).addingToSession(request, "username", username);
+
     }
 }

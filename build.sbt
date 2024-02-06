@@ -13,6 +13,7 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.25"
 libraryDependencies += "com.h2database" % "h2" % "1.4.200"
 libraryDependencies += "org.assertj" % "assertj-core" % "3.21.0" % Test
 libraryDependencies += "org.awaitility" % "awaitility" % "4.1.0" % Test
+libraryDependencies += "org.mockito" % "mockito-core" % "5.10.0" % "test"
 
 javacOptions ++= Seq(
   "-encoding", "UTF-8",
