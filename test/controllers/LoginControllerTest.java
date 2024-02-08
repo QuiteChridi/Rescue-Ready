@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import controllers.LoginController;
 import models.UserFactory;
 import org.junit.Test;
 import play.libs.Json;
@@ -12,10 +13,9 @@ import views.html.signup;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import static org.junit.Assert.assertEquals;
 import static play.test.Helpers.*;
 
 

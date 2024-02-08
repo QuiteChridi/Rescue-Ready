@@ -13,7 +13,13 @@ libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.25"
 libraryDependencies += "com.h2database" % "h2" % "1.4.200"
 libraryDependencies += "org.assertj" % "assertj-core" % "3.21.0" % Test
 libraryDependencies += "org.awaitility" % "awaitility" % "4.1.0" % Test
+libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 libraryDependencies += "org.mockito" % "mockito-core" % "5.10.0" % "test"
+libraryDependencies ++= Seq(
+  javaWs
+)
+
+testOptions += Tests.Argument(TestFrameworks.JUnit, "-v")
 
 javacOptions ++= Seq(
   "-encoding", "UTF-8",
@@ -22,8 +28,6 @@ javacOptions ++= Seq(
   "-Xlint:deprecation",
   "-Werror"
 )
-// Make verbose tests
-testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))
 
 
 

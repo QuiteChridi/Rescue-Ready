@@ -1,6 +1,7 @@
 package models;
 
 import controllers.interfaces.AbstractUserFactory;
+import models.UserFactory;
 import org.junit.After;
 import play.db.Database;
 import org.junit.Before;

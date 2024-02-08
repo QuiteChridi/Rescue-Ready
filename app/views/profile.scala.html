@@ -14,7 +14,7 @@
                         <h2 id="friends-title">Friends</h2>
                         <ul class="friends-list">
                         @for(friend <- user.getFriends()) {
-                            <li><a href="@routes.HomeController.friendProfile(friend.getId)">@friend.getName</a></li>
+                            <li><a href="@routes.ProfileController.friendProfile(friend.getId)">@friend.getName</a></li>
                         }
                         </ul>
                         <h1>Highscore</h1>
@@ -39,7 +39,7 @@
             </div>
             <div class="profile-editor">
                 <div class="edit-profile-pic-container">
-                    @helper.form(action = routes.HomeController.saveChangesToProfilePic(), Symbol("enctype") -> "multipart/form-data") {
+                    @helper.form(action = routes.ProfileController.saveChangesToProfilePic(), Symbol("enctype") -> "multipart/form-data") {
                         <p id="profilePic-label">Profilbild:</p>
                         <input type="file" name="picture">
                     }

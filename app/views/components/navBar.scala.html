@@ -1,49 +1,48 @@
-@()
+
 
 @defining(play.core.PlayVersion.current) { version =>
     <body>
         <nav>
-            <div class="nav-div">
-                <div class="nav-icons">
-                    <ul>
-                        <li>
-                            <a href="@routes.QuizController.quiz()">
-                                <div class="icon-container">
-                                    <img src="@routes.Assets.versioned("images/rescueReadyMain.png")" alt="Quiz" class="icon-image">
-                                    <p class="nav-text">Rescue Ready Quiz</p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div id="navbar-right">
-                    <ul>
-                        <li>
-                            <a href="@routes.ShopController.shop" >
-                                <p class="nav-text">Shop</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@routes.HomeController.friends" >
-                                <p class="nav-text">Freunde</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@routes.ScoreboardController.highscore()" >
-                                <p class="nav-text">Highscores</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" onclick="logout()" >
-                                <p class="nav-text">LogOut</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="@routes.HomeController.profile()" >
-                                <div class="icon-container">
-                                    <p class="nav-text">Profil</p>
-                                    <img src="@routes.Assets.versioned("images/profilePic.png")" alt="ProfilePic" id="profileImg">
-                                </div>
+            <div class="nav-icons">
+                <ul>
+                    <li>
+                        <a href="@routes.QuizController.quiz()">
+                            <div class="icon-container">
+                                <img src="@routes.Assets.versioned("images/rescueReadyMain.png")" alt="Quiz" class="icon-image">
+                                <p class="nav-text">Rescue Ready Quiz</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="navbar-right">
+                <ul>
+                    <li>
+                        <a href="@routes.ShopController.shop" >
+                            <p class="nav-text">Shop</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@routes.ProfileController.friends" >
+                            <p class="nav-text">Freunde</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@routes.ScoreboardController.highscore()" >
+                            <p class="nav-text">Highscores</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="logout()" >
+                            <p class="nav-text">LogOut</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@routes.ProfileController.profile()" >
+                            <div class="icon-container">
+                                <p class="nav-text">Profil</p>
+                                <img src="@routes.Assets.versioned("images/profilePics/" ) " alt="ProfilePic" id="profileImg">
+                            </div>
 
                             </a>
                         </li>

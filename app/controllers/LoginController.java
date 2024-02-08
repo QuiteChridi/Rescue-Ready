@@ -28,6 +28,10 @@ public class LoginController extends Controller {
         this.users = users;
     }
 
+    public LoginController(AbstractUserFactory users) {
+        this.users = users;
+    }
+
     public Result login() {
         return ok(login.render());
     }

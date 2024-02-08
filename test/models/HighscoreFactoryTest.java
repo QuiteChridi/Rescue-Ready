@@ -1,16 +1,20 @@
 package models;
 
+import controllers.interfaces.Highscore;
+
 import org.junit.Before;
 import org.junit.Test;
-
+import play.test.WithApplication;
 import static org.junit.Assert.*;
 
-public class HighscoreTest {
+public class HighscoreFactoryTest extends WithApplication {
 
-    /*private HighscoreFactory.HighscoreImplementation highscore;
-    @Before
-    public void setUp(){
-         highscore = new HighscoreFactory.HighscoreImplementation("test", 123);
+    private HighscoreFactory highscores;
+    private Highscore highscore;
+
+    /*@Before
+    public void setUp() {
+        highscores = provideApplication().injector().instanceOf(HighscoreFactory.class);
     }
 
     @Test

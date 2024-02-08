@@ -5,7 +5,7 @@
             <h1>Freunde</h1>
             <div class="friend-list">
                 @for(friend <- user.getFriends()) {
-                    <li><a href="@routes.HomeController.friendProfile(friend.getId)">@friend.getName</a></li>
+                    <li><a href="@routes.ProfileController.friendProfile(friend.getId)"> @friend.getName</a></li>
                 }
             </div>
     }}

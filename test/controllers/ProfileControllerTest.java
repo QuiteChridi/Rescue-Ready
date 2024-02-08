@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.ProfileController;
 import controllers.interfaces.Highscore;
 import models.*;
 import net.sourceforge.htmlunit.corejs.javascript.Context;
