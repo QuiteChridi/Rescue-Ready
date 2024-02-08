@@ -19,7 +19,7 @@ body {
     min-height: 100vh;
 }
 
-/* Pseudo-Element für den transparenten Overlay */
+/* Pseudo-Element für das erste transparente Overlay */
 body::before {
     content: "";
     position: absolute;
@@ -27,8 +27,22 @@ body::before {
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgb(169, 169, 169, 0.7);
+    background-color: rgba(169, 169, 169, 0.3);
     z-index: -1;
+    width: 100%;
+    height: 100%;
+}
+
+/* Pseudo-Element für das zweite transparente Overlay */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(0, 0, 0, 0.6); /* Farbe und Transparenz nach Bedarf ändern */
+    z-index: -2; /* Stellen Sie sicher, dass es unter dem ersten Overlay liegt */
     width: 100%;
     height: 100%;
 }
@@ -43,6 +57,14 @@ nav {
     width: 100%;
     height: 7%;
     display: flex;
+}
+
+.nav-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .icon-container {
@@ -68,11 +90,10 @@ nav {
 }
 
 .nav-text {
-    font-size: 2vh;
+    font-size: 3vh;
     font-weight: 550;
     color: #000000;
     margin-right: 4.5vh;
-    margin-top: 2vh;
 }
 
 #navbar-right {
@@ -90,119 +111,180 @@ ul {
     text-align: left;
 }
 
-i {
-    margin-right: 10px;
-}
 
 /* Abschnittsüberschriften */
 h1, h2, h3, h4, h5, h6 {
     color: #000000;
     font-family:  Arial, sans-serif;
-
+    text-align: center;
+    margin: 0;
 }
 
 h1 {
     font-size: 3em;
 }
 
-/* Text und Links
-p {
-    margin-bottom: 1em;
+h2 {
+    font-size: 2.6em;
 }
-*/
 
+h3 {
+    font-size: 1.6em;
+}
+
+h4 {
+    font-size: 1.4em;
+}
+
+h5 {
+    font-size: 1em;
+}
 
 a {
-    color: #0066cc;
+    color: #000000;
     text-decoration: none;
 }
 
 a:hover {
     text-decoration: underline;
-    color: black;
+    color: #0012e0;
 }
 
-/* Buttons und Formularelemente */
-button, input[type="submit"], input[type="button"]{
-    background-color: #24265f;
+/* Universeller Container für alle Inhalte auf den Seiten */
+.container {
+    max-width: 60%;
+    margin-top: 3.3%;
+    background-color: rgb(242, 242, 242);
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    gap: 25px;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.inner-container {
+    min-width: 93%;
+    max-width: 93%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    gap: 15px;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.column-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.header {
+    min-width: 94%;
+    max-width: 94%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+
+.left,
+.center,
+.right {
+    flex: 0 0 30%;
+    text-align: center;
+}
+
+.header .left {
+    margin-right: auto;
+}
+
+.header .center {
+}
+
+.header .right {
+    margin-left: auto;
+}
+
+/* Standardbuttons und Formularelemente */
+button, input[type="submit"], input[type="button"] {
+    background-color: #24265F;
     color: #ffffff;
-    border: none;
-    width: 250px;
-    border-radius: 6px;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 200px;
     padding: 10px 5px;
     font-size: 18px;
     margin-top: 5px;
     cursor: pointer;
 }
 
+/* Farbe für Hovereffekt */
 button:hover, input[type="submit"]:hover, input[type="button"]:hover {
     background-color: #0057a3;
 }
 
-@media screen and (min-width: 768px) {
-    .container {
-        width: 750px;
-        margin: auto;
-    }
+.alternativ-button {
+    background-color: #c8c8c8;
+    color: black;
 }
 
-@media screen and (min-width: 992px) {
-    .container {
-        width: 970px;
-    }
+.alternativ-button:hover {
+    background-color: rgb(220, 220, 220);
+    color: black;
 }
 
-@media screen and (min-width: 1200px) {
-    .container {
-        width: 1170px;
-    }
+.medium-button {
+    width: 300px;
+    height: 50px;
+    font-size: 25px;
 }
 
-
-/* Container&Content Klassen für SignUp Login und Profile evtl. acuh für Highscore */
-.container {
-    width: 609px;
-    height: 430px;
-    background-color: rgba(239, 239, 239, 1);
-    border-radius: 30px;
-    padding: 20px;
-    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
+.bigger-button {
+    width: 400px;
+    height: 50px;
+    font-size: 25px;
 }
 
-.form-container{
-    text-align: left;
+.input-container {
+    margin-bottom: 10px;
 }
 
-.container > div{
-    text-align: left;
-}
-
-
-.signup-option{
-    margin-top: 100px;
-    text-align: center;
-
-}
-
-.content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-input[type="text"], input[type="password"], input[type="email"],input[type="file"], select[id="gender"]{
-    width: 250px; /* Ändere die Breite nach Bedarf */
+/* Einstellung der Eingabefelder */
+.input-container input[type="text"],
+.input-container input[type="password"],
+.input-container input[type="email"],
+.input-container input[type="file"] {
+    width: 100%;
     padding: 10px;
-    margin: 0 0;
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
+
 .profile-editor {
     display: none; /* Edit-Ansicht standardmäßig ausblenden */
 }

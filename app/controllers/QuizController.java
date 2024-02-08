@@ -12,8 +12,8 @@ import play.mvc.*;
 import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
-import views.html.quiz.quizSelection;
-import views.html.quiz.quizView;
+
+import java.util.Map;
 
 
 public class QuizController extends Controller {
@@ -38,31 +38,30 @@ public class QuizController extends Controller {
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
-    public Result quizSelection() {
-        return ok(quizSelection.render(quizzes.getPossibleQuizNames()));
-    }
-
-    public Result selectQuiz(Http.Request request){
-        JsonNode json = request.body().asJson();
-        int quizId = json.findPath("quizId").asInt();
-        System.out.println("test");
-        quiz = quizzes.getQuizById(quizId);
-        return ok();
-    }
-
-    public Result quizView(Http.Request request) {
+    public Result quiz(Http.Request request) {
         User user = getUserFromSession(request);
 
         if (user != null) {
-            return ok(quizView.render(user));
+            Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
+            return ok(views.html.quiz.render(user, possibleQuizNames));
         } else {
             return redirect(routes.LoginController.login());
         }
     }
 
+    public Result selectQuizAndGetName(Http.Request request){
+        JsonNode json = request.body().asJson();
+        int quizId = json.findPath("quizId").asInt();
+        System.out.println("test");
+        quiz = quizzes.getQuizById(quizId);
+
+        String quizName = quiz.getName();
+        return ok(Json.newObject().put("quizName", quizName));
+    }
+
     public Result getNextQuestion() {
         System.out.println("Hallo");
-        System.out.println(quiz);
+        System.out.println(quiz.getName());
 
         if (!quiz.hasNextQuestion()) {
             System.out.println("Keine weiteren Fragen vorhanden");

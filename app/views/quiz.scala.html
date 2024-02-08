@@ -1,0 +1,99 @@
+@(user: interfaces.User, categories: Map[Integer, String])
+
+@index("Quiz") {
+    @defining(play.core.PlayVersion.current) { version =>
+        <body>
+            <div class="container" id="welcome-container">
+                <div class="header" id="welcome-text" >
+                    <h2>Hallo @user.getName!</h2>
+                    <h3 id="selectQuiz-h3">Willkommen bei Rescue Ready, deiner Anlaufstelle zur Auffrischung des Erste Hilfe Kurses</h3>
+                </div>
+
+                <div class="inner-container">
+                    <div id="inner-text">
+                        <h4>Dir stehen verschiedene Quizze zu folgenden Themen zur Verfügung:</h4>
+                    </div>
+                    <div class="category-btns" id="quiz-buttons">
+                    @for(value <- categories){
+                        <button class="bigger-button" onclick="selectQuizAndGetName(this.id)" type="button" id=@value._1 >@value._2 </button>
+                    }
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" id="start-quiz-container" style="display: none">
+                <div id="welcome-text">
+                    <h2>Hallo @user.getName!</h2>
+                    <h3 id="selectQuiz-h3">Willkommen bei Rescue Ready, deiner Anlaufstelle zur Auffrischung des Erste Hilfe Kurses</h3>
+                </div>
+
+                <div class="inner-container">
+                    <div id="quizName">
+                        <h4 id="quizName-h4">quizName</h4>
+                    </div>
+                    <div class="column-container" id="start-quiz-buttons">
+                        <button class="medium-button" onclick="startQuiz()">Quiz starten</button>
+                        <button class="alternativ-button medium-button" onclick="backToSelection()">zurück</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" id="quizStarted-container" style="display: none">
+                <div class="header" id="quizStarted-Header">
+                    <h1 id="quizName-h1">QuizName</h1>
+                    <h3 id="current-score"></h3>
+                </div>
+
+                <div id="timerBarAndQuestionBlockAlignment-container">
+                    <div id="timer-bar-container">
+                        <div id="timer-bar">
+                            <span id="timer-text">0:20</span>
+                        </div>
+                    </div>
+                    <div class="inner-container" id="quizStarted-Questionblock">
+
+                        <div id="question-container">
+                            <h4 id="question"></h4>
+                        </div>
+
+                        <div id="answersAndJokers-container">
+                            <div id="answer-container">
+                                <form id="answer-form"></form>
+                            </div>
+
+                            <div class="column-container" id="joker-container">
+                                <div id="button-container" class="row-container">
+                                    <div id="fiftyFiftyJokerAmount">
+                                    @user.getFiftyFiftyJoker
+                                    </div>
+                                    <img id="5050Joker" data-fifty-fifty-joker-count="@user.getFiftyFiftyJoker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="useFiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                                </div>
+                                <div id="button-container" class="row-container">
+                                    <div id="pauseJokerAmount">
+                                    @user.getPauseJoker
+                                    </div>
+                                    <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="usePauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                                </div>
+                                <div id="button-container" class="row-container">
+                                    <div id="doublePointsJokerAmount">
+                                    @user.getDoublePointsJoker
+                                    </div>
+                                    <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="useDoublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="result"></div>
+
+                        <div id="button-container" class="row-container">
+                            <button id="check-answer-button" onclick="checkAnswer()" style="display: block">Antwort überprüfen</button>
+                            <button id="next-question-button" onclick="getNextQuestion()" style="display: none">Nächste Frage</button>
+                            <button id="end-quiz-container" onclick="saveEndScore()" style="display: none">Quiz beenden</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </body>
+    }
+}

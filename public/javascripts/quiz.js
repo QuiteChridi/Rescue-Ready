@@ -4,6 +4,34 @@ let questionTimer = 20;
 let timerRunning = false;
 let timerInterval;
 let doubleIt = false;
+let quizName = "";
+
+function selectQuizAndGetName(quizId){
+    fetch("/selectQuizAndGetName", {
+        method: "POST",
+        body: JSON.stringify({
+            quizId: quizId,
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include"
+    })
+        .then(response => response.json())
+        .then(data => {
+            quizName = data.quizName;
+            document.getElementById("quizName").innerHTML = "<h4 style='line-height: 2;'>Du hast dich für das Quiz zum Thema<br><u>" + quizName + "</u><br>entschieden</h4>";
+            document.getElementById("welcome-container").style.display = "none"
+            document.getElementById("start-quiz-container").style.display = "flex"
+        })
+        .catch(error =>
+            console.log(error.message));
+}
+
+function backToSelection() {
+    document.getElementById("start-quiz-container").style.display = "none"
+    document.getElementById("welcome-container").style.display = "flex"
+}
 
 function startQuiz() {
     getNextQuestion();
@@ -18,10 +46,7 @@ function startTimer() {
             updateTimerDisplay();
 
             if (questionTimer <= 0) {
-                stopTimer();
                 submitAnswer(null);
-                document.getElementById('check-answer-button').style.display = 'none';
-                document.getElementById('next-question-button').style.display = 'flex';
             }
         }, 1000);
     }
@@ -61,30 +86,30 @@ function getNextQuestion() {
 }
 
 function renderNextQuestion(question, answers, score) {
-    document.getElementById('start-quiz-container').innerText = "";
+    document.getElementById('start-quiz-container').style.display = "none";
+    document.getElementById("quizStarted-container").style.display = "flex";
+
+    document.getElementById("quizName-h1").innerHTML = "<h5><u> Quiz: " + quizName + "</u></h5>";
 
     document.getElementById('current-score').innerText = "Aktueller Punktestand: " + score;
-    document.getElementById('timer-bar-container').style.display = 'flex';
-    updateTimerDisplay();
-
-    document.getElementById('questionCoandJoker').style.display = 'flex';
 
     document.getElementById('question-container').style.display = 'flex';
     document.getElementById('question').innerHTML = question;
     let answersContainer = document.getElementById('answer-form');
     answersContainer.innerHTML = "";
     shuffleAnswers(answers);
+
     answers.forEach(answer => {
         let label = document.createElement('label');
-        label.innerHTML = `<input type="radio" name="answer" value="${answer}">${answer}`;
+        label.style.display = 'flex';
+        label.style.alignItems = 'center';
+
+        label.innerHTML = `<input type="radio" name="answer" value="${answer}"><h5 style="margin-left: 5px;">${answer}</h5>`;
+
+        label.style.marginBottom = "15px";
         answersContainer.appendChild(label);
-        answersContainer.appendChild(document.createElement('br'));
     });
 
-    document.getElementById('button-container').style.display = 'flex';
-    document.getElementById('check-answer-button').style.display = 'flex';
-    document.getElementById('next-question-button').style.display = 'none';
-    document.getElementById('end-quiz-container').style.display = 'none';
 
     document.getElementById('joker-container').style.display = 'flex';
     document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyJoker.png";
@@ -94,7 +119,11 @@ function renderNextQuestion(question, answers, score) {
     document.getElementById('pauseJoker').disabled = false;
     document.getElementById('doublePointsJoker').disabled = false;
 
-    document.getElementById('result').innerText = "";
+    document.getElementById('check-answer-button').style.display = 'flex';
+    document.getElementById('next-question-button').style.display = 'none';
+    document.getElementById('end-quiz-container').style.display = 'none';
+
+    document.getElementById('result').style.display = "none";
 }
 
 function checkAnswer() {
@@ -137,7 +166,6 @@ function submitAnswer(selectedAnswerElement) {
 
 
 function renderResult(isCorrect, correctAnswer) {
-    let consoleOutput = document.getElementById('result');
     let message;
 
     if (isCorrect) {
@@ -147,17 +175,20 @@ function renderResult(isCorrect, correctAnswer) {
         message = "Falsch. Die richtige Antwort lautet: " + correctAnswer;
     }
 
-    consoleOutput.innerHTML = message;
+    let resultElement = document.getElementById("result");
+    resultElement.style.display = "flex";
+    resultElement.innerHTML = "<i>" + message + "</i>";
 }
 
 function updateTimerDisplay() {
     const timerBar = document.getElementById('timer-bar');
     const timerText = document.getElementById('timer-text');
+    const container = document.getElementById('timer-bar-container');
 
     const percentage = (questionTimer / 20) * 100;
 
-    const maxWidth = window.innerWidth * 0.70;
-    const barWidth = Math.min((percentage / 100) * maxWidth, maxWidth);
+    const containerWidth = container.clientWidth * 0.91;
+    const barWidth = Math.min((percentage / 100) * containerWidth, containerWidth);
 
     timerBar.style.width = barWidth + 'px';
 
@@ -169,9 +200,10 @@ function updateTimerDisplay() {
 
     timerText.innerText = formatTime(questionTimer);
     if (questionTimer <= 0) {
-        timerBar.style.width = maxWidth + 'px';
+        timerBar.style.width = containerWidth + 'px';
     }
 }
+
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);

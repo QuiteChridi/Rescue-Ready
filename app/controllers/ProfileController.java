@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import com.google.inject.Inject;
 import controllers.interfaces.*;
 import models.*;
 
+import play.api.libs.Files;
 import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
@@ -42,6 +44,10 @@ public class ProfileController extends Controller {
         } catch (NumberFormatException e) {
             return redirect(routes.LoginController.login());
         }
+    }
+
+    public Result signup() {
+        return ok(signup.render());
     }
 
     public Result friendProfile(int friendUserId) {
@@ -100,10 +106,10 @@ public class ProfileController extends Controller {
                 file.copyTo(Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics", fileName), true);
                 user.setProfilePicPath(fileName);
 
-                return redirect(routes.HomeController.profile());
+                return redirect(routes.ProfileController.profile());
             }
         }
-        return redirect(routes.HomeController.profile());
+        return redirect(routes.ProfileController.profile());
     }
 
     public Result saveChangesToUser(Http.Request request) {
