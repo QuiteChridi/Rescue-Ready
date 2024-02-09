@@ -3,36 +3,42 @@
 @index("FriendProfile") {
     @defining(play.core.PlayVersion.current) { version =>
         <body>
-            <div class="container" id="profile-container">
-                <div class="content">
-                    <div class="profile-display">
-                        <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePics/" + friend.getProfilePicPath)" alt="Profilbild">
-                        <h1 id="user-name">@friend.getName</h1>
-                        <div class="highscores-table">
-                        @if(quizHighscores.isEmpty) {
-                            <p>Keine Highscores verfügbar.</p>
-                        } else {
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Quiz</th>
-                                        <th>Highscore</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                @for((quizName, highscore) <- quizHighscores) {
-                                    <tr>
-                                        <td>@quizName</td>
-                                        <td>@highscore</td>
-                                    </tr>
-                                }
-                                </tbody>
-                            </table>
-                        }
-                        </div>
+            <div class="sizeAble-container" id="profile-container">
+                <div class="header column-container" id="profile-header">
+                    <img id="profilePicture"  src="@routes.Assets.versioned("images/profilePics/prince.png")" alt="Profilbild">
+                    <h2 id="user-name">Profil von @friend.getName</h2>
+                </div>
 
+                <div class="highscores-table-container">
+                    <div class="friendHighscores-table">
+                    @if(quizHighscores.isEmpty) {
+                        <h3>Keine Highscores verfügbar.</h3>
+                    } else {
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Highscore</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @for((quizName, highscore) <- quizHighscores) {
+                                <tr>
+                                    <td>@quizName</td>
+                                    <td>@highscore</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    }
                     </div>
                 </div>
+
+                <div id="friendProfile-buttons">
+                    <button class="medium-button" id="friendProfile-button">Chat</button>
+                    <button class="alternativ-button medium-button" id="friendProfile-button" onclick="window.location.href='@routes.ProfileController.friends()'">Zurück</button>
+                </div>
+
             </div>
         </body>
     }

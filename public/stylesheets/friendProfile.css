@@ -1,39 +1,52 @@
-.highscores-table table {
+.header {
+    gap: 10px;
+}
+
+.header img {
+    border-radius: 50%;
+    width: 300px;
+    height: auto;
+}
+
+.friendHighscores-table table {
+    width: 100%;
     border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    border-radius: 15px 15px 0 0;
+    font-size: 1.4em;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px black;
-
-
 }
 
-.highscores-table table thead tr {
+.friendHighscores-table table thead tr {
     background-color: #24265f;
-    color: white;
+    color: #ffffff;
     text-align: left;
     font-weight: bold;
+    font-size: 1.5em;
 }
 
-.highscores-table table th,
-.highscores-table table td {
-    padding: 12px 15px;
+.friendHighscores-table table th,
+.friendHighscores-table table td {
+    padding: 15px;
 }
 
-.highscores-table table tbody tr {
-    border-bottom: 1px solid #dddddd;
+.friendHighscores-table table tbody tr {
+    border-bottom: 1px solid #000000;
 }
 
-.highscores-table table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+.friendHighscores-table table tbody {
+    background-color: #ffffff;
 }
 
-.highscores-table table tbody tr:last-of-type {
-    border-bottom: #24265f;
+#friendProfile-buttons {
+    width: 93%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
-.highscores-table table tbody tr.active-row {
-    font-weight: bold;
-    color: #24265f;
+#friendProfile-button {
+    width: 50%;
+
 }

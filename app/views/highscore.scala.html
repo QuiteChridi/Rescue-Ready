@@ -4,28 +4,42 @@
 @index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>
     <body>
-        <h1>Highscore</h1>
-        <table class="content-table">
-            <thead id="highscoreTableHead">
-                <tr>
-                    <td>Name</td>
-                    <td>Score</td>
-                </tr>
-            </thead>
-            <tbody id="highscoreTableBody">
-                @for(value <- highscores){
-                    <tr>
-                        <td>@value.getUserName</td>
-                        <td>@value.getScore<td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div>
-            @for(value <- categories ){
-                <button onclick="selectHighscore(this.id)" type="button" id=@value._1> @value._2 </button>
+        <div class="sizeAble-container">
+            <div class="header">
+                <h1>Highscores</h1>
+            </div>
+
+            <div class="highscores-table-container">
+                <div class="highscores-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Score</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(value <- highscores){
+                            <tr>
+                                <td class="row-container">
+                                    <img src="@routes.Assets.versioned("images/profilePics/profilePic.png")" alt="Profile Picture">
+                                    @value.getUserName
+                                </td>
+                                <td>@value.getScore<td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
+            <div id="highscoreSwitch-buttons">
+            @for(value <- categories) {
+                <button onclick="selectHighscore(this.id)" type="button" id=@value._1 style="flex: 1; font-size: 1.4em;">@value._2</button>
             }
+            </div>
+
         </div>
     </body>
     }
-} 
+}

@@ -34,14 +34,16 @@ function backToSelection() {
 }
 
 function startQuiz() {
+    startTimer();
     getNextQuestion();
 }
 
 function startTimer() {
     if (!timerRunning) {
-        questionTimer = 20;
+        questionTimer = 21;
         timerRunning = true;
         timerInterval = setInterval(function () {
+            updateTimerDisplay();
             questionTimer--;
             updateTimerDisplay();
 
@@ -278,7 +280,7 @@ function saveQuizResult(score) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        window.location.href="quizSelection"
+        window.location.href="quiz"
         alert("Ergebnis gespeichert!");
     })
         .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));

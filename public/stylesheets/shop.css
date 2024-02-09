@@ -47,12 +47,15 @@
     gap: 10px;
 }
 
+.shop-h4-size {
+    font-size: 1.3em;
+}
+
 #shop-h4 {
-    font-size: 1.1em;
     text-decoration: underline;
 }
 
-#golden-text {
+.golden-text {
     color: #a48f38;
 }
 

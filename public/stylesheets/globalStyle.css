@@ -59,7 +59,7 @@ nav {
     display: flex;
 }
 
-.nav-div {
+.nav-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -90,7 +90,7 @@ nav {
 }
 
 .nav-text {
-    font-size: 3vh;
+    font-size: 2.5vh;
     font-weight: 550;
     color: #000000;
     margin-right: 4.5vh;
@@ -150,8 +150,42 @@ a:hover {
     color: #0012e0;
 }
 
-/* Universeller Container für alle Inhalte auf den Seiten */
+.logSign-container {
+    max-width: 60%;
+    margin-top: 3.3%;
+    background-color: rgb(242, 242, 242);
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    gap: 25px;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.sizeAble-container {
+    min-width: 45%;
+    max-width: 60%;
+    margin-top: 3.3%;
+    background-color: rgb(242, 242, 242);
+    border: 2px solid black;
+    border-radius: 25px;
+    padding: 25px;
+    gap: 25px;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+/* Universeller Container für alle Inhalte auf den meisten Seiten */
 .container {
+    min-width: 60%;
     max-width: 60%;
     margin-top: 3.3%;
     background-color: rgb(242, 242, 242);
@@ -182,6 +216,9 @@ a:hover {
     align-items: center;
 }
 
+.highscores-table-container {
+    width: 93%;
+}
 
 .column-container {
     display: flex;
@@ -235,9 +272,8 @@ button, input[type="submit"], input[type="button"] {
     border: 1px solid black;
     border-radius: 10px;
     width: 200px;
-    padding: 10px 5px;
+    padding: 10px;
     font-size: 18px;
-    margin-top: 5px;
     cursor: pointer;
 }
 

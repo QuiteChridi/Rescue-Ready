@@ -1,37 +1,40 @@
-
-.content-table{
+.highscores-table table {
+    width: 100%;
     border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    min-width: 400px;
-    border-radius: 15px 15px 0 0;
+    font-size: 1.2em;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 0 20px black;
-    width: 609px;
-    height: 430px;
+    box-shadow: 0 0 10px black;
 }
-.content-table thead tr{
+
+.highscores-table thead tr{
     background-color: #24265f;
     color: white;
     text-align: left;
     font-weight: bold;
+    font-size: 1.3em;
 }
-.content-table th,
-.content-table td{
-    padding: 12px 15px;
+.highscores-table th,
+.highscores-table td{
+    padding: 10px;
 
 }
-.content-table tbody tr{
-    border-bottom: 1px solid #dddddd;
-}
-.content-table tbody tr:nth-of-type(even){
-    background-color: #f3f3f3;
-}
-.content-table tbody tr:last-of-type{
-    border-bottom: #24265f;
-}
-.content-table tbody tr.active-row{
-    font-weight: bold;
-    color: #24265f;
+.highscores-table tbody tr {
+    border-bottom: 1px solid #000000;
 }
 
+.highscores-table tbody{
+    background-color: #ffffff;
+}
+
+.highscores-table img {
+    width: 30px;
+    height: auto;
+}
+
+#highscoreSwitch-buttons {
+    width: 93%;
+    gap: 5px;
+    display: flex;
+
+}

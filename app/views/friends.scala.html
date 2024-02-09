@@ -2,10 +2,38 @@
 
 @index("Freunde") {
     @defining(play.core.PlayVersion.current) { version =>
-            <h1>Freunde</h1>
-            <div class="friend-list">
-                @for(friend <- user.getFriends()) {
-                    <li><a href="@routes.ProfileController.friendProfile(friend.getId)"> @friend.getName</a></li>
-                }
+        <div class="sizeAble-container" id="friends-container">
+            <div class="header">
+                <h1>Freunde</h1>
             </div>
+
+            <div class="inner-container" id="friendList-container">
+                <div class="friend-list">
+                    @for(friend <- user.getFriends()) {
+                        <li>
+                            <img src="@routes.Assets.versioned("images/profilePics/profilePic.png")" alt="Profile Picture">
+                            <a id="friendName" href="@routes.ProfileController.friendProfile(friend.getId)" >@friend.getName</a>
+                            <button>Chat</button>
+                            <button class="alternativ-button">Entfernen</button>
+                        </li>                        }
+                </div>
+            </div>
+
+            <div class="inner-container" id="friendAdd-container">
+                <div id="friendAdd-text">
+                    <h3>Neuen Freund hinzufügen:</h3>
+                </div>
+
+                <div class="row-container" id="friendAdd-send">
+                    <div class="friendAddInputContainer">
+                        <input class="friendAddInput" type="text" id="newFriend" name="friend" required placeholder="Name des Freundes">
+                    </div>
+                    <div id="friendAdd-button">
+                        <button id="add-button">Abschicken</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     }}

@@ -2,23 +2,17 @@
 
 @index("Profile") {
     @defining(play.core.PlayVersion.current) { version =>
-    <body>
-        <div class="container" id="profile-container">
-            <div class="content">
-                <div class="profile-display">
-                    <img id="profile-picture" class="profile-picture" src="@routes.Assets.versioned("images/profilePics/" + user.getProfilePicPath)" alt="Profilbild">
-                    <h1 id="user-name">@user.getName</h1>
-                    <p id="achievement-points">Achievement Points: <span id="points">100</span></p>
-                    <button id="edit-button" onclick = "editProfile()">Edit</button>
-                    <div class="friends-section">
-                        <h2 id="friends-title">Friends</h2>
-                        <ul class="friends-list">
-                        @for(friend <- user.getFriends()) {
-                            <li><a href="@routes.ProfileController.friendProfile(friend.getId)">@friend.getName</a></li>
-                        }
-                        </ul>
-                        <h1>Highscore</h1>
-                        <table class="content-table">
+        <body>
+            <div class="sizeAble-container" id="profile-container">
+                <div class="header column-container" id="profile-header">
+                    <img id="profilePicture"  src="@routes.Assets.versioned("images/profilePics/prince.png")" alt="Profilbild">
+                    <h2 id="user-name">Hallo @user.getName</h2>
+                </div>
+
+                <div class="highscores-table-container">
+                    <div class="friendHighscores-table">
+
+                        <table>
                             <thead id="highscoreTableHead">
                                 <tr>
                                     <td>Name</td>
@@ -34,9 +28,21 @@
                             }
                             </tbody>
                         </table>
+
                     </div>
                 </div>
+
+                <div id="friendProfile-buttons">
+                    <button class="medium-button" id="friendProfile-button" onclick = "editProfile()">Bearbeiten</button>
+                    <button class="alternativ-button medium-button" id="logout-button" onclick="logout()">Logout</button>
+                </div>
+
             </div>
+        </body>
+
+    <body>
+        <div class="container" id="profile-container">
+            <div>("images/profilePics/" + user.getProfilePicPath)</div>
             <div class="profile-editor">
                 <div class="edit-profile-pic-container">
                     @helper.form(action = routes.ProfileController.saveChangesToProfilePic(), Symbol("enctype") -> "multipart/form-data") {

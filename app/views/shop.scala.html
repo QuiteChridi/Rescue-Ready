@@ -2,7 +2,7 @@
 
 @index("Shop") {
     @defining(play.core.PlayVersion.current) { version =>
-        <div class="container" id="shop-container">
+        <div class="sizeAble-container" id="shop-container">
             <div class="header" id="shop-header">
                 <div class="left"></div>
 
@@ -13,7 +13,7 @@
                 <div class="right">
                     <div  id="header-inner-container">
                         <div>
-                            <h5 id="golden-text">@user.getCoins</h5>
+                            <h5 class="golden-text" id="stock-text">@user.getCoins</h5>
                         </div>
                         <div id="stock-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
@@ -31,10 +31,13 @@
                     <h5>Entfernt zwei falsche Antworten für die aktuelle Frage</h5>
                 </div>
                 <div id="fiftyFiftyJoker-buy" class="joker-item joker-buy">
-                    <h4 id="shop-h4">In Besitz: @user.getFiftyFiftyJoker</h4>
+                    <div class="row-container">
+                        <h4 class="shop-h4-size" id="shop-h4" >In Besitz:</h4>
+                        <h4 class="shop-h4-size" id="fiftyFiftyJokerAmount">@user.getFiftyFiftyJoker</h4>
+                    </div>
                     <div id="buy-content">
                         <div id="buy-text">
-                            <h5 id="golden-text">2</h5>
+                            <h5 class="golden-text">2</h5>
                         </div>
                         <div id="buy-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
@@ -53,10 +56,13 @@
                     <h5>Pausiert die Zeit für die aktuelle Frage</h5>
                 </div>
                 <div id="pauseJoker-buy" class="joker-item joker-buy">
-                    <h4 id="shop-h4">In Besitz: @user.getPauseJoker</h4>
+                    <div class="row-container">
+                        <h4 class="shop-h4-size" id="shop-h4" >In Besitz:</h4>
+                        <h4 class="shop-h4-size" id="pauseJokerAmount">@user.getPauseJoker</h4>
+                    </div>
                     <div id="buy-content">
                         <div id="buy-text">
-                            <h5 id="golden-text">3</h5>
+                            <h5 class="golden-text">3</h5>
                         </div>
                         <div id="buy-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
@@ -75,10 +81,12 @@
                     <h5>Verdoppelt die Punkte für die aktuelle Frage</h5>
                 </div>
                 <div id="doublePointsJoker-buy" class="joker-item joker-buy">
-                    <h4 id="shop-h4">In Besitz: @user.getDoublePointsJoker</h4>
-                    <div id="buy-content">
+                    <div class="row-container">
+                        <h4 class="shop-h4-size" id="shop-h4" >In Besitz:</h4>
+                        <h4 class="shop-h4-size" id="doublePointsJokerAmount">@user.getDoublePointsJoker</h4>
+                    </div>                    <div id="buy-content">
                         <div id="buy-text">
-                            <h5 id="golden-text">4</h5>
+                            <h5 class="golden-text">4</h5>
                         </div>
                         <div id="buy-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">

@@ -1,33 +1,21 @@
-.friends-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid black;
-    border-radius: 10px;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-    width: 150px;
-
-}
-
 .friend-list {
-    list-style: none;
     width: 100%;
-    padding: 0;
-    margin: 0;
-    width: 300px;
-
+    max-height: 40vh; /* Setzen Sie die gewünschte maximale Höhe hier ein */
+    overflow-y: auto;
+    border: 1px solid #000000;
+    list-style: none;
 }
 
 .friend-list li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
     background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
-    transition: all 0.3s;
+    border: 1px solid #000000;
+    gap: 5px;
+    padding: 5px;
 }
 
 .friend-list li:hover {
@@ -35,9 +23,52 @@
     box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
 }
 
-.friend-list li a {
-    text-decoration: none;
-    color: #000000;
-    display: block;
-    text-align: center;
+.friend-list li img {
+    width: 10%;
+    max-height: 40px;
+    max-width: 40px;
+    border-radius: 50%;
+}
+
+.friend-list li #friendName {
+    width: 50%;
+    font-size: 25px;
+}
+
+.friend-list li button {
+    width: 20%;
+}
+
+#friendAdd-container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    align-items: start;
+    gap: 5px;
+}
+
+#friendAdd-send {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+}
+
+.friendAddInputContainer {
+    width: 75%;
+}
+
+.friendAddInput {
+    width: 100%;
+    font-size: 24px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+#friendAdd-button {
+    width: 25%;
+}
+
+#add-button {
+    width: 100%;
 }
