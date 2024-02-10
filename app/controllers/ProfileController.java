@@ -4,12 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
@@ -17,7 +11,6 @@ import com.google.inject.Inject;
 import controllers.interfaces.*;
 import models.*;
 
-import play.api.libs.Files;
 import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
@@ -98,40 +91,18 @@ public class ProfileController extends Controller {
         return quizHighscores;
     }
 
-    public Result saveChangesToProfilePic(Http.Request request){
+    public Result saveProfilePicToAssets(Http.Request request){
         User user = getUserFromSession(request);
 
         if (user != null) {
             Http.MultipartFormData<TemporaryFile> body = request.body().asMultipartFormData();
 
             Http.MultipartFormData.FilePart<TemporaryFile> picture = body.getFile("picture");
-            if (picture != null) {
-                String fileName = picture.getFilename();
-                TemporaryFile file = picture.getRef();
 
-                try {
-                    Path targetDirectory = Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics");
+            String fileName = picture.getFilename();
+            TemporaryFile file = picture.getRef();
 
-                    InputStream inputStream = new FileInputStream(file.path().toFile());
-                    OutputStream outputStream = new FileOutputStream(targetDirectory.resolve(fileName).toFile());
-
-                    byte[] buffer = new byte[1024];
-                    int length;
-                    while ((length = inputStream.read(buffer)) > 0) {
-                        outputStream.write(buffer, 0, length);
-                    }
-
-                    inputStream.close();
-                    outputStream.close();
-
-                    return redirect(routes.ProfileController.profile());
-                } catch (Exception e) {
-                    System.err.println("Fehler beim Speichern des Profilbildes: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            } else {
-                System.err.println("Profilbild nicht gefunden");
-            }
+            file.copyTo(Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics", fileName), true);
         } else {
             return redirect(routes.LoginController.login());
         }
@@ -139,7 +110,6 @@ public class ProfileController extends Controller {
     }
 
     public Result saveChangesToUser(Http.Request request) {
-        System.out.println("Fehler");
         User user = getUserFromSession(request);
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -148,6 +118,9 @@ public class ProfileController extends Controller {
             String newEmail = json.findPath("email").textValue();
             String newProfilePic = "images/profilePics/" + json.findPath("profilePicPath").textValue();
 
+            if(newProfilePic.equals("images/profilePics/")){
+                newProfilePic = user.getProfilePicPath();
+            }
             user.setMail(newEmail);
             user.setName(newUsername);
             user.setPassword(newPassword);
@@ -186,21 +159,4 @@ public class ProfileController extends Controller {
         }
     }
 
-    public Result getUserData(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-
-            String profilePicPath = user.getProfilePicPath();
-            String userName = user.getName();
-
-            ObjectNode userData = JsonNodeFactory.instance.objectNode();
-            userData.put("profilePicPath", profilePicPath);
-            userData.put("userName", userName);
-
-            return ok(userData);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
 }
