@@ -321,9 +321,5 @@ button:hover, input[type="submit"]:hover, input[type="button"]:hover {
     margin-bottom: 20px;
 }
 
-.profile-editor {
-    display: none; /* Edit-Ansicht standardmäßig ausblenden */
-}
-
 
 

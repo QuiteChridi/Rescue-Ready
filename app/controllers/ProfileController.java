@@ -4,8 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 
 import com.google.inject.Inject;
 import controllers.interfaces.*;
@@ -103,26 +108,50 @@ public class ProfileController extends Controller {
                 String fileName = picture.getFilename();
                 TemporaryFile file = picture.getRef();
 
-                file.copyTo(Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics", fileName), true);
-                user.setProfilePicPath(fileName);
+                try {
+                    Path targetDirectory = Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics");
 
-                return redirect(routes.ProfileController.profile());
+                    InputStream inputStream = new FileInputStream(file.path().toFile());
+                    OutputStream outputStream = new FileOutputStream(targetDirectory.resolve(fileName).toFile());
+
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+
+                    inputStream.close();
+                    outputStream.close();
+
+                    return redirect(routes.ProfileController.profile());
+                } catch (Exception e) {
+                    System.err.println("Fehler beim Speichern des Profilbildes: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            } else {
+                System.err.println("Profilbild nicht gefunden");
             }
+        } else {
+            return redirect(routes.LoginController.login());
         }
         return redirect(routes.ProfileController.profile());
     }
 
     public Result saveChangesToUser(Http.Request request) {
+        System.out.println("saveChanges erreicht");
         User user = getUserFromSession(request);
         if (user != null) {
             JsonNode json = request.body().asJson();
             String newUsername = json.findPath("username").textValue();
             String newPassword = json.findPath("password").textValue();
             String newEmail = json.findPath("email").textValue();
+            String newProfilePic = "images/profilePics/" + json.findPath("profilePicPath").textValue();
+            System.out.println(newProfilePic);
 
             user.setMail(newEmail);
             user.setName(newUsername);
             user.setPassword(newPassword);
+            user.setProfilePicPath(newProfilePic);
 
             ObjectNode result = Json.newObject();
             result.put("success", true);

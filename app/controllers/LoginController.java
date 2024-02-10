@@ -33,11 +33,11 @@ public class LoginController extends Controller {
     }
 
     public Result login() {
-        return ok(login.render());
+        return ok(login.render(null));
     }
 
     public Result signUp() {
-        return ok(signup.render());
+        return ok(signup.render(null));
     }
 
     public Result authenticate(Http.Request request) {

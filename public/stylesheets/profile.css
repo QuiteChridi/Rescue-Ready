@@ -1,21 +1,9 @@
+#user-name {
+    text-decoration: underline;
+}
 
-#profile-container {
-    margin-top: 100px;
+#profilePicture {
+    border-radius: 50%;
+    width: 300px;
     height: auto;
-    overflow: visible;
-}
-
-.friends-list {
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-align: left;
-
-}
-
-#friends-list .friend-item {
-    display: block;
-    margin-bottom: 3px;
-    text-align: left;
 }
