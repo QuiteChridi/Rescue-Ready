@@ -87,6 +87,7 @@ nav {
     width: auto;
     margin-left: -4vh;
     margin-right: 1.5vh;
+    border-radius: 50%;
 }
 
 .nav-text {

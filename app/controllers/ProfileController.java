@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 
@@ -138,7 +139,7 @@ public class ProfileController extends Controller {
     }
 
     public Result saveChangesToUser(Http.Request request) {
-        System.out.println("saveChanges erreicht");
+        System.out.println("Fehler");
         User user = getUserFromSession(request);
         if (user != null) {
             JsonNode json = request.body().asJson();
@@ -146,7 +147,6 @@ public class ProfileController extends Controller {
             String newPassword = json.findPath("password").textValue();
             String newEmail = json.findPath("email").textValue();
             String newProfilePic = "images/profilePics/" + json.findPath("profilePicPath").textValue();
-            System.out.println(newProfilePic);
 
             user.setMail(newEmail);
             user.setName(newUsername);
@@ -172,5 +172,35 @@ public class ProfileController extends Controller {
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
+    public Result getProfilePic(Http.Request request) {
+        User user = getUserFromSession(request);
 
+        if (user != null) {
+
+            String pp = user.getProfilePicPath();
+            System.out.println("Profilbild: " + pp);
+
+            return ok(Json.toJson(pp));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
+
+    public Result getUserData(Http.Request request) {
+        User user = getUserFromSession(request);
+
+        if (user != null) {
+
+            String profilePicPath = user.getProfilePicPath();
+            String userName = user.getName();
+
+            ObjectNode userData = JsonNodeFactory.instance.objectNode();
+            userData.put("profilePicPath", profilePicPath);
+            userData.put("userName", userName);
+
+            return ok(userData);
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
 }

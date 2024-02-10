@@ -5,41 +5,49 @@ function editProfile(){
 }
 
 function saveChanges(){
-    document.getElementById("profile-container").style.display = "flex";
-    document.getElementById("editProfile-container").style.display = "none"
+
     saveChangesToUserData();
     saveProfilePic();
+    getUserData();
 }
 
 function saveChangesToUserData() {
     let username = document.getElementById("name-input").value;
     let password = document.getElementById("password-input").value;
     let email = document.getElementById("email-input").value;
-    let profilePicPath = document.getElementById("newProfilePicture").files[0].name;
+    let profilePicInput = document.getElementById("newProfilePicture");
 
-    fetch("/saveUser", {
-        method: "POST",
-        body: JSON.stringify({
-            username: username,
-            email: email,
-            password: password,
-            profilePicPath: profilePicPath
-        }),
-        headers: {
-            "Content-Type": "text/json"
-        },
-        credentials: "include"
-    }).then(response  => {
-        if (!response.ok){
-            throw new Error('HTTP error! Status: ${result.status}')
-        }
-        return response.json()
-    }).then(data => {
-        if(data.success !== true){
-            alert("something went wrong")
-        }
-    }).catch(error => console.log(error.message))
+    if (profilePicInput && profilePicInput.files.length > 0) {
+        let profilePicFile = profilePicInput.files[0];
+        let profilePicPath = profilePicFile.name;
+
+        fetch("/saveUser", {
+            method: "POST",
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                profilePicPath: profilePicPath
+            }),
+            headers: {
+                "Content-Type": "text/json"
+            },
+            credentials: "include"
+        }).then(response  => {
+            if (!response.ok){
+                throw new Error('HTTP error! Status: ${result.status}')
+            }
+            return response.json()
+        }).then(data => {
+            if(data.success !== true){
+                alert("something went wrong")
+            }
+        }).catch(error => console.log(error.message))
+    } else {
+        console.error("Profilbild nicht geändert");
+    }
 }
+
 
 function saveProfilePic() {
     let profilePicInput = document.getElementById("newProfilePicture");

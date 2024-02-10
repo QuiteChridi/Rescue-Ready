@@ -5,7 +5,7 @@
         <body>
             <div class="sizeAble-container" id="profile-container">
                 <div class="header column-container" id="profile-header">
-                    <img id="profilePicture"  src="@routes.Assets.versioned("" + user.getProfilePicPath)" alt="Profilbild">
+                    <img id="profilePicture1"  src="@routes.Assets.versioned("" + user.getProfilePicPath)" alt="Profilbild">
                     <h2 id="user-name">Hallo @user.getName</h2>
                 </div>
 
@@ -15,15 +15,15 @@
                         <table>
                             <thead id="highscoreTableHead">
                                 <tr>
-                                    <td>Name</td>
-                                    <td>Score</td>
+                                    <th>Name</th>
+                                    <th>Score</th>
                                 </tr>
                             </thead>
                             <tbody id="highscoreTableBody">
                             @for(value <- highscores){
                                 <tr>
                                     <td>@value.getQuizName</td>
-                                    <td>@value.getScore<td>
+                                    <td>@value.getScore</td>
                                 </tr>
                             }
                             </tbody>
@@ -41,7 +41,7 @@
 
     <body>
         <div class="sizeAble-container" id="editProfile-container" style="display: none">
-            <img id="profilePicture"  src="@routes.Assets.versioned("" + user.getProfilePicPath)" alt="Profilbild">
+            <img id="profilePicture2"  src="@routes.Assets.versioned("" + user.getProfilePicPath)" alt="Profilbild">
             <div class="profile-editor">
                 <div class="edit-profile-pic-container">
                     @helper.form(action = routes.ProfileController.saveChangesToProfilePic(), Symbol("enctype") -> "multipart/form-data") {

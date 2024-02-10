@@ -1,6 +1,7 @@
-
-
 @defining(play.core.PlayVersion.current) { version =>
+    <script>
+            window.onload = getProfilePic();
+    </script>
     <body>
         <nav>
             <div class="nav-container">
@@ -37,7 +38,7 @@
                             <a href="@routes.ProfileController.profile()" >
                                 <div class="icon-container">
                                     <p class="nav-text">Profil</p>
-                                    <img src="@routes.Assets.versioned("images/profilePics/profilePic.png" ) " alt="ProfilePic" id="profileImg">
+                                    <img src="@routes.Assets.versioned("images/profilePics/profilePic.png") " alt="ProfilePic" id="profileImg">
                                 </div>
 
                             </a>

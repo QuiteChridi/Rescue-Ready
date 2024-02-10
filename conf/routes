@@ -10,13 +10,14 @@ GET         /signup                 controllers.LoginController.signUp
 POST        /signup                 controllers.LoginController.createUser(request:  play.mvc.Http.Request)
 POST        /logout                 controllers.LoginController.logout
 
+GET         /getProfilePic          controllers.ProfileController.getProfilePic(request: play.mvc.Http.Request)
 
 GET         /profile                controllers.ProfileController.profile(request: play.mvc.Http.Request)
 GET         /friendProfile/:id      controllers.ProfileController.friendProfile(id: Int)
 GET         /friends                controllers.ProfileController.friends(request: play.mvc.Http.Request)
 POST        /saveUser               controllers.ProfileController.saveChangesToUser(request: play.mvc.Http.Request)
 POST        /saveProfilePic         controllers.ProfileController.saveChangesToProfilePic(request: play.mvc.Http.Request)
-
+GET         /getUserData            controllers.ProfileController.getUserData(request: play.mvc.Http.Request)
 
 GET         /shop                   controllers.ShopController.shop(request: play.mvc.Http.Request)
 GET         /getAvailableCoins      controllers.ShopController.getAvailableCoins(request: play.mvc.Http.Request)

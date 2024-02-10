@@ -1,9 +1,10 @@
-
 @(highscores: List[interfaces.Highscore], categories: Map[Integer, String])
 
 @index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>
+
     <body>
+
         <div class="sizeAble-container">
             <div class="header">
                 <h1>Highscores</h1>
@@ -14,18 +15,18 @@
                 <table>
                     <thead>
                         <tr>
-                            <td>Name</td>
-                            <td>Score</td>
+                            <th>Name</th>
+                            <th>Score</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for(value <- highscores){
+                        @for(value <- highscores) {
                             <tr>
                                 <td class="row-container">
                                     <img src="@routes.Assets.versioned("images/profilePics/profilePic.png")" alt="Profile Picture">
                                     @value.getUserName
                                 </td>
-                                <td>@value.getScore<td>
+                                <td>@value.getScore</td>
                             </tr>
                         }
                     </tbody>

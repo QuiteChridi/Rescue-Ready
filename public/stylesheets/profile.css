@@ -2,7 +2,13 @@
     text-decoration: underline;
 }
 
-#profilePicture {
+#profilePicture1 {
+    border-radius: 50%;
+    width: 300px;
+    height: auto;
+}
+
+#profilePicture2 {
     border-radius: 50%;
     width: 300px;
     height: auto;
