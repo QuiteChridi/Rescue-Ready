@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 import java.nio.file.Paths;
 
-
 import com.google.inject.Inject;
 import controllers.interfaces.*;
 import models.*;
@@ -91,6 +90,7 @@ public class ProfileController extends Controller {
     }
 
     public Result saveProfilePicToAssets(Http.Request request){
+        System.out.println("SaveProfilePicToAsset wurde aufgerufen");
         User user = getUserFromSession(request);
 
         if (user != null) {
@@ -117,7 +117,7 @@ public class ProfileController extends Controller {
             String newEmail = json.findPath("email").textValue();
             String newProfilePic = "images/profilePics/" + json.findPath("profilePicPath").textValue();
 
-            if(newProfilePic.equals("images/profilePics/")){
+            if (newProfilePic.equals("images/profilePics/")) {
                 newProfilePic = user.getProfilePicPath();
             }
             user.setMail(newEmail);
@@ -144,5 +144,18 @@ public class ProfileController extends Controller {
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
+    public Result getProfilePic(Http.Request request) {
+        User user = getUserFromSession(request);
+
+        if (user != null) {
+
+            String pp = user.getProfilePicPath();
+            System.out.println("Profilbild: " + pp);
+
+            return ok(Json.toJson(pp));
+        } else {
+            return redirect(routes.LoginController.login());
+        }
+    }
 
 }

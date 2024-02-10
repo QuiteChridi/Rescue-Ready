@@ -10,6 +10,7 @@ GET         /signup                 controllers.LoginController.signUp
 POST        /signup                 controllers.LoginController.createUser(request:  play.mvc.Http.Request)
 POST        /logout                 controllers.LoginController.logout
 
+GET         /getProfilePic          controllers.ProfileController.getProfilePic(request: play.mvc.Http.Request)
 
 GET         /profile                controllers.ProfileController.profile(request: play.mvc.Http.Request)
 GET         /friendProfile/:id      controllers.ProfileController.friendProfile(id: Int)

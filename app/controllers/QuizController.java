@@ -42,6 +42,7 @@ public class QuizController extends Controller {
         User user = getUserFromSession(request);
 
         if (user != null) {
+
             Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
             return ok(views.html.quiz.render(user, possibleQuizNames));
         } else {
@@ -200,5 +201,4 @@ public class QuizController extends Controller {
 
         return ok();
     }
-
 }

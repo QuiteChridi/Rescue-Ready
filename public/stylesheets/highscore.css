@@ -1,6 +1,9 @@
 .highscores-table-container {
     max-height: 40vh;
     overflow: auto;
+    border-radius: 10px;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px black;
 }
 
 .highscores-table table {
