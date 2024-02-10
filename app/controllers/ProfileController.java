@@ -92,6 +92,7 @@ public class ProfileController extends Controller {
     }
 
     public Result saveProfilePicToAssets(Http.Request request){
+        System.out.println("SaveProfilePicToAsset wurde aufgerufen");
         User user = getUserFromSession(request);
 
         if (user != null) {
@@ -118,7 +119,7 @@ public class ProfileController extends Controller {
             String newEmail = json.findPath("email").textValue();
             String newProfilePic = "images/profilePics/" + json.findPath("profilePicPath").textValue();
 
-            if(newProfilePic.equals("images/profilePics/")){
+            if (newProfilePic.equals("images/profilePics/")) {
                 newProfilePic = user.getProfilePicPath();
             }
             user.setMail(newEmail);
