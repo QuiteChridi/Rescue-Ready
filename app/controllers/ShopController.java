@@ -22,55 +22,45 @@ public class ShopController extends Controller {
         this.users = users;
     }
 
-    private int getUserIdFromSession(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
+    public Result shop(Http.Request request) {
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
+
+        return ok(shop.render(user));
+    }
+
+    public Result getCoins(Http.Request request) {
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
+
+        ObjectNode result = Json.newObject();
+        result.put("availableCoins", user.getCoins());
+        return ok(result);
+    }
+
+    public Result setCoins(Http.Request request) {
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
+
+        JsonNode json = request.body().asJson();
+        int newCoins = json.findPath("newCoins").intValue();
+
+        user.setCoins(newCoins);
+        user.save();
+
+        ObjectNode result = Json.newObject();
+        result.put("success", true);
+        result.put("newCoins", newCoins);
+
+        return ok(result);
     }
 
     private User getUserFromSession(Http.Request request) {
-        int userID = getUserIdFromSession(request);
-        return (userID != -1) ? users.getUserById(userID) : null;
+        return request
+                .session()
+                .get("userID")
+                .map(Integer::parseInt)
+                .map(users::getUserById)
+                .orElse(null);
     }
-
-    public Result shop(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            return ok(shop.render(user));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result getAvailableCoins(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            int availableCoins = user.getCoins();
-            return ok(Json.newObject().put("availableCoins", availableCoins));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result setNewCoins(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            int newCoins = json.findPath("newCoins").intValue();
-            user.setCoins(newCoins);
-
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newCoins", newCoins);
-
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-
-
 }

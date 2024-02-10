@@ -111,8 +111,11 @@ public class QuizController extends Controller {
 
         if (user != null) {
             JsonNode json = request.body().asJson();
+            System.out.println(json);
             int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
+            System.out.println(newAmountOfJokers);
             user.setFiftyFiftyJoker(newAmountOfJokers);
+            user.save();
 
             ObjectNode result = Json.newObject();
             result.put("success", true);
@@ -173,35 +176,6 @@ public class QuizController extends Controller {
             ObjectNode result = Json.newObject();
             result.put("success", true);
             result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result getCoins(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            int availableCoins = user.getCoins();
-            return ok(Json.newObject().put("availableCoins", availableCoins));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result setCoins(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            int newAmountOfCoins = json.findPath("newAmountOfCoins").intValue();
-            user.setCoins(newAmountOfCoins);
-
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfCoins", newAmountOfCoins);
-
             return ok(result);
         } else {
             return redirect(routes.LoginController.login());

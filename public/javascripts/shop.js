@@ -1,153 +1,68 @@
-function getAvailableCoins() {
-    return fetch("/getAvailableCoins", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include"
-    })
-        .then(response => response.json())
-        .catch(error => console.error("Fehler beim Abrufen der verfügbaren Coins", error));
-}
+const FIFTY_FIFTY_PRICE = 2;
+const PAUSE_PRICE = 3;
+const DOUBLE_POINTS_PRICE = 5;
 
-function updateCoinsDisplay(newCoins) {
-    document.getElementById("stock-text").innerText = newCoins;
-}
+
 
 function buyFiftyFiftyJoker() {
-    getAvailableCoins()
-        .then(data => {
+    getCoins()
+        .then(data =>{
+        let availableCoins = data.availableCoins
 
-            let availableCoins = data.availableCoins;
-            let fiftyfiftyPrice = 2;
+        if(availableCoins >= FIFTY_FIFTY_PRICE){
+            availableCoins = availableCoins - FIFTY_FIFTY_PRICE;
+            setCoins(availableCoins)
 
-            if (availableCoins >= fiftyfiftyPrice) {
-                fetch("/setNewCoins", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({ newCoins: availableCoins - fiftyfiftyPrice })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        let newCoins = data.newCoins;
-                        updateCoinsDisplay(newCoins);
+            let availableJokers = Number(document.getElementById("fiftyFiftyJokerAmount").innerText) + 1;
 
-                        let availableFiftyFiftyJoker =  document.getElementById("fiftyFiftyJokerAmount").innerText;
-                        availableFiftyFiftyJoker++;
-
-                        fetch("/setFiftyFiftyJoker", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            credentials: "include",
-                            body: JSON.stringify({ newAmountOfJokers: availableFiftyFiftyJoker})
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers;
-                            })
-                            .catch(error => console.error("Fehler beim Setzen der neuen Anzahl FiftyFiftyJoker:", error));
-                    })
-                    .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
-            } else {
-                console.log("Nicht genügend Coins verfügbar.");
-            }
-        });
+            setFiftyFiftyJoker(availableJokers).then(data => {
+                document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers;
+            });
+        } else {
+            alert("Nicht genügen Coins verfügbar");
+        }
+    });
 }
 
 function buyPauseJoker() {
-    getAvailableCoins()
-        .then(data => {
+    getCoins()
+        .then(data =>{
+            let availableCoins = data.availableCoins
 
-            let availableCoins = data.availableCoins;
-            let pausePrice = 3;
+            if(availableCoins >= PAUSE_PRICE){
+                availableCoins = availableCoins - PAUSE_PRICE;
+                setCoins(availableCoins)
 
-            if (availableCoins >= pausePrice) {
-                fetch("/setNewCoins", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({ newCoins: availableCoins - pausePrice })
-                })
-                    .then(response => response.json())
-                    .then(data => {
+                let availableJokers = Number(document.getElementById("pauseJokerAmount").innerText) + 1;
 
-                        let newCoins = data.newCoins;
-                        updateCoinsDisplay(newCoins);
-
-                        let availablePauseJoker =  document.getElementById("pauseJokerAmount").innerText;
-                        availablePauseJoker++;
-
-                        fetch("/setPauseJoker", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            credentials: "include",
-                            body: JSON.stringify({ newAmountOfJokers: availablePauseJoker})
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
-                            })
-                            .catch(error => console.error("Fehler beim Setzen der neuen Anzahl PauseJoker:", error));
-                    })
-                    .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
+                setPauseJoker(availableJokers).then(data => {
+                    document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
+                });
             } else {
-                console.log("Nicht genügend Coins verfügbar.");
+                alert("Nicht genügen Coins verfügbar");
             }
         });
 }
 
 function buyDoublePointsJoker() {
-    getAvailableCoins()
-        .then(data => {
+    getCoins()
+        .then(data =>{
+            let availableCoins = data.availableCoins
 
-            let availableCoins = data.availableCoins;
-            let doublePointsPrice = 4;
+            if(availableCoins >= DOUBLE_POINTS_PRICE){
+                availableCoins = availableCoins - DOUBLE_POINTS_PRICE;
+                setCoins(availableCoins)
 
-            if (availableCoins >= doublePointsPrice) {
-                fetch("/setNewCoins", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include",
-                    body: JSON.stringify({ newCoins: availableCoins - doublePointsPrice })
-                })
-                    .then(response => response.json())
-                    .then(data => {
+                let availableJokers = Number(document.getElementById("doublePointsJokerAmount").innerText) + 1;
 
-                        let newCoins = data.newCoins;
-                        updateCoinsDisplay(newCoins);
-
-                        let availableDoublePointsJoker =  document.getElementById("doublePointsJokerAmount").innerText;
-                        availableDoublePointsJoker++;
-
-                        fetch("/setDoublePointsJoker", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            credentials: "include",
-                            body: JSON.stringify({ newAmountOfJokers: availableDoublePointsJoker})
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log(data)
-                                document.getElementById("doublePointsJokerAmount").innerText = data.newAmountOfJokers;
-                            })
-                            .catch(error => console.error("Fehler beim Setzen der neuen Anzahl DoublePointsJoker:", error));
-                    })
-                    .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
+                setPauseJoker(availableJokers).then(data => {
+                    document.getElementById("doublePointsJokerAmount").innerText = data.newAmountOfJokers;
+                });
             } else {
-                console.log("Nicht genügend Coins verfügbar.");
+                alert("Nicht genügen Coins verfügbar");
             }
         });
 }
+
+
+
