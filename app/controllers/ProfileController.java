@@ -36,7 +36,10 @@ public class ProfileController extends Controller {
         try {
             int userId = Integer.parseInt(request.session().get("userID").orElse(null));
 
-            return ok(profile.render(users.getUserById(userId), scores.getHighscoresOfUser(userId)));
+            List <Highscore> highscores = scores.getHighscoresOfUser(userId);
+            highscores.sort(Highscore::compareTo);
+
+            return ok(profile.render(users.getUserById(userId), highscores));
 
         } catch (NumberFormatException e) {
             return redirect(routes.LoginController.login());
@@ -50,9 +53,11 @@ public class ProfileController extends Controller {
     public Result friendProfile(int friendUserId) {
         User friend = users.getUserById(friendUserId);
 
+        List <Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
+        highscores.sort(Highscore::compareTo);
+
         if (friend != null) {
-            Map<String, Integer> quizHighscores = getQuizHighscoresForUser(friend);
-            return ok(friendProfile.render(friend, quizHighscores));
+            return ok(friendProfile.render(friend, highscores));
         } else {
             return notFound("Friend not found");
         }
@@ -77,17 +82,7 @@ public class ProfileController extends Controller {
             return redirect(routes.LoginController.login());
         }
     }
-    private Map<String, Integer> getQuizHighscoresForUser(User user) {
-        Map<String, Integer> quizHighscores = new HashMap<>();
-        List<Highscore> highscores = this.scores.getHighscoresOfUser(user.getId());
 
-        for (Highscore highscore : highscores) {
-            String quizName = quizzes.getQuizById(highscore.getQuizId()).getName();
-            quizHighscores.put(quizName, highscore.getScore());
-        }
-
-        return quizHighscores;
-    }
 
     public Result saveProfilePicToAssets(Http.Request request){
         System.out.println("SaveProfilePicToAsset wurde aufgerufen");
@@ -124,6 +119,7 @@ public class ProfileController extends Controller {
             user.setName(newUsername);
             user.setPassword(newPassword);
             user.setProfilePicPath(newProfilePic);
+            user.save();
 
             ObjectNode result = Json.newObject();
             result.put("success", true);

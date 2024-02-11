@@ -52,7 +52,6 @@ public class LoginController extends Controller {
             User user = users.authenticate(username, password);
             if (user != null) {
                 result.put("response", "Login successful");
-                // Fügen Sie die Benutzer-ID zur Session hinzu, nicht den Benutzernamen
                 return ok(result).addingToSession(request, "userID", Integer.toString(user.getId()));
             } else {
                 result.put("response", "Wrong username or password");

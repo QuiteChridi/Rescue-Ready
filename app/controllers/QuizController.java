@@ -145,6 +145,7 @@ public class QuizController extends Controller {
             JsonNode json = request.body().asJson();
             int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
             user.setPauseJoker(newAmountOfJokers);
+            user.save();
 
             ObjectNode result = Json.newObject();
             result.put("success", true);
@@ -173,6 +174,7 @@ public class QuizController extends Controller {
             JsonNode json = request.body().asJson();
             int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
             user.setDoublePointsJoker(newAmountOfJokers);
+            user.save();
 
             ObjectNode result = Json.newObject();
             result.put("success", true);

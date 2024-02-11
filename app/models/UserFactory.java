@@ -211,7 +211,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setCoins(int coins) {
             this.coins = coins;
-            save();
         }
 
         @Override
@@ -222,7 +221,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setFiftyFiftyJoker(int fiftyFiftyJoker) {
             this.fiftyFiftyJoker = fiftyFiftyJoker;
-            save();
         }
 
         @Override
@@ -233,7 +231,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setDoublePointsJoker(int doublePointsJoker) {
             this.doublePointsJoker = doublePointsJoker;
-            save();
         }
 
         @Override
@@ -244,7 +241,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setPauseJoker(int pauseJoker) {
             this.pauseJoker = pauseJoker;
-            save();
         }
 
         @Override
@@ -255,14 +251,12 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setProfilePicPath(String profilePicPath) {
             this.profilePicPath = profilePicPath;
-            save();
         }
 
         @Override
         public int getId() {
             return id;
         }
-
 
         @Override
         public String getName() {
@@ -272,7 +266,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setName(String username) {
             this.username = username;
-            save();
         }
 
         @Override
@@ -283,7 +276,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setMail(String mail) {
             this.mail = mail;
-            save();
         }
 
         @Override
@@ -294,7 +286,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setPassword(String password) {
             this.password = password;
-            save();
         }
 
     }

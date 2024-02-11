@@ -25,6 +25,12 @@ public class ScoreboardController extends Controller {
         currentHighscoreList = scores.getHighscoresOfQuiz(1);
     }
 
+    public ScoreboardController(AbstractQuizFactory quizzes, HighscoreFactory scores){
+        this.quizzes = quizzes;
+        this.scores = scores;
+        currentHighscoreList = scores.getHighscoresOfQuiz(1);
+    }
+
     public Result highscore(){
         return ok(highscore.render(currentHighscoreList, quizzes.getPossibleQuizNames()));
     }

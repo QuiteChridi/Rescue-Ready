@@ -1,13 +1,11 @@
 package models;
 
 import controllers.interfaces.AbstractUserFactory;
-import models.UserFactory;
 import org.junit.After;
 import play.db.Database;
 import org.junit.Before;
 import play.test.WithApplication;
 
-import static org.junit.Assert.*;
 
 public class UserFactoryTest extends WithApplication {
 
