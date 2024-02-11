@@ -24,7 +24,6 @@ GET         /getCoins               controllers.ShopController.getCoins(request:
 POST        /setCoins               controllers.ShopController.setCoins(request: play.mvc.Http.Request)
 
 GET         /highscore              controllers.ScoreboardController.highscore()
-GET         /getHighscore           controllers.ScoreboardController.getHighscoreFromSession(request:  play.mvc.Http.Request)
 POST        /highscoreByQuizName    controllers.ScoreboardController.renderHighscore(request: play.mvc.Http.Request)
 
 GET         /quiz                   controllers.QuizController.quiz(request: play.mvc.Http.Request)

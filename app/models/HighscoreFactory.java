@@ -10,8 +10,6 @@ import java.util.List;
 
 import controllers.interfaces.AbstractHighscoreFactory;
 import controllers.interfaces.Highscore;
-import models.QuizFactory;
-import models.UserFactory;
 import play.db.Database;
 
 @Singleton

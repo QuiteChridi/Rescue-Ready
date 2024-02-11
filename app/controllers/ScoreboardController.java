@@ -33,12 +33,8 @@ public class ScoreboardController extends Controller {
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
         currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
+        currentHighscoreList.sort(Highscore::compareTo);
 
         return ok(highscore.render(currentHighscoreList, quizzes.getPossibleQuizNames()));
-    }
-
-    public Result getHighscoreFromSession(Http.Request request) {
-        String highscore = request.session().get("highscore").orElse("0");
-        return ok(highscore);
     }
 }

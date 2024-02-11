@@ -1,4 +1,4 @@
-@(friend: interfaces.User, quizHighscores: Map[String, Integer])
+@(friend: interfaces.User, highscores: List[interfaces.Highscore])
 
 @index("FriendProfile") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -11,7 +11,7 @@
 
                 <div class="highscores-table-container">
                     <div class="friendHighscores-table">
-                    @if(quizHighscores.isEmpty) {
+                    @if(highscores.isEmpty) {
                         <h3>Keine Highscores verfügbar.</h3>
                     } else {
                         <table>
@@ -22,10 +22,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @for((quizName, highscore) <- quizHighscores) {
+                            @for((highscore) <- highscores) {
                                 <tr>
-                                    <td>@quizName</td>
-                                    <td>@highscore</td>
+                                    <td>@highscore.getQuizName<td>
+                                    <td>@highscore.getScore<td>
                                 </tr>
                             }
                             </tbody>
