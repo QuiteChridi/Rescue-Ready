@@ -64,11 +64,16 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
         private final int score;
         private final int quizId;
         private final int userId;
+        private final UserFactory.UserImplementation user;
+        private final QuizFactory.QuizImplementation quiz;
 
         private HighscoreImplementation(ResultSet rs) throws SQLException {
             this.score = rs.getInt("highscore");
             this.quizId = rs.getInt("quiz_idQuiz");
             this.userId = rs.getInt("user_iduser");
+
+            this.user = users.getUserById(userId);
+            this.quiz = quizes.getQuizById(quizId);
         }
 
         @Override
@@ -87,13 +92,18 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
         }
 
         @Override
+        public String getProfilePicPath() {
+            return user.getProfilePicPath();
+        }
+
+        @Override
         public String getUserName(){
-            return users.getUserById(userId).getName();
+            return user.getName();
         }
 
         @Override
         public String getQuizName() {
-            return quizes.getQuizById(quizId).getName();
+            return quiz.getName();
         }
 
         @Override
