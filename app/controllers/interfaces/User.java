@@ -11,6 +11,8 @@ public abstract class User {
 
     public abstract boolean addFriend(int userId, int friendId);
 
+    public abstract boolean removeFriend(int userId, int friendId);
+
     public abstract void delete();
 
     public abstract List<UserFactory.UserImplementation> getFriends();

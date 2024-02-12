@@ -175,4 +175,16 @@ public class ProfileController extends Controller {
         }
     }
 
+    public Result removeFriend(Http.Request request, int friendId) {
+        int userId = getUserIdFromSession(request);
+        if(userId < 0){
+            return redirect(routes.LoginController.login());
+        }
+        boolean success = users.removeFriend(userId, friendId);
+        if (success) {
+            return ok("Freund entfernt");
+        } else {
+            return internalServerError("Freund konnte nicht entfernt werden");
+        }
+    }
 }

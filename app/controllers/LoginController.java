@@ -79,7 +79,6 @@ public class LoginController extends Controller {
             User newUser = users.createUserInUsers(username, password, email);
             if (newUser != null) {
                 resultBody.put("response", "Signup successful");
-                // Hier speichern Sie zusätzliche Nutzerinformationen in der Session
                 return ok(resultBody).addingToSession(request, "userID", Integer.toString(newUser.getId()));
             } else {
                 resultBody.put("response", "Username already exists");

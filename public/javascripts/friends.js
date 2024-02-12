@@ -12,10 +12,23 @@ function addFriend(userId) {
         .then(response => {
             if (response.ok) {
                 alert('Freund hinzugefügt');
-                location.reload(); // Um die Seite zu aktualisieren und die Freundesliste neu zu laden
+                location.reload();
             } else {
                 alert('Fehler beim Hinzufügen des Freundes');
             }
         })
         .catch(error => console.error('Fehler:', error));
+}
+function removeFriend(friendId) {
+    fetch(`/removeFriend/${friendId}`, {
+        method: 'POST',
+        credentials: 'include'
+    }).then(response => {
+        if (response.ok) {
+            alert('Freund entfernt');
+            location.reload();
+        } else {
+            alert('Fehler beim Entfernen des Freundes');
+        }
+    }).catch(error => console.error('Fehler:', error));
 }

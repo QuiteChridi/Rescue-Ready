@@ -143,6 +143,21 @@ public class UserFactory implements AbstractUserFactory {
         });
     }
 
+    @Override
+    public boolean removeFriend(int userId, int friendId) {
+        return db.withConnection(conn -> {
+            String sql = "DELETE FROM friends WHERE id_user_1 = ? AND id_user_2 = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, userId);
+                stmt.setInt(2, friendId);
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+    }
 
 
     public class UserImplementation extends User {
@@ -240,6 +255,26 @@ public class UserFactory implements AbstractUserFactory {
                 }
             });
         }
+
+
+        @Override
+        public boolean removeFriend(int userId, int friendId) {
+            db.withConnection(conn -> {
+                String sql = "DELETE FROM friends WHERE id_user_1 = ? AND id_user_2 = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setInt(1, userId);
+                    stmt.setInt(2, friendId);
+                    stmt.executeUpdate();
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            });
+            return false;
+        }
+
+
 
         /**
          * Delete the user from the database
