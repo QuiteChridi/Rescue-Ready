@@ -12,4 +12,8 @@ public interface AbstractUserFactory {
     User getUserById(String id);
 
     List<User> getAllUsers();
+
+    List<User> searchUsersByName(String searchQuery);
+
+    boolean addFriend(int userId, int friendId);
 }

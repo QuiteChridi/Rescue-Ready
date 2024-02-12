@@ -21,6 +21,7 @@ public class UserFactory implements AbstractUserFactory {
 
     /**
      * Authenticates a user with the given credentials
+     *
      * @param username username from user input
      * @param password password from user input
      * @return Found user or null if user not found
@@ -110,6 +111,39 @@ public class UserFactory implements AbstractUserFactory {
     }
 
 
+    @Override
+    public List<User> searchUsersByName(String searchQuery) {
+        return db.withConnection(conn -> {
+            List<User> users = new ArrayList<>();
+            String sql = "SELECT * FROM user WHERE name LIKE ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, "%" + searchQuery + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserImplementation user = new UserImplementation(rs);
+                users.add(user);
+            }
+            stmt.close();
+            return users;
+        });
+    }
+
+    public boolean addFriend(int userId, int friendId) {
+        return db.withConnection(conn -> {
+            String sql = "INSERT INTO friends (id_user_1, id_user_2) VALUES (?, ?)";
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setInt(1, userId);
+                stmt.setInt(2, friendId);
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        });
+    }
+
+
 
     public class UserImplementation extends User {
         private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/profilePic.png";
@@ -169,6 +203,41 @@ public class UserFactory implements AbstractUserFactory {
 
                 stmt.executeUpdate();
                 stmt.close();
+            });
+        }
+
+        /**
+         * Returns a list of all users in the database
+         */
+        @Override
+        public List<UserImplementation> getAllUsers() {
+            return db.withConnection(conn -> {
+                List<UserImplementation> result = new ArrayList<>();
+                String sql = "SELECT * FROM user";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    UserImplementation user = new UserImplementation(rs);
+                    result.add(user);
+                }
+                stmt.close();
+                return result;
+            });
+        }
+
+        @Override
+        public boolean addFriend(int userId, int friendId) {
+            return db.withConnection(conn -> {
+                String sql = "INSERT INTO friendships (user_id, friend_id) VALUES (?, ?)";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setInt(1, userId);
+                    stmt.setInt(2, friendId);
+                    stmt.executeUpdate();
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
             });
         }
 

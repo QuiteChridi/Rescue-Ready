@@ -16,25 +16,36 @@
                             <a id="friendName" href="@routes.ProfileController.friendProfile(friend.getId)" >@friend.getName</a>
                             <button>Chat</button>
                             <button class="alternativ-button">Entfernen</button>
-                        </li>                        }
+                        </li>
+                    }
                 </div>
             </div>
 
-            <div class="inner-container" id="friendAdd-container">
-                <div id="friendAdd-text">
+            <div class="inner-container" id="userAdd-container">
+                <div id="userAdd-text">
                     <h3>Neuen Freund hinzufügen:</h3>
                 </div>
 
                 <div class="row-container" id="friendAdd-send">
                     <div class="friendAddInputContainer">
-                        <input class="friendAddInput" type="text" id="newFriend" name="friend" required placeholder="Name des Freundes">
+                        <input class="friendAddInput" type="text" id="newFriend" name="friend" required placeholder="Hier Namen eingeben">
                     </div>
                     <div id="friendAdd-button">
-                        <button id="add-button">Abschicken</button>
+                        <button id="add-button">Suchen</button>
                     </div>
                 </div>
-            </div>
 
+                <div class="user-list">
+                @for(user <- user.getAllUsers()) {
+                    <li>
+                        <img src="@routes.Assets.versioned(user.getProfilePicPath())" alt="Profile Picture">
+                        <a id="userName" href="@routes.ProfileController.friendProfile(user.getId())">@user.getName()</a>
+                        <button class="add-friend-button" data-user-id="@user.getId()">Hinzufügen</button>
+                    </li>
+                }
+                </div>
+            </div>
         </div>
 
-    }}
+    }
+}

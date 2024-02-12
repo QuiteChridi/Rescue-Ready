@@ -7,6 +7,10 @@ import java.util.List;
 public abstract class User {
     public abstract void save();
 
+    public abstract List<UserFactory.UserImplementation> getAllUsers();
+
+    public abstract boolean addFriend(int userId, int friendId);
+
     public abstract void delete();
 
     public abstract List<UserFactory.UserImplementation> getFriends();

@@ -76,21 +76,20 @@ public class LoginController extends Controller {
         ObjectNode resultBody = Json.newObject();
 
         try {
-            if (users.createUserInUsers(username, password, email) != null) {
+            User newUser = users.createUserInUsers(username, password, email);
+            if (newUser != null) {
                 resultBody.put("response", "Signup successful");
-                loginLogger.debug("Username: " + username);
-                loginLogger.debug("Password: " + password);
-                loginLogger.debug("Email: " + email);
-                return ok().addingToSession(request, "username", username);
-
+                // Hier speichern Sie zusätzliche Nutzerinformationen in der Session
+                return ok(resultBody).addingToSession(request, "userID", Integer.toString(newUser.getId()));
             } else {
                 resultBody.put("response", "Username already exists");
                 return notAcceptable(resultBody);
             }
-
         } catch (Throwable t) {
+            loginLogger.error("Exception during user creation", t);
             return internalServerError("Exception with username + password");
         }
-
     }
+
+
 }

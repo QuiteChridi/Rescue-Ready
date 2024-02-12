@@ -15,6 +15,10 @@ GET         /getProfilePic          controllers.ProfileController.getProfilePic(
 GET         /profile                controllers.ProfileController.profile(request: play.mvc.Http.Request)
 GET         /friendProfile/:id      controllers.ProfileController.friendProfile(id: Int)
 GET         /friends                controllers.ProfileController.friends(request: play.mvc.Http.Request)
+
+GET         /searchFriends          controllers.ProfileController.searchFriends(request: play.mvc.Http.Request)
+POST        /addFriend/:friendId    controllers.ProfileController.addFriend(request: play.mvc.Http.Request, friendId: Int)
+
 POST        /saveUser               controllers.ProfileController.saveChangesToUser(request: play.mvc.Http.Request)
 POST        /saveProfilePic         controllers.ProfileController.saveProfilePicToAssets(request: play.mvc.Http.Request)
 

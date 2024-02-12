@@ -13,9 +13,7 @@ import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class ProfileController extends Controller {
@@ -23,7 +21,7 @@ public class ProfileController extends Controller {
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
     private final AbstractQuizFactory quizzes;
-    private User currentUser;
+    private controllers.interfaces.User currentUser;
 
     @Inject
     public ProfileController(UserFactory users, HighscoreFactory scores, QuizFactory quizzes) {
@@ -36,8 +34,8 @@ public class ProfileController extends Controller {
         try {
             int userId = Integer.parseInt(request.session().get("userID").orElse(null));
 
-            List <Highscore> highscores = scores.getHighscoresOfUser(userId);
-            highscores.sort(Highscore::compareTo);
+            List <controllers.interfaces.Highscore> highscores = scores.getHighscoresOfUser(userId);
+            highscores.sort(controllers.interfaces.Highscore::compareTo);
 
             return ok(profile.render(users.getUserById(userId), highscores));
 
@@ -51,10 +49,10 @@ public class ProfileController extends Controller {
     }
 
     public Result friendProfile(int friendUserId) {
-        User friend = users.getUserById(friendUserId);
+        controllers.interfaces.User friend = users.getUserById(friendUserId);
 
-        List <Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
-        highscores.sort(Highscore::compareTo);
+        List <controllers.interfaces.Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
+        highscores.sort(controllers.interfaces.Highscore::compareTo);
 
         if (friend != null) {
             return ok(friendProfile.render(friend, highscores));
@@ -72,7 +70,7 @@ public class ProfileController extends Controller {
 
         try {
             int userID = Integer.parseInt(userIDString);
-            User user = users.getUserById(userID);
+            controllers.interfaces.User user = users.getUserById(userID);
             if (user != null) {
                 return ok(friends.render(user));
             } else {
@@ -86,7 +84,7 @@ public class ProfileController extends Controller {
 
     public Result saveProfilePicToAssets(Http.Request request){
         System.out.println("SaveProfilePicToAsset wurde aufgerufen");
-        User user = getUserFromSession(request);
+        controllers.interfaces.User user = getUserFromSession(request);
 
         if (user != null) {
             Http.MultipartFormData<TemporaryFile> body = request.body().asMultipartFormData();
@@ -104,7 +102,7 @@ public class ProfileController extends Controller {
     }
 
     public Result saveChangesToUser(Http.Request request) {
-        User user = getUserFromSession(request);
+        controllers.interfaces.User user = getUserFromSession(request);
         if (user != null) {
             JsonNode json = request.body().asJson();
             String newUsername = json.findPath("username").textValue();
@@ -135,13 +133,13 @@ public class ProfileController extends Controller {
         return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
     }
 
-    private User getUserFromSession(Http.Request request) {
+    private controllers.interfaces.User getUserFromSession(Http.Request request) {
         int userID = getUserIdFromSession(request);
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
     public Result getProfilePic(Http.Request request) {
-        User user = getUserFromSession(request);
+        controllers.interfaces.User user = getUserFromSession(request);
 
         if (user != null) {
 
@@ -151,6 +149,29 @@ public class ProfileController extends Controller {
             return ok(Json.toJson(pp));
         } else {
             return redirect(routes.LoginController.login());
+        }
+    }
+
+    public Result searchFriends(Http.Request request) {
+        String searchQuery = request.queryString("name").orElse(null);
+        if (searchQuery == null || searchQuery.isEmpty()) {
+            return ok(Json.toJson(new ArrayList<>()));
+        }
+
+        List<controllers.interfaces.User> matchingUsers = users.searchUsersByName(searchQuery);
+        return ok(Json.toJson(matchingUsers));
+    }
+
+    public Result addFriend(Http.Request request, int userId) {
+        int currentUserId = getUserIdFromSession(request);
+        if (userId < 0) {
+            return redirect(routes.LoginController.login());
+        }
+        boolean success = users.addFriend(currentUserId, userId);
+        if (success) {
+            return ok("Freund hinzugefügt");
+        } else {
+            return internalServerError("Fehler beim Hinzufügen des Freundes.");
         }
     }
 
