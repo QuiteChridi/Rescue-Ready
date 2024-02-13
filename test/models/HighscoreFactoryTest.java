@@ -11,8 +11,8 @@ public class HighscoreFactoryTest extends WithApplication {
 
     private HighscoreFactory highscores;
     private Highscore highscore;
-
-    /*@Before
+    /*
+    @Before
     public void setUp() {
         highscores = provideApplication().injector().instanceOf(HighscoreFactory.class);
     }

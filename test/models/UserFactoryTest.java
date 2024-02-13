@@ -1,27 +1,31 @@
 package models;
-
-import controllers.interfaces.AbstractUserFactory;
 import org.junit.After;
+import org.junit.Test;
 import play.db.Database;
 import org.junit.Before;
+import play.db.Databases;
 import play.test.WithApplication;
+import java.sql.SQLException;
 
+import static org.junit.Assert.*;
 
-public class UserFactoryTest extends WithApplication {
+public class UserFactoryTest {
+    private Database database;
+    private UserFactory users;
 
-    private AbstractUserFactory users;
-    private Database db;
-    private final String TEST_NAME = "test03945830958";
-    private final String TEST_PASSWORD = "test";
-    private final String TEST_EMAIL = "test@test.de";
 
     @Before
     public void setUp() {
-        users = provideApplication().injector().instanceOf(UserFactory.class);
+        database = Databases.inMemory("inMemory");
+        users = new UserFactory(database);
     }
 
+    @Test
+    public void testDatabase() throws SQLException {
+        users.getUserById(1);
+    }
     @After
     public void tearDown() {
-        //db.shutdown();
+        database.shutdown();
     }
 }
