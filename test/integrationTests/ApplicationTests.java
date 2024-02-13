@@ -2,15 +2,11 @@ package integrationTests;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.interfaces.User;
-import models.HighscoreFactory;
 import models.UserFactory;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
-import play.test.Helpers;
 import play.test.WithApplication;
 import views.html.login;
 import views.html.signup;
@@ -20,15 +16,9 @@ import static play.test.Helpers.*;
 
 public class ApplicationTests extends WithApplication {
 
-    private UserFactory userFactory;
-
-    @Before
-    public void setUp(){
-        userFactory = provideApplication().injector().instanceOf(UserFactory.class);
-    }
-
     @Test
     public void loginTestUserShouldBeAbleToLogInWithValidCredentials(){
+        UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
         User validUser = userFactory.getUserById("1");
         ObjectNode requestBody = Json.newObject();
         requestBody.put("username", validUser.getName());
@@ -41,7 +31,6 @@ public class ApplicationTests extends WithApplication {
                 .bodyJson(requestBody);
 
         Result result = route(app, request);
-
         assertEquals(OK, result.status());
         assertTrue(contentAsString(result).contains("Login successful"));
         assertEquals(validUser.getId(), Integer.parseInt(result.session().get("userID").orElse(" ")));
@@ -49,6 +38,7 @@ public class ApplicationTests extends WithApplication {
 
     @Test
     public void loginTestUserShouldNotBeAbleToLogInWithInvalidName(){
+        UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
         User invalidNameUser = userFactory.getUserById("1");
         invalidNameUser.setName(invalidNameUser.getName() + "veryInvalid");
 
@@ -71,6 +61,7 @@ public class ApplicationTests extends WithApplication {
 
     @Test
     public void loginTestUserShouldNotBeAbleToLogInWithInvalidPassword(){
+        UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
         User invalidPasswordUser = userFactory.getUserById("1");
         invalidPasswordUser.setPassword(invalidPasswordUser.getPassword() + "**");
 
