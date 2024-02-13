@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.inject.Inject;
 import controllers.interfaces.*;
@@ -13,15 +15,11 @@ import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
-import java.util.*;
-
-
 public class ProfileController extends Controller {
 
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
     private final AbstractQuizFactory quizzes;
-    private controllers.interfaces.User currentUser;
 
     @Inject
     public ProfileController(UserFactory users, HighscoreFactory scores, QuizFactory quizzes) {
@@ -34,8 +32,8 @@ public class ProfileController extends Controller {
         try {
             int userId = Integer.parseInt(request.session().get("userID").orElse(null));
 
-            List <controllers.interfaces.Highscore> highscores = scores.getHighscoresOfUser(userId);
-            highscores.sort(controllers.interfaces.Highscore::compareTo);
+            List<Highscore> highscores = scores.getHighscoresOfUser(userId);
+            highscores.sort(Highscore::compareTo);
 
             return ok(profile.render(users.getUserById(userId), highscores));
 
@@ -49,10 +47,10 @@ public class ProfileController extends Controller {
     }
 
     public Result friendProfile(int friendUserId) {
-        controllers.interfaces.User friend = users.getUserById(friendUserId);
+        User friend = users.getUserById(friendUserId);
 
-        List <controllers.interfaces.Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
-        highscores.sort(controllers.interfaces.Highscore::compareTo);
+        List <Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
+        highscores.sort(Highscore::compareTo);
 
         if (friend != null) {
             return ok(friendProfile.render(friend, highscores));
@@ -70,7 +68,7 @@ public class ProfileController extends Controller {
 
         try {
             int userID = Integer.parseInt(userIDString);
-            controllers.interfaces.User user = users.getUserById(userID);
+            User user = users.getUserById(userID);
             if (user != null) {
                 return ok(friends.render(user));
             } else {
@@ -84,7 +82,7 @@ public class ProfileController extends Controller {
 
     public Result saveProfilePicToAssets(Http.Request request){
         System.out.println("SaveProfilePicToAsset wurde aufgerufen");
-        controllers.interfaces.User user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
             Http.MultipartFormData<TemporaryFile> body = request.body().asMultipartFormData();
@@ -102,7 +100,7 @@ public class ProfileController extends Controller {
     }
 
     public Result saveChangesToUser(Http.Request request) {
-        controllers.interfaces.User user = getUserFromSession(request);
+        User user = getUserFromSession(request);
         if (user != null) {
             JsonNode json = request.body().asJson();
             String newUsername = json.findPath("username").textValue();
@@ -133,13 +131,13 @@ public class ProfileController extends Controller {
         return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
     }
 
-    private controllers.interfaces.User getUserFromSession(Http.Request request) {
+    private User getUserFromSession(Http.Request request) {
         int userID = getUserIdFromSession(request);
         return (userID != -1) ? users.getUserById(userID) : null;
     }
 
     public Result getProfilePic(Http.Request request) {
-        controllers.interfaces.User user = getUserFromSession(request);
+        User user = getUserFromSession(request);
 
         if (user != null) {
 
@@ -158,7 +156,7 @@ public class ProfileController extends Controller {
             return ok(Json.toJson(new ArrayList<>()));
         }
 
-        List<controllers.interfaces.User> matchingUsers = users.searchUsersByName(searchQuery);
+        List<User> matchingUsers = users.searchUsersByName(searchQuery);
         return ok(Json.toJson(matchingUsers));
     }
 
