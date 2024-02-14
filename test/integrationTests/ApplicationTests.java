@@ -14,7 +14,8 @@ import views.html.signup;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
-public class ApplicationTests extends WithApplication {
+public class
+ApplicationTests extends WithApplication {
 
     @Test
     public void loginTestUserShouldBeAbleToLogInWithValidCredentials(){
