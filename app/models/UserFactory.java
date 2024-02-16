@@ -10,10 +10,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Factory for creating and retrieving users from the database
+ */
 @Singleton
 public class UserFactory implements AbstractUserFactory {
     private Database db;
 
+    /**
+     * Constructor for UserFactory
+     * @param db the database
+     */
     @Inject
     UserFactory(Database db) {
         this.db = db;
@@ -21,7 +28,6 @@ public class UserFactory implements AbstractUserFactory {
 
     /**
      * Authenticates a user with the given credentials
-     *
      * @param username username from user input
      * @param password password from user input
      * @return Found user or null if user not found
@@ -42,6 +48,13 @@ public class UserFactory implements AbstractUserFactory {
         });
     }
 
+    /**
+     * Creates a user in the database
+     * @param name username
+     * @param password password
+     * @param email email
+     * @return User if created, else null
+     */
     @Override
     public UserImplementation createUserInUsers(String name, String password, String email) {
         return db.withConnection(conn -> {
@@ -65,7 +78,6 @@ public class UserFactory implements AbstractUserFactory {
 
     /**
      * Retrieves a user from database with given ID
-     *
      * @param id id of user to find
      * @return User if found, else null
      */
@@ -86,7 +98,6 @@ public class UserFactory implements AbstractUserFactory {
 
     /**
      * Polymorphism method for getUserById(int)
-     *
      * @param id String of id
      * @return User if found, else null
      */
@@ -95,6 +106,10 @@ public class UserFactory implements AbstractUserFactory {
         return getUserById(Integer.parseInt(id));
     }
 
+    /**
+     * Retrieves all users from the database
+     * @return List of all users
+     */
     @Override
     public List<User> getAllUsers() {
         return db.withConnection(conn -> {
@@ -110,7 +125,11 @@ public class UserFactory implements AbstractUserFactory {
         });
     }
 
-
+    /**
+     * Retrieves all users from the database that match the search query
+     * @param searchQuery the search query
+     * @return List of all users that match the search query
+     */
     @Override
     public List<User> searchUsersByName(String searchQuery) {
         return db.withConnection(conn -> {
@@ -128,6 +147,13 @@ public class UserFactory implements AbstractUserFactory {
         });
     }
 
+    /**
+     * Adds a friend to the database
+     * @param userId id of user
+     * @param friendId id of friend
+     * @return true if friend was added successfully, else false
+     */
+    @Override
     public boolean addFriend(int userId, int friendId) {
         return db.withConnection(conn -> {
             String sql = "INSERT INTO friends (id_user_1, id_user_2) VALUES (?, ?)";

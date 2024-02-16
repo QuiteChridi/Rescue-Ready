@@ -23,15 +23,16 @@
         <link rel="stylesheet" media="screen" href='@routes.Assets.versioned("stylesheets/highscore.css")'>
         <link rel="stylesheet" media="screen" href='@routes.Assets.versioned("stylesheets/profile.css")'>
         <link rel="shortcut icon" type="image/png" href='@routes.Assets.versioned("images/favicon.png")'>
-        <script src='@routes.Assets.versioned("javascripts/prism.js")' type="text/javascript"></script>
-        <script src='@routes.Assets.versioned("javascripts/login.js")' type="text/javascript"></script>
-        <script src='@routes.Assets.versioned("javascripts/navBar.js")' type="text/javascript"></script>
-        <script src='@routes.Assets.versioned("javascripts/profile.js")' type="text/javascript"></script>
-        <script src="@routes.Assets.versioned("javascripts/shop.js")" type="text/javascript"> </script>
-        <script src="@routes.Assets.versioned("javascripts/quiz.js")" type="text/javascript"> </script>
-        <script src="@routes.Assets.versioned("javascripts/friends.js")" type="text/javascript"> </script>
-        <script src="@routes.Assets.versioned("javascripts/highscoreSelection.js")" type="text/javascript"> </script>
-        <script src="@routes.Assets.versioned("javascripts/getSetUserData.js")" type="text/javascript"> </script>
+        <!--Durch das Hinzufügen von defer wird sichergestellt, dass die Skripte in der Reihenfolge, in der sie im Dokument erscheinen, geladen und ausgeführt werden, aber erst nachdem das Parsing des HTML-Dokuments abgeschlossen ist -->
+        <script src='@routes.Assets.versioned("javascripts/prism.js")' type="text/javascript" defer></script>
+        <script src='@routes.Assets.versioned("javascripts/login.js")' type="text/javascript" defer></script>
+        <script src='@routes.Assets.versioned("javascripts/navBar.js")' type="text/javascript" defer></script>
+        <script src='@routes.Assets.versioned("javascripts/profile.js")' type="text/javascript" defer></script>
+        <script src="@routes.Assets.versioned("javascripts/shop.js")" type="text/javascript" defer> </script>
+        <script src="@routes.Assets.versioned("javascripts/quiz.js")" type="text/javascript" defer> </script>
+        <script src="@routes.Assets.versioned("javascripts/friends.js")" type="text/javascript" defer> </script>
+        <script src="@routes.Assets.versioned("javascripts/highscoreSelection.js")" type="text/javascript" defer> </script>
+        <script src="@routes.Assets.versioned("javascripts/getSetUserData.js")" type="text/javascript" defer> </script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
 
