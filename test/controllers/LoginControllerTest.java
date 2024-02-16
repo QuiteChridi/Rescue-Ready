@@ -134,6 +134,6 @@ public class LoginControllerTest {
         Map<String,String> session = loginController.createUser(request.build()).session().data();
 
         verify(userFactoryMock).createUserInUsers(" ", " ", " ");
-        assertTrue(session.containsKey("username"));
+        assertTrue(session.containsKey("userID"));
     }
 }

@@ -3,8 +3,9 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
-
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.inject.Inject;
 import controllers.interfaces.*;
@@ -35,8 +36,8 @@ public class ProfileController extends Controller {
         try {
             int userId = Integer.parseInt(request.session().get("userID").orElse(null));
 
-            List<controllers.interfaces.Highscore> highscores = scores.getHighscoresOfUser(userId);
-            highscores.sort(controllers.interfaces.Highscore::compareTo);
+            List<Highscore> highscores = scores.getHighscoresOfUser(userId);
+            highscores.sort(Highscore::compareTo);
 
             return ok(profile.render(users.getUserById(userId), highscores));
 
@@ -52,8 +53,8 @@ public class ProfileController extends Controller {
     public Result friendProfile(int friendUserId) {
         controllers.interfaces.User friend = users.getUserById(friendUserId);
 
-        List<controllers.interfaces.Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
-        highscores.sort(controllers.interfaces.Highscore::compareTo);
+        List <Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
+        highscores.sort(Highscore::compareTo);
 
         if (friend != null) {
             return ok(friendProfile.render(friend, highscores));
@@ -83,7 +84,7 @@ public class ProfileController extends Controller {
     }
 
 
-    public Result saveProfilePicToAssets(Http.Request request) {
+    public Result saveProfilePicToAssets(Http.Request request){
         System.out.println("SaveProfilePicToAsset wurde aufgerufen");
         controllers.interfaces.User user = getUserFromSession(request);
 
@@ -178,7 +179,7 @@ public class ProfileController extends Controller {
 
     public Result removeFriend(Http.Request request, int friendId) {
         int userId = getUserIdFromSession(request);
-        if (userId < 0) {
+        if(userId < 0){
             return redirect(routes.LoginController.login());
         }
         boolean success = users.removeFriend(userId, friendId);
@@ -188,16 +189,4 @@ public class ProfileController extends Controller {
             return internalServerError("Freund konnte nicht entfernt werden");
         }
     }
-
-    public Result searchUsers(Http.Request request) {
-        String name = request.queryString("name").orElse(null);
-        if (name == null || name.isEmpty()) {
-            return ok(Json.toJson(new ArrayList<>()));
-        }
-
-        List<User> matchingUsers = users.searchUsersByName(name);
-        return ok(Json.toJson(matchingUsers));
-    }
-
-
 }
