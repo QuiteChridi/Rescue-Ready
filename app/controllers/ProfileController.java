@@ -189,4 +189,13 @@ public class ProfileController extends Controller {
             return internalServerError("Freund konnte nicht entfernt werden");
         }
     }
+    public Result searchUsers(Http.Request request) {
+        String searchQuery = request.queryString("name").orElse(null);
+        if (searchQuery == null || searchQuery.isEmpty()) {
+            return ok(Json.toJson(new ArrayList<>()));
+        }
+
+        List<controllers.interfaces.User> matchingUsers = users.searchUsersByName(searchQuery);
+        return ok(Json.toJson(matchingUsers));
+    }
 }
