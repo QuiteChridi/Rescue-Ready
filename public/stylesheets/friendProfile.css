@@ -1,4 +1,5 @@
-.header {
+#profile-header {
+    width: 93%;
     gap: 10px;
 }
 
@@ -6,6 +7,15 @@
     border-radius: 50%;
     width: 300px;
     height: auto;
+}
+
+#friendHighscores-table-container {
+    width: 93%;
+    max-height: 40vh;
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid #000000;
+    box-shadow: 0 0 10px black;
 }
 
 .friendHighscores-table table {
@@ -38,7 +48,7 @@
     background-color: #ffffff;
 }
 
-#friendProfile-buttons {
+#profile-buttons {
     width: 93%;
     display: flex;
     justify-content: space-between;
@@ -46,7 +56,6 @@
     gap: 10px;
 }
 
-#friendProfile-button {
+#profile-button {
     width: 50%;
-
 }

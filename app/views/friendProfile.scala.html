@@ -9,7 +9,7 @@
                     <h2 id="user-name">Profil von @friend.getName</h2>
                 </div>
 
-                <div class="highscores-table-container">
+                <div id="friendHighscores-table-container">
                     <div class="friendHighscores-table">
                     @if(highscores.isEmpty) {
                         <h3>Keine Highscores verfügbar.</h3>
@@ -24,8 +24,8 @@
                             <tbody>
                             @for((highscore) <- highscores) {
                                 <tr>
-                                    <td>@highscore.getQuizName<td>
-                                    <td>@highscore.getScore<td>
+                                    <td>@highscore.getQuizName</td>
+                                    <td>@highscore.getScore</td>
                                 </tr>
                             }
                             </tbody>
@@ -36,8 +36,8 @@
 
                 <div id="friendProfile-buttons">
                     <button class="medium-button" id="friendProfile-button">Chat</button>
-                    <button class="alternativ-button medium-button" id="friendProfile-button" onclick="window.location.href='@routes.ProfileController.friends()'">Zurück</button>s
-                    <button class="medium-button add-friend-button" data-user-id="@friend.getId">Hinzufügen</button>
+                    <button class="medium-button add-friend-button" id="friendProfile-button" data-user-id="@friend.getId">Hinzufügen</button>
+                    <button class="medium-button alternativ-button" id="friendProfile-button" onclick="window.history.back()">Zurück</button>
                 </div>
 
             </div>

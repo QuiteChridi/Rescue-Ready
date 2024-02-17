@@ -13,3 +13,15 @@
     width: 300px;
     height: auto;
 }
+
+#friendProfile-buttons {
+    width: 93%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+#friendProfile-button {
+    width: 33%;
+}

@@ -69,11 +69,10 @@
 
 .user-list {
     width: 100%;
-    max-height: 40vh;
+    max-height: 10vh;
     overflow-y: auto;
     border: 1px solid #000000;
     list-style: none;
-
 }
 
 .user-list li {
@@ -95,7 +94,7 @@
 }
 
 .user-list li #userName {
-    width: 50%;
+    width: 70%;
     font-size: 25px;
 }
 
@@ -133,9 +132,6 @@
     width: 25%;
 }
 
-#add-button {
-    width: 100%;
-}
 .highlight {
     background-color: yellow;
     color: black;
