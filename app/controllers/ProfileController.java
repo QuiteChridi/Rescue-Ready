@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Files.TemporaryFile;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -15,15 +14,12 @@ import play.libs.Json;
 import play.mvc.*;
 import views.html.*;
 
-import java.util.*;
-
 
 public class ProfileController extends Controller {
 
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
     private final AbstractQuizFactory quizzes;
-    private controllers.interfaces.User currentUser;
 
     @Inject
     public ProfileController(UserFactory users, HighscoreFactory scores, QuizFactory quizzes) {
@@ -44,10 +40,6 @@ public class ProfileController extends Controller {
         } catch (NumberFormatException e) {
             return redirect(routes.LoginController.login());
         }
-    }
-
-    public Result signup() {
-        return ok(signup.render());
     }
 
     public Result friendProfile(int friendUserId) {
@@ -74,7 +66,7 @@ public class ProfileController extends Controller {
             int userID = Integer.parseInt(userIDString);
             controllers.interfaces.User user = users.getUserById(userID);
             if (user != null) {
-                return ok(friends.render(user));
+                return ok(friends.render(users.getFriends(userID), users.getAllUsers()));
             } else {
                 return redirect(routes.LoginController.login());
             }
@@ -152,50 +144,5 @@ public class ProfileController extends Controller {
         } else {
             return redirect(routes.LoginController.login());
         }
-    }
-
-    public Result searchFriends(Http.Request request) {
-        String searchQuery = request.queryString("name").orElse(null);
-        if (searchQuery == null || searchQuery.isEmpty()) {
-            return ok(Json.toJson(new ArrayList<>()));
-        }
-
-        List<controllers.interfaces.User> matchingUsers = users.searchUsersByName(searchQuery);
-        return ok(Json.toJson(matchingUsers));
-    }
-
-    public Result addFriend(Http.Request request, int userId) {
-        int currentUserId = getUserIdFromSession(request);
-        if (userId < 0) {
-            return redirect(routes.LoginController.login());
-        }
-        boolean success = users.addFriend(currentUserId, userId);
-        if (success) {
-            return ok("Freund hinzugefügt");
-        } else {
-            return internalServerError("Fehler beim Hinzufügen des Freundes.");
-        }
-    }
-
-    public Result removeFriend(Http.Request request, int friendId) {
-        int userId = getUserIdFromSession(request);
-        if(userId < 0){
-            return redirect(routes.LoginController.login());
-        }
-        boolean success = users.removeFriend(userId, friendId);
-        if (success) {
-            return ok("Freund entfernt");
-        } else {
-            return internalServerError("Freund konnte nicht entfernt werden");
-        }
-    }
-    public Result searchUsers(Http.Request request) {
-        String searchQuery = request.queryString("name").orElse(null);
-        if (searchQuery == null || searchQuery.isEmpty()) {
-            return ok(Json.toJson(new ArrayList<>()));
-        }
-
-        List<controllers.interfaces.User> matchingUsers = users.searchUsersByName(searchQuery);
-        return ok(Json.toJson(matchingUsers));
     }
 }

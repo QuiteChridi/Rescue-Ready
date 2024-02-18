@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import controllers.interfaces.AbstractHighscoreFactory;
 import controllers.interfaces.Highscore;
@@ -55,6 +57,22 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
             }
             stmt.close();
             return highscores;
+        });
+    }
+
+    @Override
+    public Map<Integer, String> getPossibleQuizNames(){
+        Map<Integer, String> quizes = new HashMap<>();
+        return db.withConnection(conn -> {
+            QuizFactory.QuizImplementation quiz = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                quizes.put(rs.getInt("idQuiz"), rs.getString("name"));
+            }
+            stmt.close();
+            return quizes;
         });
     }
 

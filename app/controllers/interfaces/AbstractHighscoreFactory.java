@@ -1,6 +1,8 @@
 package controllers.interfaces;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * Interface for HighscoreFactory
  */
@@ -18,4 +20,6 @@ public interface AbstractHighscoreFactory {
      * @return a list of highscores
      */
     List<Highscore> getHighscoresOfUser(int userId);
+
+    Map<Integer, String> getPossibleQuizNames();
 }

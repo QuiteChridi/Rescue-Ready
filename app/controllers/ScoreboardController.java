@@ -14,33 +14,26 @@ import java.util.List;
 
 
 public class ScoreboardController extends Controller {
-    private final AbstractQuizFactory quizzes;
     private final AbstractHighscoreFactory scores;
     private List<Highscore> currentHighscoreList;
 
     @Inject
     public ScoreboardController(QuizFactory quizzes, HighscoreFactory scores) {
-        this.quizzes = quizzes;
-        this.scores = scores;
-        currentHighscoreList = scores.getHighscoresOfQuiz(1);
-    }
-
-    public ScoreboardController(AbstractQuizFactory quizzes, HighscoreFactory scores){
-        this.quizzes = quizzes;
         this.scores = scores;
         currentHighscoreList = scores.getHighscoresOfQuiz(1);
     }
 
     public Result highscore(){
-        return ok(highscore.render(currentHighscoreList, quizzes.getPossibleQuizNames()));
+        return ok(highscore.render(currentHighscoreList, scores.getPossibleQuizNames()));
     }
 
     public  Result renderHighscore(Http.Request request){
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
+
         currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
         currentHighscoreList.sort(Highscore::compareTo);
 
-        return ok(highscore.render(currentHighscoreList, quizzes.getPossibleQuizNames()));
+        return ok(highscore.render(currentHighscoreList, scores.getPossibleQuizNames()));
     }
 }

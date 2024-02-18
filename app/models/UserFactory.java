@@ -1,6 +1,8 @@
 package models;
 
 import controllers.interfaces.AbstractUserFactory;
+import controllers.interfaces.FriendManager;
+import controllers.interfaces.AccountManager;
 import controllers.interfaces.User;
 import play.db.Database;
 
@@ -14,7 +16,7 @@ import java.util.List;
  * Factory for creating and retrieving users from the database
  */
 @Singleton
-public class UserFactory implements AbstractUserFactory {
+public class UserFactory implements AbstractUserFactory, FriendManager, AccountManager {
     private Database db;
 
     /**
@@ -56,7 +58,7 @@ public class UserFactory implements AbstractUserFactory {
      * @return User if created, else null
      */
     @Override
-    public UserImplementation createUserInUsers(String name, String password, String email) {
+    public UserImplementation createUser(String name, String password, String email) {
         return db.withConnection(conn -> {
             UserImplementation user = null;
             String sql = "INSERT INTO user (name, password, email) VALUES ( ?, ?, ?)";
@@ -104,25 +106,6 @@ public class UserFactory implements AbstractUserFactory {
     @Override
     public UserImplementation getUserById(String id) {
         return getUserById(Integer.parseInt(id));
-    }
-
-    /**
-     * Retrieves all users from the database
-     * @return List of all users
-     */
-    @Override
-    public List<User> getAllUsers() {
-        return db.withConnection(conn -> {
-            List<User> users = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                UserImplementation user = new UserImplementation(rs);
-                users.add(user);
-            }
-            stmt.close();
-            return users;
-        });
     }
 
     /**
@@ -185,6 +168,56 @@ public class UserFactory implements AbstractUserFactory {
         });
     }
 
+    /**
+     * Delete the user from the database
+     */
+    @Override
+    public void deleteUser(int userId) {
+        db.withConnection(conn -> {
+            String sql = "DELETE FROM user WHERE UserId = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+            stmt.close();
+        });
+    }
+
+    /**
+     * Returns a list of all users in the database
+     */
+    @Override
+    public List<User> getAllUsers() {
+        return db.withConnection(conn -> {
+            List<User> result = new ArrayList<>();
+            String sql = "SELECT * FROM user";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserImplementation user = new UserImplementation(rs);
+                result.add(user);
+            }
+            stmt.close();
+            return result;
+        });
+    }
+
+    @Override
+    public List<User> getFriends(int userId) {
+        return db.withConnection(conn -> {
+            List<User> result = new ArrayList<>();
+            String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserImplementation user = new UserImplementation(rs);
+                result.add(user);
+            }
+            stmt.close();
+            return result;
+        });
+    }
+
 
     public class UserImplementation extends User {
         private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/profilePic.png";
@@ -244,92 +277,6 @@ public class UserFactory implements AbstractUserFactory {
 
                 stmt.executeUpdate();
                 stmt.close();
-            });
-        }
-
-        /**
-         * Returns a list of all users in the database
-         */
-        @Override
-        public List<UserImplementation> getAllUsers() {
-            return db.withConnection(conn -> {
-                List<UserImplementation> result = new ArrayList<>();
-                String sql = "SELECT * FROM user";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    UserImplementation user = new UserImplementation(rs);
-                    result.add(user);
-                }
-                stmt.close();
-                return result;
-            });
-        }
-
-        @Override
-        public boolean addFriend(int userId, int friendId) {
-            return db.withConnection(conn -> {
-                String sql = "INSERT INTO friendships (user_id, friend_id) VALUES (?, ?)";
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setInt(1, userId);
-                    stmt.setInt(2, friendId);
-                    stmt.executeUpdate();
-                    return true;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            });
-        }
-
-
-        @Override
-        public boolean removeFriend(int userId, int friendId) {
-            db.withConnection(conn -> {
-                String sql = "DELETE FROM friends WHERE id_user_1 = ? AND id_user_2 = ?";
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setInt(1, userId);
-                    stmt.setInt(2, friendId);
-                    stmt.executeUpdate();
-                    return true;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            });
-            return false;
-        }
-
-
-
-        /**
-         * Delete the user from the database
-         */
-        @Override
-        public void delete() {
-            db.withConnection(conn -> {
-                String sql = "DELETE FROM user WHERE UserId = ?";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, this.id);
-                stmt.executeUpdate();
-                stmt.close();
-            });
-        }
-
-        @Override
-        public List<UserImplementation> getFriends() {
-            return db.withConnection(conn -> {
-                List<UserImplementation> result = new ArrayList<>();
-                String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, this.id);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    UserImplementation user = new UserImplementation(rs);
-                    result.add(user);
-                }
-                stmt.close();
-                return result;
             });
         }
 
