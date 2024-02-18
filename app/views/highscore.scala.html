@@ -1,4 +1,4 @@
-@(highscores: List[interfaces.Highscore], categories: Map[Integer, String])
+@(highscores: List[interfaces.Highscore], quizzes: Map[Integer, String])
 
 @index("Highscores") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -24,7 +24,7 @@
                                 @for(value <- highscores) {
                                     <tr>
                                         <td class="row-container">
-                                            <img src="@routes.Assets.versioned("images/profilePics/prince.png")" alt="Profile Picture">
+                                            <img src="@routes.Assets.versioned(value.getProfilePicPath)" alt="Profile Picture">
                                             <a id="highscore-username" href="@routes.ProfileController.friendProfile(value.getUserId)">@value.getUserName</a>
                                         </td>
                                         <td>@value.getScore</td>
@@ -40,8 +40,8 @@
 
 
                 <div id="highscoreSwitch-buttons">
-                @for(value <- categories) {
-                    <button onclick="selectHighscore(this.id)" type="button" id=@value._1 style="flex: 1; font-size: 1.4em;">@value._2</button>
+                @for(quiz <- quizzes) {
+                    <button onclick="selectHighscore(this.id)" type="button" id=@quiz._1 > @quiz._2</button>
                 }
                 </div>
 

@@ -7,7 +7,6 @@ import controllers.interfaces.*;
 import play.mvc.*;
 
 import models.HighscoreFactory;
-import models.QuizFactory;
 import views.html.highscore;
 
 import java.util.List;
@@ -15,15 +14,16 @@ import java.util.List;
 
 public class ScoreboardController extends Controller {
     private final AbstractHighscoreFactory scores;
-    private List<Highscore> currentHighscoreList;
 
     @Inject
-    public ScoreboardController(QuizFactory quizzes, HighscoreFactory scores) {
+    public ScoreboardController(HighscoreFactory scores) {
         this.scores = scores;
-        currentHighscoreList = scores.getHighscoresOfQuiz(1);
     }
 
-    public Result highscore(){
+    public Result highscore(int quizId){
+        List <Highscore> currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
+        currentHighscoreList.sort(Highscore::compareTo);
+
         return ok(highscore.render(currentHighscoreList, scores.getPossibleQuizNames()));
     }
 
@@ -31,9 +31,8 @@ public class ScoreboardController extends Controller {
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
 
-        currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
+        List <Highscore> currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
         currentHighscoreList.sort(Highscore::compareTo);
-
-        return ok(highscore.render(currentHighscoreList, scores.getPossibleQuizNames()));
+        return redirect(routes.ScoreboardController.highscore(quizId));
     }
 }

@@ -27,7 +27,7 @@ POST        /saveProfilePic         controllers.ProfileController.saveProfilePic
 
 
 
-GET         /highscore              controllers.ScoreboardController.highscore()
+GET         /highscore              controllers.ScoreboardController.highscore(quizId:Int ?= 1)
 POST        /highscoreByQuizName    controllers.ScoreboardController.renderHighscore(request: play.mvc.Http.Request)
 
 GET         /quiz                   controllers.QuizController.quiz(request: play.mvc.Http.Request)
