@@ -13,6 +13,8 @@ import play.mvc.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class FriendController extends Controller{
     final FriendManager friendManager;
@@ -23,65 +25,58 @@ public class FriendController extends Controller{
     }
 
     public Result friends(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-
-        if (userIDString == null || userIDString.equals("leer")) {
-            return redirect(routes.LoginController.login());
-        }
-
         try {
-            int userID = Integer.parseInt(userIDString);
-            if (userID != 0) {
-                return ok(friends.render(friendManager.getFriends(userID), friendManager.getAllUsers()));
-            } else {
-                return redirect(routes.LoginController.login());
-            }
-        } catch (NumberFormatException e) {
+            int userID = getUserIdFromSession(request);
+            return ok(friends.render(friendManager.getFriends(userID), friendManager.getAllUsers()));
+        } catch (NoSuchElementException ex) {
             return redirect(routes.LoginController.login());
         }
     }
 
     public Result searchUsers(Http.Request request) {
-        String searchQuery = request.queryString("name").orElse(null);
-        if (searchQuery == null || searchQuery.isEmpty()) {
-            return ProfileController.ok(Json.toJson(new ArrayList<Object>()));
+        List<User> matchingUsers = new ArrayList<>();
+
+        Optional<String> searchQuery = request.queryString("name");
+        if (searchQuery.isPresent()) {
+            matchingUsers = friendManager.searchUsersByName(searchQuery.get());
         }
 
-        List<User> matchingUsers = friendManager.searchUsersByName(searchQuery);
         return ProfileController.ok(Json.toJson(matchingUsers));
     }
 
-    public Result addFriend(Http.Request request, int userId) {
-        int currentUserId = getUserIdFromSession(request);
-        if (userId < 0) {
-            return ProfileController.redirect(routes.LoginController.login());
-        }
-        boolean success = friendManager.addFriend(currentUserId, userId);
-        if (success) {
-            return ProfileController.ok("Freund hinzugefügt");
-        } else {
-            return ProfileController.internalServerError("Fehler beim Hinzufügen des Freundes.");
+    public Result addFriend(Http.Request request, int friendId) {
+        try {
+            int userId = getUserIdFromSession(request);
+            boolean success = friendManager.addFriend(userId, friendId);
+            if (success) {
+                return ProfileController.ok("Freund hinzugefügt");
+            } else {
+                return ProfileController.internalServerError("Fehler beim Hinzufügen des Freundes.");
+            }
+        } catch (NoSuchElementException ex) {
+            return redirect(routes.LoginController.login());
         }
     }
 
     public Result removeFriend(Http.Request request, int friendId) {
-        int userId = getUserIdFromSession(request);
-        if (userId < 0) {
-            return ProfileController.redirect(routes.LoginController.login());
-        }
-        boolean success = friendManager.removeFriend(userId, friendId);
-        if (success) {
-            return ProfileController.ok("Freund entfernt");
-        } else {
-            return ProfileController.internalServerError("Freund konnte nicht entfernt werden");
+        try {
+            int userId = getUserIdFromSession(request);
+            boolean success = friendManager.removeFriend(userId, friendId);
+            if (success) {
+                return ProfileController.ok("Freund entfernt");
+            } else {
+                return ProfileController.internalServerError("Freund konnte nicht entfernt werden");
+            }
+        } catch (NoSuchElementException ex) {
+            return redirect(routes.LoginController.login());
         }
     }
 
-    private int getUserIdFromSession(Http.Request request) {
+    private int getUserIdFromSession(Http.Request request) throws NoSuchElementException {
         return request
                 .session()
                 .get("userID")
                 .map(Integer::parseInt)
-                .orElse(0);
+                .orElseThrow();
     }
 }
