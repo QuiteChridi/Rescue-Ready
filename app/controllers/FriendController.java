@@ -25,12 +25,42 @@ public class FriendController extends Controller{
     }
 
     public Result friends(Http.Request request) {
-        try {
-            int userID = getUserIdFromSession(request);
-            return ok(friends.render(friendManager.getFriends(userID), friendManager.getAllUsers()));
-        } catch (NoSuchElementException ex) {
-            return redirect(routes.LoginController.login());
+        int userId = getUserIdFromSession(request);
+        if(userId == 0) return redirect(routes.LoginController.login());
+
+        return ok(friends.render(friendManager.getFriends(userId), friendManager.getAllUsers()));
+    }
+
+    public Result addFriend(Http.Request request, int friendId) {
+        int userId = getUserIdFromSession(request);
+        if(userId == 0) return redirect(routes.LoginController.login());
+
+        boolean success = friendManager.addFriend(userId, friendId);
+        if (success) {
+            return ProfileController.ok("Freund hinzugefügt");
+        } else {
+            return ProfileController.internalServerError("Fehler beim Hinzufügen des Freundes.");
         }
+    }
+
+    public Result removeFriend(Http.Request request, int friendId) {
+        int userId = getUserIdFromSession(request);
+        if(userId == 0) return redirect(routes.LoginController.login());
+
+        boolean success = friendManager.removeFriend(userId, friendId);
+        if (success) {
+            return ProfileController.ok("Freund entfernt");
+        } else {
+            return ProfileController.internalServerError("Freund konnte nicht entfernt werden");
+        }
+    }
+
+    private int getUserIdFromSession(Http.Request request){
+        return request
+                .session()
+                .get("userID")
+                .map(Integer::parseInt)
+                .orElse(0);
     }
 
     public Result searchUsers(Http.Request request) {
@@ -42,41 +72,5 @@ public class FriendController extends Controller{
         }
 
         return ProfileController.ok(Json.toJson(matchingUsers));
-    }
-
-    public Result addFriend(Http.Request request, int friendId) {
-        try {
-            int userId = getUserIdFromSession(request);
-            boolean success = friendManager.addFriend(userId, friendId);
-            if (success) {
-                return ProfileController.ok("Freund hinzugefügt");
-            } else {
-                return ProfileController.internalServerError("Fehler beim Hinzufügen des Freundes.");
-            }
-        } catch (NoSuchElementException ex) {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result removeFriend(Http.Request request, int friendId) {
-        try {
-            int userId = getUserIdFromSession(request);
-            boolean success = friendManager.removeFriend(userId, friendId);
-            if (success) {
-                return ProfileController.ok("Freund entfernt");
-            } else {
-                return ProfileController.internalServerError("Freund konnte nicht entfernt werden");
-            }
-        } catch (NoSuchElementException ex) {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    private int getUserIdFromSession(Http.Request request) throws NoSuchElementException {
-        return request
-                .session()
-                .get("userID")
-                .map(Integer::parseInt)
-                .orElseThrow();
     }
 }
