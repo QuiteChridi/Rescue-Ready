@@ -75,7 +75,6 @@ public class ProfileController extends Controller {
         }
     }
 
-
     public Result saveProfilePicToAssets(Http.Request request){
         System.out.println("SaveProfilePicToAsset wurde aufgerufen");
         controllers.interfaces.User user = getUserFromSession(request);
