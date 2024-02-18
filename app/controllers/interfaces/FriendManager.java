@@ -8,4 +8,8 @@ public interface FriendManager {
     boolean removeFriend(int userId, int friendId);
 
     List<User> searchUsersByName(String searchQuery);
+
+    List<User> getAllUsers();
+
+    List<User> getFriends(int userId);
 }

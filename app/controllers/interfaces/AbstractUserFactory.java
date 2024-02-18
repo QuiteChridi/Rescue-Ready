@@ -9,7 +9,5 @@ public interface AbstractUserFactory{
 
     User getUserById(String id);
 
-    List<User> getAllUsers();
 
-    List<User> getFriends(int userId);
 }

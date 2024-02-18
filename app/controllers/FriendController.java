@@ -3,22 +3,42 @@ package controllers;
 import com.google.inject.Inject;
 import controllers.interfaces.FriendManager;
 import controllers.interfaces.User;
-import models.HighscoreFactory;
-import models.QuizFactory;
+
 import models.UserFactory;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
+import views.html.friends;
+import play.mvc.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendController {
+public class FriendController extends Controller{
     final FriendManager friendManager;
 
     @Inject
     public FriendController(UserFactory users) {
         this.friendManager = users;
+    }
+
+    public Result friends(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+
+        if (userIDString == null || userIDString.equals("leer")) {
+            return redirect(routes.LoginController.login());
+        }
+
+        try {
+            int userID = Integer.parseInt(userIDString);
+            if (userID != 0) {
+                return ok(friends.render(friendManager.getFriends(userID), friendManager.getAllUsers()));
+            } else {
+                return redirect(routes.LoginController.login());
+            }
+        } catch (NumberFormatException e) {
+            return redirect(routes.LoginController.login());
+        }
     }
 
     public Result searchUsers(Http.Request request) {
