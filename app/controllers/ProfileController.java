@@ -28,100 +28,82 @@ public class ProfileController extends Controller {
 
 
     public Result profile(Http.Request request) {
-        try {
-            int userId = Integer.parseInt(request.session().get("userID").orElse(null));
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-            List<Highscore> highscores = scores.getHighscoresOfUser(userId);
-            highscores.sort(Highscore::compareTo);
-
-            return ok(profile.render(users.getUserById(userId), highscores));
-
-        } catch (NumberFormatException e) {
-            return redirect(routes.LoginController.login());
-        }
+        return getProfileByUser(user);
     }
 
     public Result friendProfile(int friendUserId) {
-        controllers.interfaces.User friend = users.getUserById(friendUserId);
+        User friend = users.getUserById(friendUserId);
+        if(friend == null) return notFound("Friend not found");
 
-        List <Highscore> highscores = scores.getHighscoresOfUser(friendUserId);
+        return getProfileByUser(friend);
+    }
+
+    private Result getProfileByUser(User user){
+        List<Highscore> highscores = scores.getHighscoresOfUser(user.getId());
         highscores.sort(Highscore::compareTo);
 
-        if (friend != null) {
-            return ok(friendProfile.render(friend, highscores));
-        } else {
-            return notFound("Friend not found");
-        }
+        return ok(profile.render(user, highscores));
     }
 
     public Result saveProfilePicToAssets(Http.Request request){
-        System.out.println("SaveProfilePicToAsset wurde aufgerufen");
-        controllers.interfaces.User user = getUserFromSession(request);
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            Http.MultipartFormData<TemporaryFile> body = request.body().asMultipartFormData();
+        Http.MultipartFormData<TemporaryFile> body = request.body().asMultipartFormData();
+        Http.MultipartFormData.FilePart<TemporaryFile> picture = body.getFile("picture");
 
-            Http.MultipartFormData.FilePart<TemporaryFile> picture = body.getFile("picture");
+        String fileName = picture.getFilename();
+        TemporaryFile file = picture.getRef();
 
-            String fileName = picture.getFilename();
-            TemporaryFile file = picture.getRef();
+        file.copyTo(Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics", fileName), true);
 
-            file.copyTo(Paths.get(routes.Assets._defaultPrefix(), "public/images/profilePics", fileName), true);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
         return redirect(routes.ProfileController.profile());
     }
 
     public Result saveChangesToUser(Http.Request request) {
-        controllers.interfaces.User user = getUserFromSession(request);
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            String newUsername = json.findPath("username").textValue();
-            String newPassword = json.findPath("password").textValue();
-            String newEmail = json.findPath("email").textValue();
-            String newProfilePic = "images/profilePics/" + json.findPath("profilePicPath").textValue();
+        String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/";
 
-            if (newProfilePic.equals("images/profilePics/")) {
-                newProfilePic = user.getProfilePicPath();
-            }
-            user.setMail(newEmail);
-            user.setName(newUsername);
-            user.setPassword(newPassword);
-            user.setProfilePicPath(newProfilePic);
-            user.save();
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
+        JsonNode json = request.body().asJson();
+        String newUsername = json.findPath("username").textValue();
+        String newPassword = json.findPath("password").textValue();
+        String newEmail = json.findPath("email").textValue();
+        String newProfilePicPath = DEFAULT_PROFILE_PIC_PATH + json.findPath("profilePicPath").textValue();
 
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
+        if (!newProfilePicPath.equals(DEFAULT_PROFILE_PIC_PATH)) {
+            user.setProfilePicPath(newProfilePicPath);
         }
+        user.setMail(newEmail);
+        user.setName(newUsername);
+        user.setPassword(newPassword);
+        user.save();
+
+        ObjectNode result = Json.newObject();
+        result.put("success", true);
+
+        return ok(result);
     }
+
 
     public Result getProfilePic(Http.Request request) {
-        controllers.interfaces.User user = getUserFromSession(request);
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-
-            String pp = user.getProfilePicPath();
-            System.out.println("Profilbild: " + pp);
-
-            return ok(Json.toJson(pp));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        String profilePicPath = user.getProfilePicPath();
+        return ok(Json.toJson(profilePicPath));
     }
 
-    private int getUserIdFromSession(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
+    private User getUserFromSession(Http.Request request){
+        return request
+                .session()
+                .get("userID")
+                .map(Integer::parseInt)
+                .map(users::getUserById)
+                .orElse(null);
     }
-
-    private controllers.interfaces.User getUserFromSession(Http.Request request) {
-        int userID = getUserIdFromSession(request);
-        return (userID != -1) ? users.getUserById(userID) : null;
-    }
-
 }
