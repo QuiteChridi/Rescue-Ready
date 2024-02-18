@@ -13,6 +13,7 @@ import views.html.shop;
 
 import javax.inject.Inject;
 
+
 public class InventoryController extends Controller {
 
     private final AbstractUserFactory users;
@@ -57,94 +58,80 @@ public class InventoryController extends Controller {
 
     public Result getFiftyFiftyJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            int availableFiftyFiftyJoker = user.getFiftyFiftyJoker();
-            return ok(Json.newObject().put("availableFiftyFiftyJoker", availableFiftyFiftyJoker));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        ObjectNode result = Json.newObject();
+        result.put("availableFiftyFiftyJoker", user.getFiftyFiftyJoker());
+        return ok(result);
     }
 
     public Result setFiftyFiftyJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            System.out.println(json);
-            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            System.out.println(newAmountOfJokers);
-            user.setFiftyFiftyJoker(newAmountOfJokers);
-            user.save();
+        JsonNode json = request.body().asJson();
+        int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
 
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        user.setFiftyFiftyJoker(newAmountOfJokers);
+        user.save();
+
+        ObjectNode result = Json.newObject();
+        result.put("success", true);
+        result.put("newAmountOfJokers", user.getFiftyFiftyJoker());
+        return ok(result);
     }
 
     public Result getPauseJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            int availablePauseJoker = user.getPauseJoker();
-            return ok(Json.newObject().put("availablePauseJoker", availablePauseJoker));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        ObjectNode result = Json.newObject();
+        result.put("availablePauseJoker", user.getPauseJoker());
+        return ok(result);
     }
 
     public Result setPauseJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            user.setPauseJoker(newAmountOfJokers);
-            user.save();
+        JsonNode json = request.body().asJson();
+        int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
 
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        user.setPauseJoker(newAmountOfJokers);
+        user.save();
+
+        ObjectNode result = Json.newObject();
+        result.put("success", true);
+        result.put("newAmountOfJokers", user.getPauseJoker());
+        return ok(result);
     }
 
     public Result getDoublePointsJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            int availableDoublePointsJoker = user.getDoublePointsJoker();
-            return ok(Json.newObject().put("availableDoublePointsJoker", availableDoublePointsJoker));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        ObjectNode result = Json.newObject();
+        result.put("availableDoublePointsJoker", user.getDoublePointsJoker());
+        return ok(result);
     }
 
     public Result setDoublePointsJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            user.setDoublePointsJoker(newAmountOfJokers);
-            user.save();
+        JsonNode json = request.body().asJson();
+        int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
 
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        user.setDoublePointsJoker(newAmountOfJokers);
+        user.save();
+
+        ObjectNode result = Json.newObject();
+        result.put("success", true);
+        result.put("newAmountOfJokers", user.getDoublePointsJoker());
+        return ok(result);
     }
 
-    private User getUserFromSession(Http.Request request) {
+    private User getUserFromSession(Http.Request request){
         return request
                 .session()
                 .get("userID")
