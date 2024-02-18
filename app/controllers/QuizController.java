@@ -28,16 +28,6 @@ public class QuizController extends Controller {
         this.users = users;
     }
 
-    private int getUserIdFromSession(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
-    }
-
-    private User getUserFromSession(Http.Request request) {
-        int userID = getUserIdFromSession(request);
-        return (userID != -1) ? users.getUserById(userID) : null;
-    }
-
     public Result quiz(Http.Request request) {
         User user = getUserFromSession(request);
 
@@ -113,5 +103,15 @@ public class QuizController extends Controller {
         int rank = scoreboard.getRank(username);*/
 
         return ok();
+    }
+
+    private int getUserIdFromSession(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
+    }
+
+    private User getUserFromSession(Http.Request request) {
+        int userID = getUserIdFromSession(request);
+        return (userID != -1) ? users.getUserById(userID) : null;
     }
 }

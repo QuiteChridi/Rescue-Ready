@@ -19,14 +19,13 @@ public class ProfileController extends Controller {
 
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
-    private final AbstractQuizFactory quizzes;
 
     @Inject
-    public ProfileController(UserFactory users, HighscoreFactory scores, QuizFactory quizzes) {
+    public ProfileController(UserFactory users, HighscoreFactory scores) {
         this.users = users;
         this.scores = scores;
-        this.quizzes = quizzes;
     }
+
 
     public Result profile(Http.Request request) {
         try {
@@ -52,26 +51,6 @@ public class ProfileController extends Controller {
             return ok(friendProfile.render(friend, highscores));
         } else {
             return notFound("Friend not found");
-        }
-    }
-
-    public Result friends(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-
-        if (userIDString == null || userIDString.equals("leer")) {
-            return redirect(routes.LoginController.login());
-        }
-
-        try {
-            int userID = Integer.parseInt(userIDString);
-            controllers.interfaces.User user = users.getUserById(userID);
-            if (user != null) {
-                return ok(friends.render(users.getFriends(userID), users.getAllUsers()));
-            } else {
-                return redirect(routes.LoginController.login());
-            }
-        } catch (NumberFormatException e) {
-            return redirect(routes.LoginController.login());
         }
     }
 
@@ -121,16 +100,6 @@ public class ProfileController extends Controller {
         }
     }
 
-    private int getUserIdFromSession(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
-    }
-
-    private controllers.interfaces.User getUserFromSession(Http.Request request) {
-        int userID = getUserIdFromSession(request);
-        return (userID != -1) ? users.getUserById(userID) : null;
-    }
-
     public Result getProfilePic(Http.Request request) {
         controllers.interfaces.User user = getUserFromSession(request);
 
@@ -144,4 +113,15 @@ public class ProfileController extends Controller {
             return redirect(routes.LoginController.login());
         }
     }
+
+    private int getUserIdFromSession(Http.Request request) {
+        String userIDString = request.session().get("userID").orElse(null);
+        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
+    }
+
+    private controllers.interfaces.User getUserFromSession(Http.Request request) {
+        int userID = getUserIdFromSession(request);
+        return (userID != -1) ? users.getUserById(userID) : null;
+    }
+
 }

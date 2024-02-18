@@ -1,7 +1,5 @@
 package controllers.interfaces;
 
-import models.UserFactory;
-
 import java.util.List;
 
 public interface AbstractUserFactory{

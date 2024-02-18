@@ -1,9 +1,6 @@
 package models;
 
-import controllers.interfaces.AbstractUserFactory;
-import controllers.interfaces.FriendManager;
-import controllers.interfaces.AccountManager;
-import controllers.interfaces.User;
+import controllers.interfaces.*;
 import play.db.Database;
 
 import javax.inject.Inject;
@@ -18,6 +15,7 @@ import java.util.List;
 @Singleton
 public class UserFactory implements AbstractUserFactory, FriendManager, AccountManager {
     private Database db;
+    //private HighscoreFactory scores;
 
     /**
      * Constructor for UserFactory
@@ -217,6 +215,10 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
             return result;
         });
     }
+
+
+
+
 
 
     public class UserImplementation extends User {
