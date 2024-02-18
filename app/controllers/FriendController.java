@@ -21,7 +21,7 @@ public class FriendController {
         this.friendManager = users;
     }
 
-    public Result searchFriends(Http.Request request) {
+    public Result searchUsers(Http.Request request) {
         String searchQuery = request.queryString("name").orElse(null);
         if (searchQuery == null || searchQuery.isEmpty()) {
             return ProfileController.ok(Json.toJson(new ArrayList<Object>()));
@@ -55,16 +55,6 @@ public class FriendController {
         } else {
             return ProfileController.internalServerError("Freund konnte nicht entfernt werden");
         }
-    }
-
-    public Result searchUsers(Http.Request request) {
-        String searchQuery = request.queryString("name").orElse(null);
-        if (searchQuery == null || searchQuery.isEmpty()) {
-            return ProfileController.ok(Json.toJson(new ArrayList<Object>()));
-        }
-
-        List<User> matchingUsers = friendManager.searchUsersByName(searchQuery);
-        return ProfileController.ok(Json.toJson(matchingUsers));
     }
 
     private int getUserIdFromSession(Http.Request request) {

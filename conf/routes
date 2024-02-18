@@ -16,7 +16,6 @@ GET         /profile                controllers.ProfileController.profile(reques
 GET         /friendProfile/:id      controllers.ProfileController.friendProfile(id: Int)
 GET         /friends                controllers.ProfileController.friends(request: play.mvc.Http.Request)
 
-GET         /searchFriends          controllers.FriendController.searchFriends(request: play.mvc.Http.Request)
 GET         /searchUsers            controllers.FriendController.searchUsers(request: play.mvc.Http.Request)
 POST        /addFriend/:friendId    controllers.FriendController.addFriend(request: play.mvc.Http.Request, friendId: Int)
 POST        /removeFriend/:friendId controllers.FriendController.removeFriend(request: play.mvc.Http.Request,friendId: Int)
