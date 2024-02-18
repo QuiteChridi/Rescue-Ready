@@ -13,6 +13,7 @@ import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
 
+import javax.validation.constraints.Null;
 import java.util.Map;
 
 
@@ -30,20 +31,15 @@ public class QuizController extends Controller {
 
     public Result quiz(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-
-            Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
-            return ok(views.html.quiz.render(user, possibleQuizNames));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
+        return ok(views.html.quiz.render(user, possibleQuizNames));
     }
 
     public Result selectQuizAndGetName(Http.Request request){
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
-        System.out.println("test");
         quiz = quizzes.getQuizById(quizId);
 
         String quizName = quiz.getName();
@@ -51,24 +47,18 @@ public class QuizController extends Controller {
     }
 
     public Result getNextQuestion() {
-        System.out.println("Hallo");
-        System.out.println(quiz.getName());
+        ObjectNode result = Json.newObject();
 
-        if (!quiz.hasNextQuestion()) {
-            System.out.println("Keine weiteren Fragen vorhanden");
-            ObjectNode result = Json.newObject();
+        if (quiz.hasNextQuestion()) {
+            quiz.nextQuestion();
+            QuizQuestion question = quiz.getCurrentQuestion();
+            result.put("question", question.getQuestionText());
+            result.set("answers", Json.toJson(question.getAnswers()));
+        } else {
             result.put("endOfQuiz", true);
-            return ok(result);
         }
 
-        quiz.nextQuestion();
-
-        QuizQuestion question = quiz.getCurrentQuestion();
-        JsonNode jsonQuestion = Json.newObject()
-                .put("question", question.getQuestionText())
-                .set("answers", Json.toJson(question.getAnswers()));
-
-        return ok(jsonQuestion);
+        return ok(result);
     }
 
     public Result checkAnswer(Http.Request request) {
@@ -105,13 +95,12 @@ public class QuizController extends Controller {
         return ok();
     }
 
-    private int getUserIdFromSession(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
-    }
-
-    private User getUserFromSession(Http.Request request) {
-        int userID = getUserIdFromSession(request);
-        return (userID != -1) ? users.getUserById(userID) : null;
+    private User getUserFromSession(Http.Request request){
+        return request
+                .session()
+                .get("userID")
+                .map(Integer::parseInt)
+                .map(users::getUserById)
+                .orElse(null);
     }
 }
