@@ -41,8 +41,7 @@ public class ProfileControllerTest extends WithApplication {
         highscoreFactoryStub = mock(HighscoreFactory.class);
         when(highscoreFactoryStub.getHighscoresOfUser(0)).thenReturn(highscoreListStub);
 
-        quizFactoryDummy = mock(QuizFactory.class);
-        profileController = new ProfileController(userFactoryStub, highscoreFactoryStub, quizFactoryDummy);
+        profileController = new ProfileController(userFactoryStub, highscoreFactoryStub);
 
     }
 

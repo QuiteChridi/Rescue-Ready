@@ -12,27 +12,24 @@ import java.util.Map;
 
 import controllers.interfaces.AbstractHighscoreFactory;
 import controllers.interfaces.Highscore;
+import controllers.interfaces.Quiz;
+import controllers.interfaces.User;
 import play.db.Database;
 
 @Singleton
 public class HighscoreFactory implements AbstractHighscoreFactory {
     private final Database db;
-    private final UserFactory users;
-    private final QuizFactory quizes;
-
 
     @Inject
-    HighscoreFactory(Database db, UserFactory users, QuizFactory quizes) {
+    HighscoreFactory(Database db) {
         this.db = db;
-        this.users = users;
-        this.quizes = quizes;
     }
 
     @Override
     public  List<Highscore> getHighscoresOfQuiz(int quizId) {
         return db.withConnection(conn -> {
             List<Highscore> highscores = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores WHERE quiz_idQuiz = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.iduser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE quiz_idQuiz = ?");
             stmt.setInt(1, quizId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -63,7 +60,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
     public List<Highscore> getHighscoresOfUser(int userId) {
         return db.withConnection(conn -> {
             List<Highscore> highscores = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores WHERE user_idUser = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.iduser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE user_iduser = ?");
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -79,16 +76,27 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
         private final int score;
         private final int quizId;
         private final int userId;
-        private final UserFactory.UserImplementation user;
-        private final QuizFactory.QuizImplementation quiz;
+        private final String quizName;
+        private final String userName;
+        private final String profilePicPath;
+
 
         private HighscoreImplementation(ResultSet rs) throws SQLException {
             this.score = rs.getInt("highscore");
             this.quizId = rs.getInt("quiz_idQuiz");
             this.userId = rs.getInt("user_iduser");
+            this.quizName = rs.getString("quiz.name");
+            this.userName = rs.getString("user.name");
+            this.profilePicPath = rs.getString("user.profile_pic_path");
+        }
 
-            this.user = users.getUserById(userId);
-            this.quiz = quizes.getQuizById(quizId);
+        public HighscoreImplementation(int score, int quizId, int userId, String quizName, String userName, String profilePicPath) {
+            this.score = score;
+            this.quizId = quizId;
+            this.userId = userId;
+            this.quizName = quizName;
+            this.userName = userName;
+            this.profilePicPath = profilePicPath;
         }
 
         @Override
@@ -108,17 +116,17 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
 
         @Override
         public String getProfilePicPath() {
-            return user.getProfilePicPath();
+            return profilePicPath;
         }
 
         @Override
         public String getUserName(){
-            return user.getName();
+            return userName;
         }
 
         @Override
         public String getQuizName() {
-            return quiz.getName();
+            return quizName;
         }
 
         @Override
