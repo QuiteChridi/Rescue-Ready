@@ -52,8 +52,8 @@
                     <img src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker">
                 </div>
                 <div id="pauseJoker-text" class="joker-item">
-                    <h3>Pause Joker</h3>
-                    <h5>Pausiert die Zeit für die aktuelle Frage</h5>
+                    <h3>@pauseJoker.getName</h3>
+                    <h5>@pauseJoker.getDescription</h5>
                 </div>
                 <div id="pauseJoker-buy" class="joker-item joker-buy">
                     <div class="row-container">
@@ -62,7 +62,7 @@
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">
-                            <h5 class="golden-text">3</h5>
+                            <h5 class="golden-text">@pauseJoker.getPrice</h5>
                         </div>
                         <div id="buy-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
@@ -77,8 +77,8 @@
                     <img src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker">
                 </div>
                 <div id="doubleItJoker-text" class="joker-item">
-                    <h3>Double It Joker</h3>
-                    <h5>Verdoppelt die Punkte für die aktuelle Frage</h5>
+                    <h3>@doublePointsJoker.getName</h3>
+                    <h5>@doublePointsJoker.getDescription</h5>
                 </div>
                 <div id="doublePointsJoker-buy" class="joker-item joker-buy">
                     <div class="row-container">
@@ -86,7 +86,7 @@
                         <h4 class="shop-h4-size" id="@doublePointsJoker.getId">@jokerAmounts.get(2)</h4>
                     </div>                    <div id="buy-content">
                         <div id="buy-text">
-                            <h5 class="golden-text">4</h5>
+                            <h5 class="golden-text">@doublePointsJoker.getPrice</h5>
                         </div>
                         <div id="buy-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
