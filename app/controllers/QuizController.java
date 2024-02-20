@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 
 import controllers.interfaces.AbstractQuizFactory;
 import controllers.interfaces.AbstractUserFactory;
+import models.HighscoreFactory;
 import play.libs.Json;
 import play.mvc.*;
 
@@ -13,7 +14,6 @@ import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
 
-import javax.validation.constraints.Null;
 import java.util.Map;
 
 
@@ -22,11 +22,13 @@ public class QuizController extends Controller {
     private Quiz quiz;
     private final AbstractQuizFactory quizzes;
     private final AbstractUserFactory users;
+    private final AbstractHighscoreFactory scores;
 
     @Inject
-    public QuizController(QuizFactory quizzes, UserFactory users) {
+    public QuizController(QuizFactory quizzes, UserFactory users, HighscoreFactory scores) {
         this.quizzes = quizzes;
         this.users = users;
+        this.scores = scores;
     }
 
     public Result quiz(Http.Request request) {
@@ -44,6 +46,10 @@ public class QuizController extends Controller {
 
         String quizName = quiz.getName();
         return ok(Json.newObject().put("quizName", quizName));
+    }
+
+    public void setQuiz(int quizId){
+        quiz = quizzes.getQuizById(quizId);
     }
 
     public Result getNextQuestion() {
@@ -76,21 +82,18 @@ public class QuizController extends Controller {
         return ok(Json.newObject().put("correctAnswer", correctAnswer));
     }
 
-    public Result handleResult(Http.Request request) {
-        /*
+    public Result savePointsIfHighscore(Http.Request request) {
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
+
         JsonNode json = request.body().asJson();
-        int highscore = json.findPath("highscore").asInt();
+        int newHighscore = json.findPath("score").asInt();
+        System.out.println(newHighscore);
+        Highscore oldHighscore = scores.getHighscoreOfUserAndQuiz(user.getId(), quiz.getId());
 
-        int userID = Integer.parseInt(request.session().get("userId").get());
-        int quizId= quiz.getId();
-
-        if(scoreboard.isInHighscoreList(quiz)){
-            scoreboard.updateHighscore(username, highscore);
-        } else {
-            scoreboard.addHighscore(username, highscore);
+        if(oldHighscore == null || newHighscore > oldHighscore.getScore()){
+            scores.createHighscore(user.getId(), quiz.getId(), newHighscore);
         }
-
-        int rank = scoreboard.getRank(username);*/
 
         return ok();
     }

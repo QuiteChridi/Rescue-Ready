@@ -35,7 +35,7 @@ GET         /quiz                   controllers.QuizController.quiz(request: pla
 GET         /getNextQuestion        controllers.QuizController.getNextQuestion
 GET         /getCorrectAnswer       controllers.QuizController.getCorrectAnswer
 POST        /checkAnswer            controllers.QuizController.checkAnswer(request:  play.mvc.Http.Request)
-POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
+POST        /saveQuizResult         controllers.QuizController.savePointsIfHighscore(request:  play.mvc.Http.Request)
 POST        /selectQuizAndGetName   controllers.QuizController.selectQuizAndGetName(request: play.mvc.Http.Request)
 
 GET         /shop                   controllers.InventoryController.shop(request: play.mvc.Http.Request)

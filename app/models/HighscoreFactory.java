@@ -57,6 +57,35 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
         });
     }
 
+    @Override
+    public Highscore getHighscoreOfUserAndQuiz(int userId, int quizId) {
+        return db.withConnection(conn -> {
+            Highscore highscore = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.iduser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE user_iduser = ? AND quiz_idQuiz = ?");
+            stmt.setInt(1, userId);
+            stmt.setInt(2, quizId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                highscore = new HighscoreFactory.HighscoreImplementation(rs);
+            }
+            stmt.close();
+            return highscore;
+        });
+    }
+
+    @Override
+    public void createHighscore(int userId, int quizID, int score) {
+        db.withConnection(conn -> {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE highscores SET highscore = ? WHERE user_iduser = ? AND quiz_idQuiz = ?");
+            stmt.setInt(1, score);
+            stmt.setInt(2, userId);
+            stmt.setInt(3, quizID);
+
+            stmt.executeUpdate();
+            stmt.close();
+        });
+    }
+
     public List<Highscore> getHighscoresOfUser(int userId) {
         return db.withConnection(conn -> {
             List<Highscore> highscores = new ArrayList<>();

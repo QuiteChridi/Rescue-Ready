@@ -1,5 +1,5 @@
 let correctAnswerCount = 0;
-let scoreCount = 0;
+let score = 0;
 let questionTimer = 20;
 let timerRunning = false;
 let timerInterval;
@@ -222,14 +222,19 @@ function stopTimer() {
 
 function calculateHighscore(questionTimer) {
     if (doubleIt === true) {
-        scoreCount += (2*questionTimer);
+        score += (2*questionTimer);
     } else {
-        scoreCount += questionTimer;
+        score += questionTimer;
     }
 }
 
+function handleEndOfQuiz(){
+    saveQuizResult();
+    setNewAmountOfCoins();
+}
+
 function setNewAmountOfCoins(availableCoins) {
-    let newAmountOfCoins = Math.floor(scoreCount/10);
+    let newAmountOfCoins = Math.floor(score/10);
     newAmountOfCoins += availableCoins;
 
     fetch("/setCoins", {
@@ -240,18 +245,14 @@ function setNewAmountOfCoins(availableCoins) {
         credentials: "include",
         body: JSON.stringify({ newAmountOfCoins: newAmountOfCoins})
     })
-        .then(response => response.json())
-        .then(data => {
-            saveQuizResult(scoreCount);
-        })
         .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
 }
 
-function saveQuizResult(score) {
+function saveQuizResult() {
     fetch("/saveQuizResult", {
         method: "POST",
         body: JSON.stringify({
-            highscore: score
+            score: score
         }),
         headers: {
             "Content-Type": "application/json"

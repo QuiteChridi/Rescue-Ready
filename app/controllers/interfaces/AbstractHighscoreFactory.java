@@ -1,5 +1,7 @@
 package controllers.interfaces;
 
+import models.HighscoreFactory;
+
 import java.util.List;
 import java.util.Map;
 
@@ -22,4 +24,8 @@ public interface AbstractHighscoreFactory {
     List<Highscore> getHighscoresOfUser(int userId);
 
     Map<Integer, String> getPossibleQuizNames();
+
+    Highscore getHighscoreOfUserAndQuiz(int userId, int quizId);
+
+    void createHighscore(int userId, int quizID, int score);
 }
