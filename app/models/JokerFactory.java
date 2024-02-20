@@ -10,6 +10,8 @@ import javax.inject.Singleton;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class JokerFactory implements AbstractJokerFactory {
@@ -37,15 +39,49 @@ public class JokerFactory implements AbstractJokerFactory {
     }
 
     @Override
-    public void setJokersOfUser(int jokerId, int userId, int amount) {
+    public void setJokerAmountOfUser(int jokerId, int userId, int amount) {
         db.withConnection(conn -> {
-            PreparedStatement stmt = conn.prepareStatement("UPDATE joker_of_users SET amount = ? WHERE user_id = ? AND joker_id = ?");
-            stmt.setInt(1, amount);
-            stmt.setInt(2, userId);
-            stmt.setInt(3, jokerId);
+            PreparedStatement stmt = conn.prepareStatement("REPLACE INTO joker_of_users VALUES (?,?,?)");
+            stmt.setInt(1, userId);
+            stmt.setInt(2, jokerId);
+            stmt.setInt(3, amount);
 
             stmt.executeUpdate();
             stmt.close();
+        });
+    }
+
+    @Override
+    public int getJokerAmountOfUser(int jokerId, int userId) {
+        return db.withConnection(conn -> {
+            int amount = 0;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM joker_of_users WHERE user_id = ? AND joker_id = ?");
+            stmt.setInt(1, userId);
+            stmt.setInt(2, jokerId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                amount = rs.getInt("amount");
+            }
+            stmt.close();
+            return amount;
+        });
+    }
+
+    @Override
+    public List<Integer> getAllJokerAmountsOfUser(int userId) {
+        return db.withConnection(conn -> {
+            List<Integer> amounts = new ArrayList<>();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM joker_of_users WHERE user_id = ?");
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while(amounts.size() < 3){
+                while (rs.next()) {
+                    amounts.add(rs.getInt("amount"));
+                }
+                amounts.add(0);
+            }
+            stmt.close();
+            return amounts;
         });
     }
 

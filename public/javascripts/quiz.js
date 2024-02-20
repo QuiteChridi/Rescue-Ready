@@ -28,42 +28,6 @@ function selectQuizAndGetName(quizId){
             console.log(error.message));
 }
 
-function backToSelection() {
-    document.getElementById("start-quiz-container").style.display = "none"
-    document.getElementById("welcome-container").style.display = "flex"
-}
-
-function startQuiz() {
-    startTimer();
-    getNextQuestion();
-}
-
-function startTimer() {
-    if (!timerRunning) {
-        questionTimer = 21;
-        timerRunning = true;
-        timerInterval = setInterval(function () {
-            updateTimerDisplay();
-            questionTimer--;
-            updateTimerDisplay();
-
-            if (questionTimer <= 0) {
-                submitAnswer(null);
-            }
-        }, 1000);
-    }
-}
-
-function updateScore() {
-    if (doubleIt === true) {
-        correctAnswerCount += 2;
-        doubleIt = false;
-    } else {
-        correctAnswerCount += 1;
-    }
-    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + correctAnswerCount;
-}
-
 function getNextQuestion() {
     fetch("/getNextQuestion", {
         method: "GET",
@@ -85,6 +49,46 @@ function getNextQuestion() {
             renderNextQuestion(data.question, data.answers, correctAnswerCount);
         }
     }).catch(error => console.log(error.message));
+}
+
+function startTimer() {
+    if (!timerRunning) {
+        questionTimer = 21;
+        timerRunning = true;
+        timerInterval = setInterval(function () {
+            updateTimerDisplay();
+            questionTimer--;
+            updateTimerDisplay();
+
+            if (questionTimer <= 0) {
+                submitAnswer(null);
+            }
+        }, 1000);
+    }
+}
+
+function updateTimerDisplay() {
+    const timerBar = document.getElementById('timer-bar');
+    const timerText = document.getElementById('timer-text');
+    const container = document.getElementById('timer-bar-container');
+
+    const percentage = (questionTimer / 20) * 100;
+
+    const containerWidth = container.clientWidth * 0.91;
+    const barWidth = Math.min((percentage / 100) * containerWidth, containerWidth);
+
+    timerBar.style.width = barWidth + 'px';
+
+    if (questionTimer <= 5) {
+        timerBar.style.backgroundColor = 'red';
+    } else {
+        timerBar.style.backgroundColor = 'green';
+    }
+
+    timerText.innerText = formatTime(questionTimer);
+    if (questionTimer <= 0) {
+        timerBar.style.width = containerWidth + 'px';
+    }
 }
 
 function renderNextQuestion(question, answers, score) {
@@ -128,6 +132,23 @@ function renderNextQuestion(question, answers, score) {
     document.getElementById('result').style.display = "none";
 }
 
+function backToSelection() {
+    document.getElementById("start-quiz-container").style.display = "none"
+    document.getElementById("welcome-container").style.display = "flex"
+}
+
+
+
+function updateScore() {
+    if (doubleIt === true) {
+        correctAnswerCount += 2;
+        doubleIt = false;
+    } else {
+        correctAnswerCount += 1;
+    }
+    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + correctAnswerCount;
+}
+
 function checkAnswer() {
     let selectedAnswerElement = document.querySelector('input[name="answer"]:checked');
 
@@ -157,7 +178,7 @@ function submitAnswer(selectedAnswerElement) {
         return response.json();
     }).then(data => {
         if (data.isCorrect === true) {
-            calculateHighscore(questionTimer);
+            calculateHighscore();
         }
         stopTimer();
         renderResult(data.isCorrect, data.correctAnswer);
@@ -182,29 +203,7 @@ function renderResult(isCorrect, correctAnswer) {
     resultElement.innerHTML = "<i>" + message + "</i>";
 }
 
-function updateTimerDisplay() {
-    const timerBar = document.getElementById('timer-bar');
-    const timerText = document.getElementById('timer-text');
-    const container = document.getElementById('timer-bar-container');
 
-    const percentage = (questionTimer / 20) * 100;
-
-    const containerWidth = container.clientWidth * 0.91;
-    const barWidth = Math.min((percentage / 100) * containerWidth, containerWidth);
-
-    timerBar.style.width = barWidth + 'px';
-
-    if (questionTimer <= 5) {
-        timerBar.style.backgroundColor = 'red';
-    } else {
-        timerBar.style.backgroundColor = 'green';
-    }
-
-    timerText.innerText = formatTime(questionTimer);
-    if (questionTimer <= 0) {
-        timerBar.style.width = containerWidth + 'px';
-    }
-}
 
 
 function formatTime(seconds) {
@@ -220,7 +219,7 @@ function stopTimer() {
     }
 }
 
-function calculateHighscore(questionTimer) {
+function calculateHighscore() {
     if (doubleIt === true) {
         score += (2*questionTimer);
     } else {
@@ -233,19 +232,13 @@ function handleEndOfQuiz(){
     setNewAmountOfCoins();
 }
 
-function setNewAmountOfCoins(availableCoins) {
-    let newAmountOfCoins = Math.floor(score/10);
-    newAmountOfCoins += availableCoins;
+function setNewAmountOfCoins() {
+    let coinsGained = Math.floor(score/10);
+    getCoins().then(data => {
+        let newAmountOfCoins = coinsGained + data.availableCoins
+        setCoins(newAmountOfCoins);
+    });
 
-    fetch("/setCoins", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({ newAmountOfCoins: newAmountOfCoins})
-    })
-        .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
 }
 
 function saveQuizResult() {
@@ -291,20 +284,19 @@ function shuffleAnswers(array) {
 }
 
 function useFiftyFiftyJoker() {
-    getFiftyFiftyJoker().then(data => {
-        let availableFiftyFiftyJoker = data.availableFiftyFiftyJoker;
+    if(!document.getElementById('5050Joker').disabled){
+        useJoker(1).then(data => {
+            if (data.success === true) {
+                executeFiftyFiftyJoker();
 
-        if (availableFiftyFiftyJoker >= 1 && !document.getElementById('5050Joker').disabled) {
-            executeFiftyFiftyJoker();
-            setFiftyFiftyJoker(availableFiftyFiftyJoker - 1).then(data => {
                 document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers
-            })
-            document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
-            document.getElementById('5050Joker').disabled = true;
-        } else {
-            console.log("Nicht genügend FiftyFiftyJoker verfügbar oder Joker wurde bereits genutzt");
-        }
-    })
+                document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
+                document.getElementById('5050Joker').disabled = true;
+            } else {
+                console.log("Nicht genügend FiftyFiftyJoker verfügbar oder Joker wurde bereits genutzt");
+            }
+        })
+    }
 }
 
 function executeFiftyFiftyJoker() {
@@ -329,20 +321,19 @@ function executeFiftyFiftyJoker() {
 }
 
 function usePauseJoker() {
-    getPauseJoker().then(data => {
-        let availableJoker = data.availablePauseJoker;
+    if(!document.getElementById('pauseJoker').disabled){
+        useJoker(2).then(data => {
+            if (data.success === true) {
+                executePauseJoker();
 
-        if (availableJoker >= 1 && !document.getElementById('pauseJoker').disabled) {
-            executePauseJoker();
-            setPauseJoker(availableJoker - 1).then(data => {
                 document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
-            })
-            document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
-            document.getElementById('pauseJoker').disabled = true;
-        } else {
-            console.log("Nicht genügend PauseJoker verfügbar oder Joker wurde bereits genutzt");
-        }
-    })
+                document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
+                document.getElementById('pauseJoker').disabled = true;
+            } else {
+                console.log("Nicht genügend PauseJoker verfügbar oder Joker wurde bereits genutzt");
+            }
+        })
+    }
 }
 
 function executePauseJoker() {
@@ -353,22 +344,34 @@ function executePauseJoker() {
 }
 
 function useDoublePointsJoker() {
-    getDoublePointsJoker().then(data => {
-        let availableJoker = data.availableDoublePointsJoker;
+    if(!document.getElementById('doublePointsJokerAmount').disabled){
+        useJoker(3).then(data => {
+            if (data.success === true) {
+                executePauseJoker();
 
-        if (availableJoker >= 1 && !document.getElementById('doublePointsJokerAmount').disabled) {
-            executeDoublePointsJoker();
-            setDoublePointsJoker(availableJoker - 1).then(data => {
                 document.getElementById("doublePointsJokerAmount").innerText = data.newAmountOfJokers;
-            })
-            document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
-            document.getElementById('doublePointsJoker').disabled = true;
-        } else {
-            console.log("Nicht genügend DoublePointsJoker verfügbar oder Joker wurde bereits genutzt");
-        }
-    })
+                document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
+                document.getElementById('doublePointsJoker').disabled = true;
+            } else {
+                console.log("Nicht genügend DoublePointsJoker verfügbar oder Joker wurde bereits genutzt");
+            }
+        })
+    }
 }
 
 function executeDoublePointsJoker() {
     doubleIt = true;
+}
+
+function useJoker(id) {
+    return fetch("/useJoker", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            jokerId: id
+        })
+    }).then(response => response.json())
 }

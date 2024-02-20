@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import controllers.interfaces.AbstractQuizFactory;
 import controllers.interfaces.AbstractUserFactory;
 import models.HighscoreFactory;
+import models.JokerFactory;
 import play.libs.Json;
 import play.mvc.*;
 
@@ -14,6 +15,7 @@ import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -23,12 +25,14 @@ public class QuizController extends Controller {
     private final AbstractQuizFactory quizzes;
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
+    private final JokerGetter jokerGetter;
 
     @Inject
-    public QuizController(QuizFactory quizzes, UserFactory users, HighscoreFactory scores) {
+    public QuizController(QuizFactory quizzes, UserFactory users, HighscoreFactory scores, JokerFactory jokers) {
         this.quizzes = quizzes;
         this.users = users;
         this.scores = scores;
+        this.jokerGetter = jokers;
     }
 
     public Result quiz(Http.Request request) {
@@ -36,7 +40,8 @@ public class QuizController extends Controller {
         if(user == null) return redirect(routes.LoginController.login());
 
         Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
-        return ok(views.html.quiz.render(user, possibleQuizNames));
+        List<Integer> jokerAmounts = jokerGetter.getAllJokerAmountsOfUser(user.getId());
+        return ok(views.html.quiz.render(user, jokerAmounts, possibleQuizNames));
     }
 
     public Result selectQuizAndGetName(Http.Request request){

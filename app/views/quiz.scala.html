@@ -1,4 +1,4 @@
-@(user: interfaces.User, categories: Map[Integer, String])
+@(user: interfaces.User, jokerAmounts: List[Integer], categories: Map[Integer, String])
 
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -32,7 +32,7 @@
                         <h4 id="quizName-h4">quizName</h4>
                     </div>
                     <div class="column-container" id="start-quiz-buttons">
-                        <button class="medium-button" onclick="startQuiz()">Quiz starten</button>
+                        <button class="medium-button" onclick="getNextQuestion();">Quiz starten</button>
                         <button class="alternativ-button medium-button" onclick="backToSelection()">zurück</button>
                     </div>
                 </div>
@@ -64,19 +64,19 @@
                             <div class="column-container" id="joker-container">
                                 <div id="button-container" class="row-container">
                                     <div id="fiftyFiftyJokerAmount">
-                                    @user.getFiftyFiftyJoker
+                                    @jokerAmounts.get(0)
                                     </div>
-                                    <img id="5050Joker" data-fifty-fifty-joker-count="@user.getFiftyFiftyJoker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="useFiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
+                                    <img id="5050Joker" data-fifty-fifty-joker-count="@jokerAmounts.get(0)" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="useFiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                                 </div>
                                 <div id="button-container" class="row-container">
                                     <div id="pauseJokerAmount">
-                                    @user.getPauseJoker
+                                    @jokerAmounts.get(1)
                                     </div>
                                     <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="usePauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                                 </div>
                                 <div id="button-container" class="row-container">
                                     <div id="doublePointsJokerAmount">
-                                    @user.getDoublePointsJoker
+                                    @jokerAmounts.get(2)
                                     </div>
                                     <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="useDoublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
                                 </div>

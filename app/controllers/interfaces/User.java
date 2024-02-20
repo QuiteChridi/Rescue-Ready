@@ -7,18 +7,6 @@ public abstract class User {
 
     public abstract void setCoins(int coins);
 
-    public abstract int getFiftyFiftyJoker();
-
-    public abstract void setFiftyFiftyJoker(int fiftyFiftyJoker);
-
-    public abstract int getDoublePointsJoker();
-
-    public abstract void setDoublePointsJoker(int doublePointsJoker);
-
-    public abstract int getPauseJoker();
-
-    public abstract void setPauseJoker(int pauseJoker);
-
     public abstract String getProfilePicPath();
 
     public abstract void setProfilePicPath(String profilePicPath);

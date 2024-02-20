@@ -76,10 +76,10 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
     @Override
     public void createHighscore(int userId, int quizID, int score) {
         db.withConnection(conn -> {
-            PreparedStatement stmt = conn.prepareStatement("UPDATE highscores SET highscore = ? WHERE user_iduser = ? AND quiz_idQuiz = ?");
-            stmt.setInt(1, score);
+            PreparedStatement stmt = conn.prepareStatement("REPLACE INTO highscores VALUES (?,?,?)");
+            stmt.setInt(1, quizID);
             stmt.setInt(2, userId);
-            stmt.setInt(3, quizID);
+            stmt.setInt(3, score);
 
             stmt.executeUpdate();
             stmt.close();

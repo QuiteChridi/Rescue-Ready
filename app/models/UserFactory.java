@@ -2,6 +2,7 @@ package models;
 
 import controllers.interfaces.*;
 import play.db.Database;
+import scala.Int;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -229,9 +230,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         private String password;
         private String mail;
         private int coins;
-        private int fiftyFiftyJoker;
-        private int doublePointsJoker;
-        private int pauseJoker;
+        private List<Integer> jokers = new ArrayList<>();
         private String profilePicPath;
 
         private UserImplementation(int id, String username, String password, String mail) {
@@ -240,9 +239,6 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
             this.mail = mail;
             this.password = password;
             this.coins = 0;
-            this.fiftyFiftyJoker = 0;
-            this.doublePointsJoker = 0;
-            this.pauseJoker = 0;
             this.profilePicPath = DEFAULT_PROFILE_PIC_PATH;
         }
 
@@ -252,9 +248,6 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
             this.mail = rs.getString("email");
             this.password = rs.getString("password");
             this.coins = rs.getInt("coins");
-            this.fiftyFiftyJoker = rs.getInt("fifty_fifty_joker");
-            this.doublePointsJoker = rs.getInt("double_points_joker");
-            this.pauseJoker = rs.getInt("pause_joker");
             this.profilePicPath = rs.getString("profile_pic_path");
         }
 
@@ -265,17 +258,14 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         @Override
         public void save() {
             db.withConnection(conn -> {
-                String sql = "UPDATE user SET name = ?, email = ?, password = ?, coins = ?, fifty_fifty_joker = ?, double_points_joker = ?, pause_joker = ?, profile_pic_path = ? WHERE idUser = ?";
+                String sql = "UPDATE user SET name = ?, email = ?, password = ?, coins = ?, profile_pic_path = ? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, this.username);
                 stmt.setString(2, this.mail);
                 stmt.setString(3, this.password);
                 stmt.setInt(4, this.coins);
-                stmt.setInt(5, this.fiftyFiftyJoker);
-                stmt.setInt(6, this.doublePointsJoker);
-                stmt.setInt(7, this.pauseJoker);
-                stmt.setString(8, profilePicPath);
-                stmt.setInt(9, this.id);
+                stmt.setString(5, profilePicPath);
+                stmt.setInt(6, this.id);
 
                 stmt.executeUpdate();
                 stmt.close();
@@ -290,36 +280,6 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         @Override
         public void setCoins(int coins) {
             this.coins = coins;
-        }
-
-        @Override
-        public int getFiftyFiftyJoker() {
-            return fiftyFiftyJoker;
-        }
-
-        @Override
-        public void setFiftyFiftyJoker(int fiftyFiftyJoker) {
-            this.fiftyFiftyJoker = fiftyFiftyJoker;
-        }
-
-        @Override
-        public int getDoublePointsJoker() {
-            return doublePointsJoker;
-        }
-
-        @Override
-        public void setDoublePointsJoker(int doublePointsJoker) {
-            this.doublePointsJoker = doublePointsJoker;
-        }
-
-        @Override
-        public int getPauseJoker() {
-            return pauseJoker;
-        }
-
-        @Override
-        public void setPauseJoker(int pauseJoker) {
-            this.pauseJoker = pauseJoker;
         }
 
         @Override
@@ -366,7 +326,6 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         public void setPassword(String password) {
             this.password = password;
         }
-
     }
 
 }

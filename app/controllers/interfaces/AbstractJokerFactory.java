@@ -1,6 +1,7 @@
 package controllers.interfaces;
 
-public interface AbstractJokerFactory {
+public interface AbstractJokerFactory extends JokerGetter {
     Joker getJokerById (int id);
-    public void setJokersOfUser(int jokerId, int userId, int amount);
+    int getJokerAmountOfUser(int jokerId, int userId);
+    void setJokerAmountOfUser(int jokerId, int userId, int amount);
 }

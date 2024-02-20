@@ -1,4 +1,4 @@
-@(user: interfaces.User, fiftyFiftyJoker: interfaces.Joker, pauseJoker: interfaces.Joker,doublePointsJoker: interfaces.Joker)
+@(user: interfaces.User, fiftyFiftyJoker: interfaces.Joker, pauseJoker: interfaces.Joker,doublePointsJoker: interfaces.Joker, jokerAmounts: List[Integer])
 
 @index("Shop") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -33,7 +33,7 @@
                 <div id="fiftyFiftyJoker-buy" class="joker-item joker-buy">
                     <div class="row-container">
                         <h4 class="shop-h4-size" id="shop-h4" >In Besitz:</h4>
-                        <h4 class="shop-h4-size" id="fiftyFiftyJokerAmount">@user.getFiftyFiftyJoker</h4>
+                        <h4 class="shop-h4-size" id="@fiftyFiftyJoker.getId">@jokerAmounts.get(0)</h4>
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">
@@ -43,7 +43,7 @@
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
                         </div>
                     </div>
-                    <button onclick="buyFiftyFiftyJoker()">Buy</button>
+                    <button onclick="buyJoker(@fiftyFiftyJoker.getId)">Buy</button>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                 <div id="pauseJoker-buy" class="joker-item joker-buy">
                     <div class="row-container">
                         <h4 class="shop-h4-size" id="shop-h4" >In Besitz:</h4>
-                        <h4 class="shop-h4-size" id="pauseJokerAmount">@user.getPauseJoker</h4>
+                        <h4 class="shop-h4-size" id="@pauseJoker.getId">@jokerAmounts.get(1)</h4>
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">
@@ -68,7 +68,7 @@
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
                         </div>
                     </div>
-                    <button onclick="buyPauseJoker()">Buy</button>
+                    <button onclick="buyJoker(@pauseJoker.getId)">Buy</button>
                 </div>
             </div>
 
@@ -83,7 +83,7 @@
                 <div id="doublePointsJoker-buy" class="joker-item joker-buy">
                     <div class="row-container">
                         <h4 class="shop-h4-size" id="shop-h4" >In Besitz:</h4>
-                        <h4 class="shop-h4-size" id="doublePointsJokerAmount">@user.getDoublePointsJoker</h4>
+                        <h4 class="shop-h4-size" id="@doublePointsJoker.getId">@jokerAmounts.get(2)</h4>
                     </div>                    <div id="buy-content">
                         <div id="buy-text">
                             <h5 class="golden-text">4</h5>
@@ -92,7 +92,7 @@
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">
                         </div>
                     </div>
-                    <button onclick="buyDoublePointsJoker()">Buy</button>
+                    <button onclick="buyJoker(@doublePointsJoker.getId)">Buy</button>
                 </div>
             </div>
         </div>

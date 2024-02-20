@@ -41,13 +41,8 @@ POST        /selectQuizAndGetName   controllers.QuizController.selectQuizAndGetN
 GET         /shop                   controllers.InventoryController.shop(request: play.mvc.Http.Request)
 GET         /getCoins               controllers.InventoryController.getCoins(request: play.mvc.Http.Request)
 POST        /setCoins               controllers.InventoryController.setCoins(request: play.mvc.Http.Request)
-GET         /getFiftyFiftyJoker     controllers.InventoryController.getFiftyFiftyJoker(request: play.mvc.Http.Request)
-POST        /setFiftyFiftyJoker     controllers.InventoryController.setFiftyFiftyJoker(request: play.mvc.Http.Request)
-GET         /getPauseJoker          controllers.InventoryController.getPauseJoker(request: play.mvc.Http.Request)
-POST        /setPauseJoker          controllers.InventoryController.setPauseJoker(request: play.mvc.Http.Request)
-GET         /getDoublePointsJoker   controllers.InventoryController.getDoublePointsJoker(request: play.mvc.Http.Request)
-POST        /setDoublePointsJoker   controllers.InventoryController.setDoublePointsJoker(request: play.mvc.Http.Request)
-POST        /setJoker               controllers.InventoryController.setJoker(request: play.mvc.Http.Request)
+POST        /useJoker               controllers.InventoryController.useJoker(request: play.mvc.Http.Request)
+POST        /buyJoker               controllers.InventoryController.buyJoker(request: play.mvc.Http.Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file           controllers.Assets.versioned(path="/public", file: Asset)
