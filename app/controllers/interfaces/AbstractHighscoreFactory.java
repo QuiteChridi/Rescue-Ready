@@ -1,7 +1,5 @@
 package controllers.interfaces;
 
-import models.HighscoreFactory;
-
 import java.util.List;
 import java.util.Map;
 

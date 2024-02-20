@@ -327,5 +327,4 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
             this.password = password;
         }
     }
-
 }

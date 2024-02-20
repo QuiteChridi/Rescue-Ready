@@ -18,7 +18,7 @@ import static org.junit.Assert.assertNotEquals;
 import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.route;
 
-public class QuizControllerTest extends WithApplication {
+public class QuizTest extends WithApplication {
     private QuizController quizController;
     private HighscoreFactory highscoreFactory;
 

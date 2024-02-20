@@ -12,8 +12,6 @@ import java.util.Map;
 
 import controllers.interfaces.AbstractHighscoreFactory;
 import controllers.interfaces.Highscore;
-import controllers.interfaces.Quiz;
-import controllers.interfaces.User;
 import play.db.Database;
 
 @Singleton
