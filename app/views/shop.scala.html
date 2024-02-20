@@ -1,4 +1,4 @@
-@(user: interfaces.User)
+@(user: interfaces.User, fiftyFiftyJoker: interfaces.Joker, pauseJoker: interfaces.Joker,doublePointsJoker: interfaces.Joker)
 
 @index("Shop") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -27,8 +27,8 @@
                     <img src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="Fifty-Fifty Joker">
                 </div>
                 <div id="fiftyFiftyJoker-text" class="joker-item">
-                    <h3>50:50 Joker</h3>
-                    <h5>Entfernt zwei falsche Antworten für die aktuelle Frage</h5>
+                    <h3>@fiftyFiftyJoker.getName</h3>
+                    <h5>@fiftyFiftyJoker.getDescription</h5>
                 </div>
                 <div id="fiftyFiftyJoker-buy" class="joker-item joker-buy">
                     <div class="row-container">
@@ -37,7 +37,7 @@
                     </div>
                     <div id="buy-content">
                         <div id="buy-text">
-                            <h5 class="golden-text">2</h5>
+                            <h5 class="golden-text">@fiftyFiftyJoker.getPrice</h5>
                         </div>
                         <div id="buy-image">
                             <img src="@routes.Assets.versioned("images/coin.png")" alt="Coin">

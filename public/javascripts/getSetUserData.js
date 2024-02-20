@@ -1,3 +1,20 @@
+function setJoker(newJokers, id){
+    return fetch("/setJoker", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            newAmountOfJokers: newJokers,
+            jokerId: id
+        })
+    })
+        .then(response => response.json())
+        .catch(error => console.error("Fehler beim Setzen der neuen Anzahl Joker:", error));
+}
+
+
 function getFiftyFiftyJoker(){
     return fetch("/getFiftyFiftyJoker", {
         method:"GET",

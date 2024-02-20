@@ -3,6 +3,25 @@ const PAUSE_PRICE = 3;
 const DOUBLE_POINTS_PRICE = 5;
 
 
+function buyJoker(id) {
+    getCoins()
+        .then(data =>{
+            let availableCoins = data.availableCoins
+
+            if(availableCoins >= FIFTY_FIFTY_PRICE){
+                availableCoins = availableCoins - FIFTY_FIFTY_PRICE;
+                setCoins(availableCoins)
+
+                let availableJokers = Number(document.getElementById("fiftyFiftyJokerAmount").innerText) + 1;
+
+                setJoker(availableJokers, id).then(data => {
+                    document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers;
+                });
+            } else {
+                alert("Nicht genügen Coins verfügbar");
+            }
+        });
+}
 
 function buyFiftyFiftyJoker() {
     getCoins()

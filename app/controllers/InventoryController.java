@@ -2,7 +2,9 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import controllers.interfaces.AbstractJokerFactory;
 import controllers.interfaces.User;
+import models.JokerFactory;
 import models.UserFactory;
 import controllers.interfaces.AbstractUserFactory;
 import play.libs.Json;
@@ -17,17 +19,19 @@ import javax.inject.Inject;
 public class InventoryController extends Controller {
 
     private final AbstractUserFactory users;
+    private final AbstractJokerFactory jokers;
 
     @Inject
-    public InventoryController(UserFactory users) {
+    public InventoryController(UserFactory users, JokerFactory jokers) {
         this.users = users;
+        this.jokers = jokers;
     }
 
     public Result shop(Http.Request request) {
         User user = getUserFromSession(request);
         if(user == null) return redirect(routes.LoginController.login());
 
-        return ok(shop.render(user));
+        return ok(shop.render(user, jokers.getJokerById(1), jokers.getJokerById(2), jokers.getJokerById(3)));
     }
 
     public Result getCoins(Http.Request request) {
@@ -53,6 +57,22 @@ public class InventoryController extends Controller {
         result.put("success", true);
         result.put("newCoins", newCoins);
 
+        return ok(result);
+    }
+
+    public Result setJoker(Http.Request request) {
+        User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
+
+        JsonNode json = request.body().asJson();
+        int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
+        int jokerId = json.findPath("jokerId").intValue();
+
+        jokers.setJokersOfUser(jokerId, user.getId(), newAmountOfJokers);
+
+        ObjectNode result = Json.newObject();
+        result.put("success", true);
+        result.put("newAmountOfJokers", newAmountOfJokers);
         return ok(result);
     }
 

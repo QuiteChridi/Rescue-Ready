@@ -36,6 +36,19 @@ public class JokerFactory implements AbstractJokerFactory {
         });
     }
 
+    @Override
+    public void setJokersOfUser(int jokerId, int userId, int amount) {
+        db.withConnection(conn -> {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE joker_of_users SET amount = ? WHERE user_id = ? AND joker_id = ?");
+            stmt.setInt(1, amount);
+            stmt.setInt(2, userId);
+            stmt.setInt(3, jokerId);
+
+            stmt.executeUpdate();
+            stmt.close();
+        });
+    }
+
     public class JokerImplementation extends Joker {
 
         private final int jokerId;
@@ -45,13 +58,6 @@ public class JokerFactory implements AbstractJokerFactory {
         private String jokerDescription;
 
         private int jokerPrice;
-
-        private JokerImplementation(int jokerId, String jokerName, String jokerDescription, int jokerPrice) {
-            this.jokerId = jokerId;
-            this.jokerName = jokerName;
-            this.jokerDescription = jokerDescription;
-            this.jokerPrice = jokerPrice;
-        }
 
         private JokerImplementation(ResultSet rs) throws SQLException {
             this.jokerId = rs.getInt("idJoker");
@@ -64,35 +70,17 @@ public class JokerFactory implements AbstractJokerFactory {
         public int getId() {
             return jokerId;
         }
-
         @Override
         public String getName() {
             return jokerName;
         }
-
-        @Override
-        public void setName(String jokerName) {
-            this.jokerName = jokerName;
-        }
-
         @Override
         public String getDescription() {
             return jokerDescription;
         }
-
-        @Override
-        public void setDescription(String jokerDescription) {
-            this.jokerDescription = jokerDescription;
-        }
-
         @Override
         public int getPrice() {
             return jokerPrice;
-        }
-
-        @Override
-        public void setPrice(int jokerPrice) {
-            this.jokerPrice = jokerPrice;
         }
     }
 }
