@@ -3,7 +3,6 @@ package models;
 
 import controllers.interfaces.AbstractJokerFactory;
 import controllers.interfaces.Joker;
-import controllers.interfaces.User;
 import play.db.Database;
 
 import javax.inject.Inject;

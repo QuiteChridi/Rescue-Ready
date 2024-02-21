@@ -46,6 +46,6 @@
     display: flex;
 }
 
-#highscoreSwitch-button {
+#highscoreSwitch-buttons button {
     width: 33%;
 }
