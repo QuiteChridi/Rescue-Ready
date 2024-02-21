@@ -80,9 +80,13 @@ function updateTimerDisplay() {
     timerBar.style.width = barWidth + 'px';
 
     if (questionTimer <= 5) {
-        timerBar.style.backgroundColor = 'red';
+        const red = 255; // Farbe am Ende
+        const green = Math.floor((questionTimer / 5) * 128);
+        timerBar.style.backgroundColor = `rgb(${red},${green},0)`;
     } else {
-        timerBar.style.backgroundColor = 'green';
+        const red = Math.floor(((20 - questionTimer) / 15) * 255);
+        const green = 128; // Farbe am Anfang
+        timerBar.style.backgroundColor = `rgb(${red},${green},0)`;
     }
 
     timerText.innerText = formatTime(questionTimer);
@@ -90,6 +94,7 @@ function updateTimerDisplay() {
         timerBar.style.width = containerWidth + 'px';
     }
 }
+
 
 function renderNextQuestion(question, answers, score) {
     document.getElementById('start-quiz-container').style.display = "none";
