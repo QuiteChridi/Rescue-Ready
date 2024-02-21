@@ -22,7 +22,7 @@
     margin-top: 5px;
 }
 
-#fiftyFiftyJoker-container, #pauseJoker-container, #doubleItJoker-container {
+#oneJoker-container {
     flex-direction: row;
     padding: 5px;
     gap: unset;
@@ -43,7 +43,7 @@
     margin: 5px;
 }
 
-#fiftyFiftyJoker-text, #pauseJoker-text, #doubleItJoker-text {
+#joker-text {
     gap: 10px;
 }
 
@@ -75,11 +75,7 @@
     max-width: 30px;
 }
 
-#fiftyFiftyJoker-buy button,
-#pauseJoker-buy button,
-#doublePointsJoker-buy button {
+#joker-buy button {
     width: 75%;
     margin-bottom: 5px;
 }
-
-

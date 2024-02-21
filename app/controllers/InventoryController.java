@@ -33,11 +33,8 @@ public class InventoryController extends Controller {
         User user = getUserFromSession(request);
         if(user == null) return redirect(routes.LoginController.login());
 
-        List<Integer> allJokerAmounts = jokers.getAllJokerAmountsOfUser(user.getId());
-        Joker fiftyFifty = jokers.getJokerById(1, user.getId());
-        Joker pauseJoker = jokers.getJokerById(2, user.getId());
-        Joker doublePoints = jokers.getJokerById(3, user.getId());
-        return ok(shop.render(user, fiftyFifty, pauseJoker, doublePoints, allJokerAmounts));
+        List<Joker> allJokers = jokers.getAllJokers(user.getId());
+        return ok(shop.render(user, allJokers));
     }
 
     public Result getCoins(Http.Request request) {
@@ -75,7 +72,7 @@ public class InventoryController extends Controller {
         int oldAmountOfJokers = jokers.getJokerAmountOfUser(jokerId, user.getId());
         int coins = user.getCoins();
         int price = jokers.getJokerById(jokerId, user.getId()).getPrice();
-        System.out.println(jokerId);
+        System.out.println("JokerId: " + jokerId);
         ObjectNode result = Json.newObject();
         if(coins >= price){
             int newAmountOfJokers = oldAmountOfJokers + 1;
@@ -87,23 +84,28 @@ public class InventoryController extends Controller {
             result.put("newAmountOfJokers", newAmountOfJokers);
             result.put("newAmountOfCoins", newAmountOfCoins);
         } else {
-            result.put("success", false);
+            result.put("not enough coins available", false);
         }
         return ok(result);
     }
 
     public Result useJoker(Http.Request request) {
         User user = getUserFromSession(request);
+        ObjectNode result = Json.newObject();
         if(user == null) return redirect(routes.LoginController.login());
 
         JsonNode json = request.body().asJson();
         int jokerId = json.findPath("jokerId").intValue();
-        int newAmountOfJokers = jokers.getJokerAmountOfUser(jokerId, user.getId());
-        jokers.setJokerAmountOfUser(jokerId, user.getId(), newAmountOfJokers);
+        int amountOfJokers = jokers.getJokerAmountOfUser(jokerId, user.getId());
+        if (amountOfJokers >= 1) {
+            int newAmountOfJokers = amountOfJokers -1;
+            jokers.setJokerAmountOfUser(jokerId, user.getId(), newAmountOfJokers);
 
-        ObjectNode result = Json.newObject();
-        result.put("success", true);
-        result.put("newAmountOfJokers", newAmountOfJokers);
+            result.put("success", true);
+            result.put("newAmountOfJokers", newAmountOfJokers);
+        } else {
+            result.put("not enough Jokers available", false);
+        }
         return ok(result);
     }
 

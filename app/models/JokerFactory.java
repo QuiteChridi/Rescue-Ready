@@ -3,6 +3,7 @@ package models;
 
 import controllers.interfaces.AbstractJokerFactory;
 import controllers.interfaces.Joker;
+import controllers.interfaces.User;
 import play.db.Database;
 
 import javax.inject.Inject;
@@ -22,6 +23,21 @@ public class JokerFactory implements AbstractJokerFactory {
         this.db = db;
     }
 
+    @Override
+    public List<Joker> getAllJokers(int userId) {
+        return db.withConnection(conn -> {
+            List<Joker> result = new ArrayList<>();
+            String sql = "SELECT * FROM joker";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                JokerImplementation joker = new JokerImplementation(rs, userId);
+                result.add(joker);
+            }
+            stmt.close();
+            return result;
+        });
+    }
 
     @Override
     public JokerImplementation getJokerById(int id, int userId) {
@@ -97,11 +113,14 @@ public class JokerFactory implements AbstractJokerFactory {
 
         private int jokerAmount;
 
+        private String jokerPicPath;
+
         private JokerImplementation(ResultSet rs, int userId) throws SQLException {
             this.jokerId = rs.getInt("idJoker");
             this.jokerName = rs.getString("name");
             this.jokerDescription = rs.getString("description");
             this.jokerPrice = rs.getInt("price");
+            this.jokerPicPath = rs.getString("joker_pic_path");
             this.jokerAmount = getJokerAmountOfUser(jokerId, userId);
         }
 
@@ -122,6 +141,12 @@ public class JokerFactory implements AbstractJokerFactory {
             return jokerPrice;
         }
 
+        @Override
+        public String getJokerPicPath() {
+            return jokerPicPath;
+        }
+
+        @Override
         public int getAmount() {
             return jokerAmount;
         }

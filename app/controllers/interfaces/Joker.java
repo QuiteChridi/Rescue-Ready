@@ -10,5 +10,7 @@ public abstract class Joker {
 
     public abstract int getPrice();
 
+    public abstract String getJokerPicPath();
+
     public abstract int getAmount();
 }

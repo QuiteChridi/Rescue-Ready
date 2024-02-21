@@ -48,7 +48,7 @@
     background-color: #ffffff;
 }
 
-#profile-buttons {
+#friendProfile-buttons {
     width: 93%;
     display: flex;
     justify-content: space-between;
@@ -56,6 +56,6 @@
     gap: 10px;
 }
 
-#profile-button {
-    width: 50%;
+#friendProfile-button {
+    width: 33%;
 }

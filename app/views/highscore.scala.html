@@ -41,7 +41,7 @@
 
                 <div id="highscoreSwitch-buttons">
                 @for(quiz <- quizzes) {
-                    <button onclick="selectHighscore(this.id)" type="button" id=@quiz._1 > @quiz._2</button>
+                    <button id="highscoreSwitch-button" onclick="selectHighscore(this.id)" type="button" >@quiz._2</button>
                 }
                 </div>
 

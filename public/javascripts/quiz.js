@@ -101,6 +101,7 @@ function renderNextQuestion(question, answers, score) {
 
     document.getElementById('question-container').style.display = 'flex';
     document.getElementById('question').innerHTML = question;
+    enableRadioButtons();
     let answersContainer = document.getElementById('answer-form');
     answersContainer.innerHTML = "";
     shuffleAnswers(answers);
@@ -118,12 +119,12 @@ function renderNextQuestion(question, answers, score) {
 
 
     document.getElementById('joker-container').style.display = 'flex';
-    document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyJoker.png";
-    document.getElementById('pauseJoker').src = "/assets/images/pauseJoker.png";
-    document.getElementById('doublePointsJoker').src = "/assets/images/doubleItJoker.png";
-    document.getElementById('5050Joker').disabled = false;
-    document.getElementById('pauseJoker').disabled = false;
-    document.getElementById('doublePointsJoker').disabled = false;
+    document.getElementById('jokerPicPath1').src = "/assets/images/fiftyFiftyJoker.png";
+    document.getElementById('jokerPicPath2').src = "/assets/images/pauseJoker.png";
+    document.getElementById('jokerPicPath3').src = "/assets/images/doubleItJoker.png";
+    document.getElementById('jokerPicPath1').disabled = false;
+    document.getElementById('jokerPicPath2').disabled = false;
+    document.getElementById('jokerPicPath3').disabled = false;
 
     document.getElementById('check-answer-button').style.display = 'flex';
     document.getElementById('next-question-button').style.display = 'none';
@@ -182,29 +183,47 @@ function submitAnswer(selectedAnswerElement) {
         }
         stopTimer();
         renderResult(data.isCorrect, data.correctAnswer);
+        disableRadioButtons();
+        document.getElementById('jokerPicPath1').disabled = true;
+        document.getElementById('jokerPicPath2').disabled = true;
+        document.getElementById('jokerPicPath3').disabled = true;
         document.getElementById('check-answer-button').style.display = 'none';
         document.getElementById('next-question-button').style.display = 'flex';
     }).catch(error => console.log(error.message));
 }
 
-
 function renderResult(isCorrect, correctAnswer) {
     let message;
+    let resultElement = document.getElementById("result");
 
     if (isCorrect) {
         updateScore(correctAnswerCount);
         message = "Richtige Antwort!";
+        resultElement.classList.remove("incorrect");
+        resultElement.classList.add("correct");
     } else {
         message = "Falsch. Die richtige Antwort lautet: " + correctAnswer;
+        resultElement.classList.remove("correct");
+        resultElement.classList.add("incorrect");
     }
 
-    let resultElement = document.getElementById("result");
     resultElement.style.display = "flex";
     resultElement.innerHTML = "<i>" + message + "</i>";
 }
 
+function disableRadioButtons() {
+    let radioButtons = document.querySelectorAll('#answer-form input[type="radio"]');
+    radioButtons.forEach(function(radioButton) {
+        radioButton.disabled = true;
+    });
+}
 
-
+function enableRadioButtons() {
+    let radioButtons = document.querySelectorAll('#answer-form input[type="radio"]');
+    radioButtons.forEach(function(radioButton) {
+        radioButton.disabled = false;
+    });
+}
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -283,15 +302,27 @@ function shuffleAnswers(array) {
     }
 }
 
+function useJokerOfId(jokerID) {
+    if (jokerID === 1) {
+        useFiftyFiftyJoker();
+    } else if (jokerID === 2) {
+        usePauseJoker();
+    } else if (jokerID === 3) {
+        useDoublePointsJoker();
+    } else {
+        console.log("Joker nicht implementiert!!!")
+    }
+}
+
 function useFiftyFiftyJoker() {
-    if(!document.getElementById('5050Joker').disabled){
+    if(!document.getElementById("jokerPicPath1").disabled) {
         useJoker(1).then(data => {
             if (data.success === true) {
                 executeFiftyFiftyJoker();
 
-                document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers
-                document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
-                document.getElementById('5050Joker').disabled = true;
+                document.getElementById("jokerAmount1").innerText = data.newAmountOfJokers
+                document.getElementById('jokerPicPath1').src = "/assets/images/fiftyFiftyNope.png";
+                document.getElementById('jokerPicPath1').disabled = true;
             } else {
                 console.log("Nicht genügend FiftyFiftyJoker verfügbar oder Joker wurde bereits genutzt");
             }
@@ -321,14 +352,14 @@ function executeFiftyFiftyJoker() {
 }
 
 function usePauseJoker() {
-    if(!document.getElementById('pauseJoker').disabled){
+    if(!document.getElementById('jokerPicPath2').disabled){
         useJoker(2).then(data => {
             if (data.success === true) {
                 executePauseJoker();
 
-                document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
-                document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
-                document.getElementById('pauseJoker').disabled = true;
+                document.getElementById("jokerAmount2").innerText = data.newAmountOfJokers;
+                document.getElementById('jokerPicPath2').src = "/assets/images/pauseNope.png";
+                document.getElementById('jokerPicPath2').disabled = true;
             } else {
                 console.log("Nicht genügend PauseJoker verfügbar oder Joker wurde bereits genutzt");
             }
@@ -344,14 +375,14 @@ function executePauseJoker() {
 }
 
 function useDoublePointsJoker() {
-    if(!document.getElementById('doublePointsJokerAmount').disabled){
+    if(!document.getElementById('jokerPicPath3').disabled){
         useJoker(3).then(data => {
             if (data.success === true) {
-                executePauseJoker();
+                executeDoublePointsJoker();
 
-                document.getElementById("doublePointsJokerAmount").innerText = data.newAmountOfJokers;
-                document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
-                document.getElementById('doublePointsJoker').disabled = true;
+                document.getElementById("jokerAmount3").innerText = data.newAmountOfJokers;
+                document.getElementById('jokerPicPath3').src = "/assets/images/doubleItNope.png";
+                document.getElementById('jokerPicPath3').disabled = true;
             } else {
                 console.log("Nicht genügend DoublePointsJoker verfügbar oder Joker wurde bereits genutzt");
             }

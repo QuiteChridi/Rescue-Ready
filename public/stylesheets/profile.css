@@ -14,20 +14,6 @@
     height: auto;
 }
 
-/*
-#friendProfile-buttons {
-    width: 93%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-#friendProfile-button {
-    width: 33%;
-}
- */
-
 .profile-editor {
     width: 60%;
     display: flex;
@@ -51,4 +37,17 @@
     font-size: 24px;
     box-sizing: border-box;
     padding: 5px;
+}
+
+
+#profile-buttons {
+    width: 93%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+#profile-button {
+    width: 50%;
 }

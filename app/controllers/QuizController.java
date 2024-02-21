@@ -25,14 +25,14 @@ public class QuizController extends Controller {
     private final AbstractQuizFactory quizzes;
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
-    private final JokerGetter jokerGetter;
+    private final AbstractJokerFactory jokers;
 
     @Inject
     public QuizController(QuizFactory quizzes, UserFactory users, HighscoreFactory scores, JokerFactory jokers) {
         this.quizzes = quizzes;
         this.users = users;
         this.scores = scores;
-        this.jokerGetter = jokers;
+        this.jokers = jokers;
     }
 
     public Result quiz(Http.Request request) {
@@ -40,8 +40,8 @@ public class QuizController extends Controller {
         if(user == null) return redirect(routes.LoginController.login());
 
         Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
-        List<Integer> jokerAmounts = jokerGetter.getAllJokerAmountsOfUser(user.getId());
-        return ok(views.html.quiz.render(user, jokerAmounts, possibleQuizNames));
+        List<Joker> allJokers = jokers.getAllJokers(user.getId());
+        return ok(views.html.quiz.render(user, allJokers, possibleQuizNames));
     }
 
     public Result selectQuizAndGetName(Http.Request request){
