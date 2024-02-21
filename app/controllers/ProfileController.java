@@ -31,21 +31,20 @@ public class ProfileController extends Controller {
         User user = getUserFromSession(request);
         if(user == null) return redirect(routes.LoginController.login());
 
-        return getProfileByUser(user);
+        List<Highscore> highscores = scores.getHighscoresOfUser(user.getId());
+        highscores.sort(Highscore::compareTo);
+
+        return ok(profile.render(user, highscores));
     }
 
     public Result friendProfile(int friendUserId) {
         User friend = users.getUserById(friendUserId);
         if(friend == null) return notFound("Friend not found");
 
-        return getProfileByUser(friend);
-    }
-
-    private Result getProfileByUser(User user){
-        List<Highscore> highscores = scores.getHighscoresOfUser(user.getId());
+        List<Highscore> highscores = scores.getHighscoresOfUser(friend.getId());
         highscores.sort(Highscore::compareTo);
 
-        return ok(profile.render(user, highscores));
+        return ok(friendProfile.render(friend, highscores));
     }
 
     public Result saveProfilePicToAssets(Http.Request request){
