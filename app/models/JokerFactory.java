@@ -24,14 +24,14 @@ public class JokerFactory implements AbstractJokerFactory {
 
 
     @Override
-    public JokerImplementation getJokerById(int id) {
+    public JokerImplementation getJokerById(int id, int userId) {
         return db.withConnection(conn -> {
             JokerImplementation joker = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM joker WHERE idjoker = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                joker = new JokerImplementation(rs);
+                joker = new JokerImplementation(rs, userId);
             }
             stmt.close();
             return joker;
@@ -95,11 +95,14 @@ public class JokerFactory implements AbstractJokerFactory {
 
         private int jokerPrice;
 
-        private JokerImplementation(ResultSet rs) throws SQLException {
+        private int jokerAmount;
+
+        private JokerImplementation(ResultSet rs, int userId) throws SQLException {
             this.jokerId = rs.getInt("idJoker");
             this.jokerName = rs.getString("name");
             this.jokerDescription = rs.getString("description");
             this.jokerPrice = rs.getInt("price");
+            this.jokerAmount = getJokerAmountOfUser(jokerId, userId);
         }
 
         @Override
@@ -117,6 +120,10 @@ public class JokerFactory implements AbstractJokerFactory {
         @Override
         public int getPrice() {
             return jokerPrice;
+        }
+
+        public int getAmount() {
+            return jokerAmount;
         }
     }
 }

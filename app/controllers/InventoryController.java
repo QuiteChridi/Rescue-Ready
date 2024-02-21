@@ -34,9 +34,9 @@ public class InventoryController extends Controller {
         if(user == null) return redirect(routes.LoginController.login());
 
         List<Integer> allJokerAmounts = jokers.getAllJokerAmountsOfUser(user.getId());
-        Joker fiftyFifty = jokers.getJokerById(1);
-        Joker pauseJoker = jokers.getJokerById(2);
-        Joker doublePoints = jokers.getJokerById(3);
+        Joker fiftyFifty = jokers.getJokerById(1, user.getId());
+        Joker pauseJoker = jokers.getJokerById(2, user.getId());
+        Joker doublePoints = jokers.getJokerById(3, user.getId());
         return ok(shop.render(user, fiftyFifty, pauseJoker, doublePoints, allJokerAmounts));
     }
 
@@ -74,7 +74,7 @@ public class InventoryController extends Controller {
         int jokerId = json.findPath("jokerId").intValue();
         int oldAmountOfJokers = jokers.getJokerAmountOfUser(jokerId, user.getId());
         int coins = user.getCoins();
-        int price = jokers.getJokerById(jokerId).getPrice();
+        int price = jokers.getJokerById(jokerId, user.getId()).getPrice();
         System.out.println(jokerId);
         ObjectNode result = Json.newObject();
         if(coins >= price){

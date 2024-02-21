@@ -9,4 +9,6 @@ public abstract class Joker {
     public abstract String getDescription();
 
     public abstract int getPrice();
+
+    public abstract int getAmount();
 }
