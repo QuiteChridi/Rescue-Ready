@@ -2,13 +2,13 @@ package models;
 
 import controllers.interfaces.*;
 import play.db.Database;
-import scala.Int;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Factory for creating and retrieving users from the database
@@ -217,7 +217,17 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         });
     }
 
+    @Override
+    public List<User> getNotFriends(int userId) {
+        List<User> allUsers = getAllUsers();
+        List<User> friends = getFriends(userId);
 
+        List<User> notFriends = allUsers.stream()
+                .filter(user -> !friends.contains(user))
+                .collect(Collectors.toList());
+        
+        return notFriends;
+    }
 
 
 
@@ -325,6 +335,20 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         @Override
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (!(obj instanceof User)) {
+                return false;
+            }
+
+            User userToCompare = (User) obj;
+            return this.id == userToCompare.getId();
         }
     }
 }

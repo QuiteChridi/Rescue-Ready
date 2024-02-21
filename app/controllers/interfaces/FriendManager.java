@@ -12,4 +12,6 @@ public interface FriendManager {
     List<User> getAllUsers();
 
     List<User> getFriends(int userId);
+
+    List<User> getNotFriends(int userId);
 }

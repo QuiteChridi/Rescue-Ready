@@ -27,7 +27,7 @@ public class FriendController extends Controller{
         int userId = getUserIdFromSession(request);
         if(userId == 0) return redirect(routes.LoginController.login());
 
-        return ok(friends.render(friendManager.getFriends(userId), friendManager.getAllUsers()));
+        return ok(friends.render(friendManager.getFriends(userId), friendManager.getNotFriends(userId)));
     }
 
     public Result addFriend(Http.Request request, int friendId) {
