@@ -8,6 +8,7 @@
 
             </div>
 
+            @if(!friends.isEmpty) {
             <div class="inner-container" id="friendList-container">
                 <div class="friend-list">
                     @for(friend <- friends) {
@@ -20,6 +21,7 @@
                     }
                 </div>
             </div>
+            }
 
             <div class="inner-container" id="userAdd-container">
                 <div id="userAdd-text">
