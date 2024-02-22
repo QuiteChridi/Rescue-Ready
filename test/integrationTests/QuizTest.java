@@ -3,7 +3,9 @@ package integrationTests;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.QuizController;
 import controllers.interfaces.Highscore;
+import controllers.interfaces.JokerGetter;
 import models.HighscoreFactory;
+import models.JokerFactory;
 import models.QuizFactory;
 import models.UserFactory;
 import org.junit.Before;
@@ -27,8 +29,8 @@ public class QuizTest extends WithApplication {
         UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
         highscoreFactory = provideApplication().injector().instanceOf(HighscoreFactory.class);
         QuizFactory quizFactory = provideApplication().injector().instanceOf(QuizFactory.class);
-
-        quizController = new QuizController(quizFactory, userFactory, highscoreFactory);
+        JokerFactory jokerGetter = provideApplication().injector().instanceOf(JokerFactory.class);
+        quizController = new QuizController(quizFactory, userFactory, highscoreFactory, jokerGetter);
     }
 
     @Test

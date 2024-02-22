@@ -26,7 +26,6 @@ public class ProfileController extends Controller {
         this.scores = scores;
     }
 
-
     public Result profile(Http.Request request) {
         User user = getUserFromSession(request);
         if(user == null) return redirect(routes.LoginController.login());
@@ -37,15 +36,16 @@ public class ProfileController extends Controller {
         return ok(profile.render(user, highscores));
     }
 
-    public Result friendProfile(int friendUserId) {
-        User friend = users.getUserById(friendUserId);
-        if(friend == null) return notFound("Friend not found");
+    public Result friendProfile(int otherUserId) {
+        User otherUser = users.getUserById(otherUserId);
+        if(otherUser == null) return notFound("Friend not found");
 
-        List<Highscore> highscores = scores.getHighscoresOfUser(friend.getId());
+        List<Highscore> highscores = scores.getHighscoresOfUser(otherUser.getId());
         highscores.sort(Highscore::compareTo);
 
-        return ok(friendProfile.render(friend, highscores));
+        return ok(friendProfile.render(otherUser, highscores));
     }
+
 
     public Result saveProfilePicToAssets(Http.Request request){
         User user = getUserFromSession(request);

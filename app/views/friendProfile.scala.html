@@ -36,7 +36,10 @@
 
                 <div id="friendProfile-buttons">
                     <button class="medium-button" id="friendProfile-button">Chat</button>
-                    <button class="medium-button add-friend-button" id="friendProfile-button" data-user-id="@friend.getId">Hinzufügen</button>
+                    <!-- routes.FriendController.checkFriendship(friend.getId, friend.getId) -->
+                    @if(true){
+                        <button class="medium-button add-friend-button" id="friendProfile-button" data-user-id="@friend.getId">Hinzufügen</button>
+                    }
                     <button class="medium-button alternativ-button" id="friendProfile-button" onclick="window.history.back()">Zurück</button>
                 </div>
 

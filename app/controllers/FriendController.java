@@ -54,6 +54,11 @@ public class FriendController extends Controller{
         }
     }
 
+    public Result checkFriendship(int userId, int otherUserId){
+        friendManager.isFriend(userId, otherUserId);
+        return ok();
+    }
+
     private int getUserIdFromSession(Http.Request request){
         return request
                 .session()
