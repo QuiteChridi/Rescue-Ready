@@ -1,3 +1,4 @@
+
 @(user: interfaces.User)
 
 @index("Freunde") {
@@ -5,21 +6,27 @@
         <div class="sizeAble-container" id="friends-container">
             <div class="header">
                 <h1>Freunde</h1>
-
             </div>
 
             <div class="inner-container" id="friendList-container">
                 <div class="friend-list">
                     @for(friend <- user.getFriends()) {
-                        <li>
+                        <li class="friend-item">
                             <img src="@routes.Assets.versioned("" + friend.getProfilePicPath)" alt="Profile Picture">
                             <a id="friendName" href="@routes.ProfileController.friendProfile(friend.getId)" >@friend.getName</a>
-                            <button>Chat</button>
+                            <button data-receiver-id="@friend.getId" class="chat-button">Chat</button>
                             <button class="alternativ-button" onclick="removeFriend(@friend.getId())">Entfernen</button>
                         </li>
                     }
                 </div>
+
+                <div id="chat-container" class="chat-container" style="display: none;">
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Schreibe eine Nachricht...">
+                    <button id="chat-send" class="chat-send">Senden</button>
+                </div>
             </div>
+
 
             <div class="inner-container" id="userAdd-container">
                 <div id="userAdd-text">
@@ -46,6 +53,6 @@
                 </div>
             </div>
         </div>
-
+    </div>
     }
 }

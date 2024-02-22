@@ -25,6 +25,10 @@ POST        /removeFriend/:friendId controllers.ProfileController.removeFriend(r
 POST        /saveUser               controllers.ProfileController.saveChangesToUser(request: play.mvc.Http.Request)
 POST        /saveProfilePic         controllers.ProfileController.saveProfilePicToAssets(request: play.mvc.Http.Request)
 
+GET         /getMessages/:conversationPartnerId    controllers.MessageController.getMessages(request: play.mvc.Http.Request, conversationPartnerId: Int)
+POST        /sendMessage/:receiverId               controllers.MessageController.sendMessage(request: play.mvc.Http.Request, receiverId: Int)
+
+
 
 GET         /shop                   controllers.ShopController.shop(request: play.mvc.Http.Request)
 GET         /getCoins               controllers.ShopController.getCoins(request: play.mvc.Http.Request)

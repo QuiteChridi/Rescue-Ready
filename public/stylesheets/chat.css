@@ -1,0 +1,59 @@
+.chat-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.chat-messages {
+    height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 5px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+}
+
+.chat-input, .chat-send {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.friend-item img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.friend-item button {
+    margin-left: 10px;
+}
+.message {
+    padding: 5px;
+    margin: 4px;
+    border-radius: 5px;
+}
+
+.sent {
+    align-self: flex-end;
+    background-color: #DCF8C6;
+}
+
+.received {
+    align-self: flex-start;
+    background-color: #ECECEC;
+}
