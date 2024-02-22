@@ -57,7 +57,7 @@ public class QuizFactory implements AbstractQuizFactory {
     public Map<Integer, String> getPossibleQuizNames(){
         Map<Integer, String> quizes = new HashMap<>();
         return db.withConnection(conn -> {
-            QuizImplementation quiz = null;
+            QuizFactory.QuizImplementation quiz = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM quiz");
             ResultSet rs = stmt.executeQuery();
 

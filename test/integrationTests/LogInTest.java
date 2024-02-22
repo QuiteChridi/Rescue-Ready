@@ -15,7 +15,28 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 public class
-ApplicationTests extends WithApplication {
+LogInTest extends WithApplication {
+
+    @Test
+    public void mainShouldReturnLoginPage() {
+        Http.RequestBuilder request = new Http.RequestBuilder()
+                .method(GET)
+                .header(Http.HeaderNames.HOST, "localhost:19001")
+                .uri("/");
+
+        Result result = route(app, request);
+        assertEquals(contentAsString(login.render()), contentAsString(result));
+    }
+
+    @Test
+    public void signupShouldReturnSignupPage() {
+        Http.RequestBuilder requestBuilder = new Http.RequestBuilder()
+                .method(GET)
+                .header(Http.HeaderNames.HOST, "localhost:19001")
+                .uri("/signup");
+        Result result = route(app, requestBuilder);
+        assertEquals(contentAsString(signup.render()), contentAsString(result));
+    }
 
     @Test
     public void loginTestUserShouldBeAbleToLogInWithValidCredentials(){
@@ -91,26 +112,5 @@ ApplicationTests extends WithApplication {
         Result result = route(app, request);
         final String body = contentAsString(result);
         assertTrue("Index should contain a Login link", body.contains("value=\"Login\""));
-    }
-
-    @Test
-    public void mainShouldReturnLoginPage() {
-        Http.RequestBuilder request = new Http.RequestBuilder()
-                .method(GET)
-                .header(Http.HeaderNames.HOST, "localhost:19001")
-                .uri("/");
-
-        Result result = route(app, request);
-        assertEquals(contentAsString(login.render()), contentAsString(result));
-    }
-
-    @Test
-    public void signupShouldReturnSignupPage() {
-        Http.RequestBuilder requestBuilder = new Http.RequestBuilder()
-                .method(GET)
-                .header(Http.HeaderNames.HOST, "localhost:19001")
-                .uri("/signup");
-        Result result = route(app, requestBuilder);
-        assertEquals(contentAsString(signup.render()), contentAsString(result));
     }
 }

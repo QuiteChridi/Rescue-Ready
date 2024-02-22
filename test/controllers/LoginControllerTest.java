@@ -1,7 +1,6 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import controllers.LoginController;
 import models.UserFactory;
 import org.junit.Test;
 import play.libs.Json;
@@ -110,14 +109,14 @@ public class LoginControllerTest {
 
         Result result = loginController.createUser(request.build());
         assertEquals(406,result.status());
-        verify(userFactoryDummy).createUserInUsers(" ", " ", " ");
+        verify(userFactoryDummy).createUser(" ", " ", " ");
     }
 
     @Test
     public void createUserShouldAddUserToSessionIfUsernameNotExists() {
         UserFactory.UserImplementation dummyUser= mock(UserFactory.UserImplementation.class);
         UserFactory userFactoryMock = mock(UserFactory.class);
-        when(userFactoryMock.createUserInUsers(" ", " ", " ")).thenReturn(dummyUser);
+        when(userFactoryMock.createUser(" ", " ", " ")).thenReturn(dummyUser);
         LoginController loginController = new LoginController(userFactoryMock);
 
         ObjectNode requestBody = Json.newObject();
@@ -133,7 +132,7 @@ public class LoginControllerTest {
 
         Map<String,String> session = loginController.createUser(request.build()).session().data();
 
-        verify(userFactoryMock).createUserInUsers(" ", " ", " ");
+        verify(userFactoryMock).createUser(" ", " ", " ");
         assertTrue(session.containsKey("userID"));
     }
 }

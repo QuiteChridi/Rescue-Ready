@@ -76,7 +76,7 @@ public class UserFactoryTest {
 
     @Test
     public void createUserInUsersShouldReturnCreatedUser(){
-        User newUser = users.createUserInUsers(NEW_USERNAME, NEW_PASSWORD, NEW_EMAIL);
+        User newUser = users.createUser(NEW_USERNAME, NEW_PASSWORD, NEW_EMAIL);
         User fetchedUser = users.getUserById(newUser.getId());
 
         assertNotNull(newUser);

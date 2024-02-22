@@ -14,13 +14,12 @@ GET         /getProfilePic          controllers.ProfileController.getProfilePic(
 
 GET         /profile                controllers.ProfileController.profile(request: play.mvc.Http.Request)
 GET         /friendProfile/:id      controllers.ProfileController.friendProfile(id: Int)
-GET         /friends                controllers.ProfileController.friends(request: play.mvc.Http.Request)
 
-GET         /searchFriends          controllers.ProfileController.searchFriends(request: play.mvc.Http.Request)
-GET         /searchUsers            controllers.ProfileController.searchUsers(request: play.mvc.Http.Request)
-POST        /addFriend/:friendId    controllers.ProfileController.addFriend(request: play.mvc.Http.Request, friendId: Int)
-POST        /removeFriend/:friendId controllers.ProfileController.removeFriend(request: play.mvc.Http.Request,friendId: Int)
 
+GET         /searchUsers            controllers.FriendController.searchUsers(request: play.mvc.Http.Request)
+POST        /addFriend/:friendId    controllers.FriendController.addFriend(request: play.mvc.Http.Request, friendId: Int)
+POST        /removeFriend/:friendId controllers.FriendController.removeFriend(request: play.mvc.Http.Request,friendId: Int)
+GET         /friends                controllers.FriendController.friends(request: play.mvc.Http.Request)
 
 POST        /saveUser               controllers.ProfileController.saveChangesToUser(request: play.mvc.Http.Request)
 POST        /saveProfilePic         controllers.ProfileController.saveProfilePicToAssets(request: play.mvc.Http.Request)
@@ -30,11 +29,9 @@ POST        /sendMessage/:receiverId               controllers.MessageController
 
 
 
-GET         /shop                   controllers.ShopController.shop(request: play.mvc.Http.Request)
-GET         /getCoins               controllers.ShopController.getCoins(request: play.mvc.Http.Request)
-POST        /setCoins               controllers.ShopController.setCoins(request: play.mvc.Http.Request)
 
-GET         /highscore              controllers.ScoreboardController.highscore()
+
+GET         /highscore              controllers.ScoreboardController.highscore(quizId:Int ?= 1)
 POST        /highscoreByQuizName    controllers.ScoreboardController.renderHighscore(request: play.mvc.Http.Request)
 
 GET         /quiz                   controllers.QuizController.quiz(request: play.mvc.Http.Request)
@@ -42,14 +39,14 @@ GET         /quiz                   controllers.QuizController.quiz(request: pla
 GET         /getNextQuestion        controllers.QuizController.getNextQuestion
 GET         /getCorrectAnswer       controllers.QuizController.getCorrectAnswer
 POST        /checkAnswer            controllers.QuizController.checkAnswer(request:  play.mvc.Http.Request)
-POST        /saveQuizResult         controllers.QuizController.handleResult(request:  play.mvc.Http.Request)
+POST        /saveQuizResult         controllers.QuizController.savePointsIfHighscore(request:  play.mvc.Http.Request)
 POST        /selectQuizAndGetName   controllers.QuizController.selectQuizAndGetName(request: play.mvc.Http.Request)
-GET         /getFiftyFiftyJoker     controllers.QuizController.getFiftyFiftyJoker(request: play.mvc.Http.Request)
-POST        /setFiftyFiftyJoker     controllers.QuizController.setFiftyFiftyJoker(request: play.mvc.Http.Request)
-GET         /getPauseJoker          controllers.QuizController.getPauseJoker(request: play.mvc.Http.Request)
-POST        /setPauseJoker          controllers.QuizController.setPauseJoker(request: play.mvc.Http.Request)
-GET         /getDoublePointsJoker   controllers.QuizController.getDoublePointsJoker(request: play.mvc.Http.Request)
-POST        /setDoublePointsJoker   controllers.QuizController.setDoublePointsJoker(request: play.mvc.Http.Request)
+
+GET         /shop                   controllers.InventoryController.shop(request: play.mvc.Http.Request)
+GET         /getCoins               controllers.InventoryController.getCoins(request: play.mvc.Http.Request)
+POST        /setCoins               controllers.InventoryController.setCoins(request: play.mvc.Http.Request)
+POST        /useJoker               controllers.InventoryController.useJoker(request: play.mvc.Http.Request)
+POST        /buyJoker               controllers.InventoryController.buyJoker(request: play.mvc.Http.Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file           controllers.Assets.versioned(path="/public", file: Asset)

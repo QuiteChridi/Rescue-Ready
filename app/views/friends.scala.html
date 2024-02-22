@@ -1,21 +1,21 @@
-
-@(user: interfaces.User)
+@(friends: List[interfaces.User],users: List[interfaces.User])
 
 @index("Freunde") {
     @defining(play.core.PlayVersion.current) { version =>
         <div class="sizeAble-container" id="friends-container">
             <div class="header">
                 <h1>Freunde</h1>
+
             </div>
 
             <div class="inner-container" id="friendList-container">
                 <div class="friend-list">
-                    @for(friend <- user.getFriends()) {
-                        <li class="friend-item">
+                    @for(friend <- friends) {
+                        <li>
                             <img src="@routes.Assets.versioned("" + friend.getProfilePicPath)" alt="Profile Picture">
                             <a id="friendName" href="@routes.ProfileController.friendProfile(friend.getId)" >@friend.getName</a>
-                            <button data-receiver-id="@friend.getId" class="chat-button">Chat</button>
-                            <button class="alternativ-button" onclick="removeFriend(@friend.getId())">Entfernen</button>
+                            <button>Chat</button>
+                            <button class="alternativ-button" onclick="removeFriend(@friend.getId)">Entfernen</button>
                         </li>
                     }
                 </div>
@@ -26,7 +26,6 @@
                     <button id="chat-send" class="chat-send">Senden</button>
                 </div>
             </div>
-
 
             <div class="inner-container" id="userAdd-container">
                 <div id="userAdd-text">
@@ -43,16 +42,16 @@
                 </div>
 
                 <div class="user-list">
-                @for(user <- user.getAllUsers()) {
+                @for(user <- users) {
                     <li>
                         <img src="@routes.Assets.versioned(user.getProfilePicPath())" alt="Profile Picture">
-                        <a id="userName" href="@routes.ProfileController.friendProfile(user.getId())">@user.getName()</a>
-                        <button class="add-friend-button" data-user-id="@user.getId()">Hinzufügen</button>
+                        <a id="userName" href="@routes.ProfileController.friendProfile(user.getId)">@user.getName</a>
+                        <button class="add-friend-button" data-user-id="@user.getId">Hinzufügen</button>
                     </li>
                 }
                 </div>
             </div>
         </div>
-    </div>
+
     }
 }

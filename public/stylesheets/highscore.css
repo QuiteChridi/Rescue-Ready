@@ -12,10 +12,9 @@
     font-size: 1.2em;
     border-radius: 10px;
     box-shadow: 0 0 10px black;
-
 }
 
-.highscores-table thead tr{
+.highscores-table thead tr {
     background-color: #24265f;
     color: white;
     text-align: left;
@@ -36,13 +35,17 @@
 }
 
 .highscores-table img {
-    width: 30px;
-    height: auto;
+    max-height: 40px;
+    max-width: 40px;
+    border-radius: 50%;
 }
 
 #highscoreSwitch-buttons {
     width: 93%;
     gap: 5px;
     display: flex;
+}
 
+#highscoreSwitch-buttons button {
+    width: 33%;
 }

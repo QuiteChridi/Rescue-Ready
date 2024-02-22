@@ -9,7 +9,7 @@ function selectHighscore(quizId) {
         },
         credentials: "include",
     }).then(response => {
-        window.location.href="highscore"
+        window.location.href= response.url
     })
         .catch(error => console.error(`Fehler bei der Serveranfrage:`, error));
 }

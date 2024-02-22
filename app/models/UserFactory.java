@@ -1,7 +1,6 @@
 package models;
 
-import controllers.interfaces.AbstractUserFactory;
-import controllers.interfaces.User;
+import controllers.interfaces.*;
 import play.db.Database;
 
 import javax.inject.Inject;
@@ -9,13 +8,15 @@ import javax.inject.Singleton;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Factory for creating and retrieving users from the database
  */
 @Singleton
-public class UserFactory implements AbstractUserFactory {
+public class UserFactory implements AbstractUserFactory, FriendManager, AccountManager {
     private Database db;
+    //private HighscoreFactory scores;
 
     /**
      * Constructor for UserFactory
@@ -56,7 +57,7 @@ public class UserFactory implements AbstractUserFactory {
      * @return User if created, else null
      */
     @Override
-    public UserImplementation createUserInUsers(String name, String password, String email) {
+    public UserImplementation createUser(String name, String password, String email) {
         return db.withConnection(conn -> {
             UserImplementation user = null;
             String sql = "INSERT INTO user (name, password, email) VALUES ( ?, ?, ?)";
@@ -104,25 +105,6 @@ public class UserFactory implements AbstractUserFactory {
     @Override
     public UserImplementation getUserById(String id) {
         return getUserById(Integer.parseInt(id));
-    }
-
-    /**
-     * Retrieves all users from the database
-     * @return List of all users
-     */
-    @Override
-    public List<User> getAllUsers() {
-        return db.withConnection(conn -> {
-            List<User> users = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                UserImplementation user = new UserImplementation(rs);
-                users.add(user);
-            }
-            stmt.close();
-            return users;
-        });
     }
 
     /**
@@ -185,6 +167,70 @@ public class UserFactory implements AbstractUserFactory {
         });
     }
 
+    /**
+     * Delete the user from the database
+     */
+    @Override
+    public void deleteUser(int userId) {
+        db.withConnection(conn -> {
+            String sql = "DELETE FROM user WHERE UserId = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+            stmt.close();
+        });
+    }
+
+    /**
+     * Returns a list of all users in the database
+     */
+    @Override
+    public List<User> getAllUsers() {
+        return db.withConnection(conn -> {
+            List<User> result = new ArrayList<>();
+            String sql = "SELECT * FROM user";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserImplementation user = new UserImplementation(rs);
+                result.add(user);
+            }
+            stmt.close();
+            return result;
+        });
+    }
+
+    @Override
+    public List<User> getFriends(int userId) {
+        return db.withConnection(conn -> {
+            List<User> result = new ArrayList<>();
+            String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserImplementation user = new UserImplementation(rs);
+                result.add(user);
+            }
+            stmt.close();
+            return result;
+        });
+    }
+
+    @Override
+    public List<User> getNotFriends(int userId) {
+        List<User> allUsers = getAllUsers();
+        List<User> friends = getFriends(userId);
+
+        List<User> notFriends = allUsers.stream()
+                .filter(user -> !friends.contains(user))
+                .collect(Collectors.toList());
+        
+        return notFriends;
+    }
+
+
+
 
     public class UserImplementation extends User {
         private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/profilePic.png";
@@ -194,9 +240,7 @@ public class UserFactory implements AbstractUserFactory {
         private String password;
         private String mail;
         private int coins;
-        private int fiftyFiftyJoker;
-        private int doublePointsJoker;
-        private int pauseJoker;
+        private List<Integer> jokers = new ArrayList<>();
         private String profilePicPath;
 
         private UserImplementation(int id, String username, String password, String mail) {
@@ -205,9 +249,6 @@ public class UserFactory implements AbstractUserFactory {
             this.mail = mail;
             this.password = password;
             this.coins = 0;
-            this.fiftyFiftyJoker = 0;
-            this.doublePointsJoker = 0;
-            this.pauseJoker = 0;
             this.profilePicPath = DEFAULT_PROFILE_PIC_PATH;
         }
 
@@ -217,9 +258,6 @@ public class UserFactory implements AbstractUserFactory {
             this.mail = rs.getString("email");
             this.password = rs.getString("password");
             this.coins = rs.getInt("coins");
-            this.fiftyFiftyJoker = rs.getInt("fifty_fifty_joker");
-            this.doublePointsJoker = rs.getInt("double_points_joker");
-            this.pauseJoker = rs.getInt("pause_joker");
             this.profilePicPath = rs.getString("profile_pic_path");
         }
 
@@ -230,106 +268,17 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void save() {
             db.withConnection(conn -> {
-                String sql = "UPDATE user SET name = ?, email = ?, password = ?, coins = ?, fifty_fifty_joker = ?, double_points_joker = ?, pause_joker = ?, profile_pic_path = ? WHERE idUser = ?";
+                String sql = "UPDATE user SET name = ?, email = ?, password = ?, coins = ?, profile_pic_path = ? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, this.username);
                 stmt.setString(2, this.mail);
                 stmt.setString(3, this.password);
                 stmt.setInt(4, this.coins);
-                stmt.setInt(5, this.fiftyFiftyJoker);
-                stmt.setInt(6, this.doublePointsJoker);
-                stmt.setInt(7, this.pauseJoker);
-                stmt.setString(8, profilePicPath);
-                stmt.setInt(9, this.id);
+                stmt.setString(5, profilePicPath);
+                stmt.setInt(6, this.id);
 
                 stmt.executeUpdate();
                 stmt.close();
-            });
-        }
-
-        /**
-         * Returns a list of all users in the database
-         */
-        @Override
-        public List<UserImplementation> getAllUsers() {
-            return db.withConnection(conn -> {
-                List<UserImplementation> result = new ArrayList<>();
-                String sql = "SELECT * FROM user";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    UserImplementation user = new UserImplementation(rs);
-                    result.add(user);
-                }
-                stmt.close();
-                return result;
-            });
-        }
-
-        @Override
-        public boolean addFriend(int userId, int friendId) {
-            return db.withConnection(conn -> {
-                String sql = "INSERT INTO friendships (user_id, friend_id) VALUES (?, ?)";
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setInt(1, userId);
-                    stmt.setInt(2, friendId);
-                    stmt.executeUpdate();
-                    return true;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            });
-        }
-
-
-        @Override
-        public boolean removeFriend(int userId, int friendId) {
-            db.withConnection(conn -> {
-                String sql = "DELETE FROM friends WHERE id_user_1 = ? AND id_user_2 = ?";
-                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setInt(1, userId);
-                    stmt.setInt(2, friendId);
-                    stmt.executeUpdate();
-                    return true;
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            });
-            return false;
-        }
-
-
-
-        /**
-         * Delete the user from the database
-         */
-        @Override
-        public void delete() {
-            db.withConnection(conn -> {
-                String sql = "DELETE FROM user WHERE UserId = ?";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, this.id);
-                stmt.executeUpdate();
-                stmt.close();
-            });
-        }
-
-        @Override
-        public List<UserImplementation> getFriends() {
-            return db.withConnection(conn -> {
-                List<UserImplementation> result = new ArrayList<>();
-                String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, this.id);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    UserImplementation user = new UserImplementation(rs);
-                    result.add(user);
-                }
-                stmt.close();
-                return result;
             });
         }
 
@@ -341,36 +290,6 @@ public class UserFactory implements AbstractUserFactory {
         @Override
         public void setCoins(int coins) {
             this.coins = coins;
-        }
-
-        @Override
-        public int getFiftyFiftyJoker() {
-            return fiftyFiftyJoker;
-        }
-
-        @Override
-        public void setFiftyFiftyJoker(int fiftyFiftyJoker) {
-            this.fiftyFiftyJoker = fiftyFiftyJoker;
-        }
-
-        @Override
-        public int getDoublePointsJoker() {
-            return doublePointsJoker;
-        }
-
-        @Override
-        public void setDoublePointsJoker(int doublePointsJoker) {
-            this.doublePointsJoker = doublePointsJoker;
-        }
-
-        @Override
-        public int getPauseJoker() {
-            return pauseJoker;
-        }
-
-        @Override
-        public void setPauseJoker(int pauseJoker) {
-            this.pauseJoker = pauseJoker;
         }
 
         @Override
@@ -418,6 +337,18 @@ public class UserFactory implements AbstractUserFactory {
             this.password = password;
         }
 
-    }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
 
+            if (!(obj instanceof User)) {
+                return false;
+            }
+
+            User userToCompare = (User) obj;
+            return this.id == userToCompare.getId();
+        }
+    }
 }

@@ -1,6 +1,8 @@
 @defining(play.core.PlayVersion.current) { version =>
     <script>
-            window.onload = getProfilePic();
+            window.onload = function() {
+                getProfilePic();
+            };
     </script>
     <body>
         <nav>
@@ -20,12 +22,12 @@
                 <div id="navbar-right">
                     <ul>
                         <li>
-                            <a href="@routes.ShopController.shop()" >
+                            <a href="@routes.InventoryController.shop()" >
                                 <p class="nav-text">Shop</p>
                             </a>
                         </li>
                         <li>
-                            <a href="@routes.ProfileController.friends()" >
+                            <a href="@routes.FriendController.friends()" >
                                 <p class="nav-text">Freunde</p>
                             </a>
                         </li>

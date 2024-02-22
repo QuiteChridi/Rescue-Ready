@@ -7,40 +7,32 @@ import controllers.interfaces.*;
 import play.mvc.*;
 
 import models.HighscoreFactory;
-import models.QuizFactory;
 import views.html.highscore;
 
 import java.util.List;
 
 
 public class ScoreboardController extends Controller {
-    private final AbstractQuizFactory quizzes;
     private final AbstractHighscoreFactory scores;
-    private List<Highscore> currentHighscoreList;
 
     @Inject
-    public ScoreboardController(QuizFactory quizzes, HighscoreFactory scores) {
-        this.quizzes = quizzes;
+    public ScoreboardController(HighscoreFactory scores) {
         this.scores = scores;
-        currentHighscoreList = scores.getHighscoresOfQuiz(1);
     }
 
-    public ScoreboardController(AbstractQuizFactory quizzes, HighscoreFactory scores){
-        this.quizzes = quizzes;
-        this.scores = scores;
-        currentHighscoreList = scores.getHighscoresOfQuiz(1);
-    }
+    public Result highscore(int quizId){
+        List <Highscore> currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
+        currentHighscoreList.sort(Highscore::compareTo);
 
-    public Result highscore(){
-        return ok(highscore.render(currentHighscoreList, quizzes.getPossibleQuizNames()));
+        return ok(highscore.render(currentHighscoreList, scores.getPossibleQuizNames()));
     }
 
     public  Result renderHighscore(Http.Request request){
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
-        currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
-        currentHighscoreList.sort(Highscore::compareTo);
 
-        return ok(highscore.render(currentHighscoreList, quizzes.getPossibleQuizNames()));
+        List <Highscore> currentHighscoreList = scores.getHighscoresOfQuiz(quizId);
+        currentHighscoreList.sort(Highscore::compareTo);
+        return redirect(routes.ScoreboardController.highscore(quizId));
     }
 }

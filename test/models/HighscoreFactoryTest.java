@@ -1,75 +1,83 @@
 package models;
 
 import controllers.interfaces.Highscore;
-
 import org.junit.Before;
 import org.junit.Test;
-import play.test.WithApplication;
+import play.db.Database;
+import play.db.Databases;
+import play.db.evolutions.Evolution;
+import play.db.evolutions.Evolutions;
 import static org.junit.Assert.*;
 
-public class HighscoreFactoryTest extends WithApplication {
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.List;
+
+public class HighscoreFactoryTest {
+    private Database database;
     private HighscoreFactory highscores;
-    private Highscore highscore;
-    /*
+
+    private String NAME_USER = "testuser";
+    private String PASSWORD_USER = "testpassword";
+    private String EMAIL_USER = "test@test.de";
+    private int ID_USER = 99;
+    private String NAME_QUIZ = "testquiz";
+    private int ID_QUIZ = 99;
+    private int SCORE_HIGHSCORE = 100;
     @Before
-    public void setUp() {
-        highscores = provideApplication().injector().instanceOf(HighscoreFactory.class);
+    public void givenADatabaseWithAnUserAnQuizAndAnHighscore(){
+        database = Databases.inMemory("inMemory");
+        Evolutions.applyEvolutions(database);
+
+
+        highscores = new HighscoreFactory(database);
+
+        database.withConnection(conn -> {
+            UserFactory.UserImplementation user = null;
+            String sql = "INSERT INTO user (iduser, name, password, email) VALUES (?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, Integer.toString(ID_USER));
+            stmt.setString(2, NAME_USER);
+            stmt.setString(3, PASSWORD_USER);
+            stmt.setString(4, EMAIL_USER);
+            stmt.executeUpdate();
+            stmt.close();
+        });
+
+        database.withConnection(conn -> {
+            UserFactory.UserImplementation user = null;
+            String sql = "INSERT INTO quiz (idQuiz, name) VALUES (?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, Integer.toString(ID_QUIZ));
+            stmt.setString(2, NAME_QUIZ);
+            stmt.executeUpdate();
+            stmt.close();
+        });
+
+        database.withConnection(conn -> {
+            UserFactory.UserImplementation user = null;
+            String sql = "INSERT INTO highscores (quiz_idQuiz, user_iduser, highscore) VALUES ( ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, Integer.toString(ID_QUIZ));
+            stmt.setString(2, Integer.toString(ID_USER));
+            stmt.setString(3, Integer.toString(SCORE_HIGHSCORE));
+            stmt.executeUpdate();
+        });
     }
 
     @Test
-    public void getNameShouldReturnName(){
+    public void fetchedHighscoreShouldContainValues(){
+        Highscore highscore = highscores.getHighscoresOfUser(ID_USER).get(0);
 
-        assertEquals("test", highscore.getUserName());
-    }
 
-    @Test
-    public void getScoreShouldReturnScore(){
-        assertEquals(123, highscore.getScore());
-    }
+        assertNotNull(highscore);
+        assertEquals(ID_USER, highscore.getUserId());
+        assertEquals(SCORE_HIGHSCORE, highscore.getScore());
+        assertEquals(ID_QUIZ, highscore.getQuizId());
+        assertEquals(NAME_USER, highscore.getUserName());
+        assertEquals(NAME_QUIZ, highscore.getQuizName());
 
-    @Test
-    public void setScoreShouldSetNewScore(){
-        int newScore = 10;
-        highscore.setScore(newScore);
-        assertEquals(newScore, highscore.getScore());
     }
-
-    @Test
-    public void highscoresWithSameNameAndSameScoreShouldBeEqual(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 123);
-        assertEquals(h1, h2);
-    }
-
-    @Test
-    public void highscoresWithDifferentNameShouldNotBeEqual(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("toast", 123);
-        assertNotEquals(h1, h2);
-    }
-    @Test
-    public void highscoresWithSameNameAndDifferentScoreShouldBeEqual(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 122);
-        assertEquals(h1, h2);
-    }
-    @Test
-    public void compareToShouldReturnZeroForHighscoreWithSameScores(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 123);
-        assertEquals(0, h1.compareTo(h2));
-    }
-    @Test
-    public void compareToShouldReturnPositiveIntForHighscoreWithHigherScores(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 122);
-        assertTrue(h1.compareTo(h2) < 0);
-    }
-    @Test
-    public void compareToShouldReturnNegativeIntForHighscoreWithLowerScores(){
-        var h1 = new HighscoreFactory.Highscore("test", 122);
-        var h2 = new HighscoreFactory.Highscore("test", 123);
-        assertTrue(h1.compareTo(h2) > 0);
-    }*/
 }

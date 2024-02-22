@@ -6,6 +6,8 @@ import com.google.inject.Inject;
 
 import controllers.interfaces.AbstractQuizFactory;
 import controllers.interfaces.AbstractUserFactory;
+import models.HighscoreFactory;
+import models.JokerFactory;
 import play.libs.Json;
 import play.mvc.*;
 
@@ -13,6 +15,7 @@ import controllers.interfaces.*;
 import models.UserFactory;
 import models.QuizFactory;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,64 +24,52 @@ public class QuizController extends Controller {
     private Quiz quiz;
     private final AbstractQuizFactory quizzes;
     private final AbstractUserFactory users;
+    private final AbstractHighscoreFactory scores;
+    private final AbstractJokerFactory jokers;
 
     @Inject
-    public QuizController(QuizFactory quizzes, UserFactory users) {
+    public QuizController(QuizFactory quizzes, UserFactory users, HighscoreFactory scores, JokerFactory jokers) {
         this.quizzes = quizzes;
         this.users = users;
-    }
-
-    private int getUserIdFromSession(Http.Request request) {
-        String userIDString = request.session().get("userID").orElse(null);
-        return (userIDString != null && !userIDString.equals("leer")) ? Integer.parseInt(userIDString) : -1;
-    }
-
-    private User getUserFromSession(Http.Request request) {
-        int userID = getUserIdFromSession(request);
-        return (userID != -1) ? users.getUserById(userID) : null;
+        this.scores = scores;
+        this.jokers = jokers;
     }
 
     public Result quiz(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-
-            Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
-            return ok(views.html.quiz.render(user, possibleQuizNames));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
+        Map<Integer, String> possibleQuizNames = quizzes.getPossibleQuizNames();
+        List<Joker> allJokers = jokers.getAllJokers(user.getId());
+        return ok(views.html.quiz.render(user, allJokers, possibleQuizNames));
     }
 
     public Result selectQuizAndGetName(Http.Request request){
         JsonNode json = request.body().asJson();
         int quizId = json.findPath("quizId").asInt();
-        System.out.println("test");
         quiz = quizzes.getQuizById(quizId);
 
         String quizName = quiz.getName();
         return ok(Json.newObject().put("quizName", quizName));
     }
 
-    public Result getNextQuestion() {
-        System.out.println("Hallo");
-        System.out.println(quiz.getName());
+    public void setQuiz(int quizId){
+        quiz = quizzes.getQuizById(quizId);
+    }
 
-        if (!quiz.hasNextQuestion()) {
-            System.out.println("Keine weiteren Fragen vorhanden");
-            ObjectNode result = Json.newObject();
+    public Result getNextQuestion() {
+        ObjectNode result = Json.newObject();
+
+        if (quiz.hasNextQuestion()) {
+            quiz.nextQuestion();
+            QuizQuestion question = quiz.getCurrentQuestion();
+            result.put("question", question.getQuestionText());
+            result.set("answers", Json.toJson(question.getAnswers()));
+        } else {
             result.put("endOfQuiz", true);
-            return ok(result);
         }
 
-        quiz.nextQuestion();
-
-        QuizQuestion question = quiz.getCurrentQuestion();
-        JsonNode jsonQuestion = Json.newObject()
-                .put("question", question.getQuestionText())
-                .set("answers", Json.toJson(question.getAnswers()));
-
-        return ok(jsonQuestion);
+        return ok(result);
     }
 
     public Result checkAnswer(Http.Request request) {
@@ -96,111 +87,28 @@ public class QuizController extends Controller {
         return ok(Json.newObject().put("correctAnswer", correctAnswer));
     }
 
-    public Result getFiftyFiftyJoker(Http.Request request) {
+    public Result savePointsIfHighscore(Http.Request request) {
         User user = getUserFromSession(request);
+        if(user == null) return redirect(routes.LoginController.login());
 
-        if (user != null) {
-            int availableFiftyFiftyJoker = user.getFiftyFiftyJoker();
-            return ok(Json.newObject().put("availableFiftyFiftyJoker", availableFiftyFiftyJoker));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result setFiftyFiftyJoker(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            System.out.println(json);
-            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            System.out.println(newAmountOfJokers);
-            user.setFiftyFiftyJoker(newAmountOfJokers);
-            user.save();
-
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result getPauseJoker(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            int availablePauseJoker = user.getPauseJoker();
-            return ok(Json.newObject().put("availablePauseJoker", availablePauseJoker));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result setPauseJoker(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            user.setPauseJoker(newAmountOfJokers);
-            user.save();
-
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result getDoublePointsJoker(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            int availableDoublePointsJoker = user.getDoublePointsJoker();
-            return ok(Json.newObject().put("availableDoublePointsJoker", availableDoublePointsJoker));
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result setDoublePointsJoker(Http.Request request) {
-        User user = getUserFromSession(request);
-
-        if (user != null) {
-            JsonNode json = request.body().asJson();
-            int newAmountOfJokers = json.findPath("newAmountOfJokers").intValue();
-            user.setDoublePointsJoker(newAmountOfJokers);
-            user.save();
-
-            ObjectNode result = Json.newObject();
-            result.put("success", true);
-            result.put("newAmountOfJokers", newAmountOfJokers);
-            return ok(result);
-        } else {
-            return redirect(routes.LoginController.login());
-        }
-    }
-
-    public Result handleResult(Http.Request request) {
-        /*
         JsonNode json = request.body().asJson();
-        int highscore = json.findPath("highscore").asInt();
+        int newHighscore = json.findPath("score").asInt();
+        System.out.println(newHighscore);
+        Highscore oldHighscore = scores.getHighscoreOfUserAndQuiz(user.getId(), quiz.getId());
 
-        int userID = Integer.parseInt(request.session().get("userId").get());
-        int quizId= quiz.getId();
-
-        if(scoreboard.isInHighscoreList(quiz)){
-            scoreboard.updateHighscore(username, highscore);
-        } else {
-            scoreboard.addHighscore(username, highscore);
+        if(oldHighscore == null || newHighscore > oldHighscore.getScore()){
+            scores.createHighscore(user.getId(), quiz.getId(), newHighscore);
         }
-
-        int rank = scoreboard.getRank(username);*/
 
         return ok();
+    }
+
+    private User getUserFromSession(Http.Request request){
+        return request
+                .session()
+                .get("userID")
+                .map(Integer::parseInt)
+                .map(users::getUserById)
+                .orElse(null);
     }
 }

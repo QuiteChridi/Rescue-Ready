@@ -1,4 +1,4 @@
-@(user: interfaces.User, categories: Map[Integer, String])
+@(user: interfaces.User, jokers: List[interfaces.Joker], categories: Map[Integer, String])
 
 @index("Quiz") {
     @defining(play.core.PlayVersion.current) { version =>
@@ -32,7 +32,7 @@
                         <h4 id="quizName-h4">quizName</h4>
                     </div>
                     <div class="column-container" id="start-quiz-buttons">
-                        <button class="medium-button" onclick="startQuiz()">Quiz starten</button>
+                        <button class="medium-button" onclick="getNextQuestion();">Quiz starten</button>
                         <button class="alternativ-button medium-button" onclick="backToSelection()">zurück</button>
                     </div>
                 </div>
@@ -62,24 +62,12 @@
                             </div>
 
                             <div class="column-container" id="joker-container">
-                                <div id="button-container" class="row-container">
-                                    <div id="fiftyFiftyJokerAmount">
-                                    @user.getFiftyFiftyJoker
+                                @for(joker <- jokers) {
+                                    <div id="button-container" class="row-container">
+                                        <div id="jokerAmount@joker.getId">@joker.getAmount</div>
+                                        <img id="jokerPicPath@joker.getId" src="@routes.Assets.versioned("" + joker.getJokerPicPath)" alt="JokerPic" onclick="useJokerOfId(@joker.getId)" style="cursor: pointer; width: 50px; height: 50px;">
                                     </div>
-                                    <img id="5050Joker" data-fifty-fifty-joker-count="@user.getFiftyFiftyJoker" src="@routes.Assets.versioned("images/fiftyFiftyJoker.png")" alt="50:50 Joker" onclick="useFiftyFiftyJoker()" style="cursor: pointer; width: 50px; height: 50px;">
-                                </div>
-                                <div id="button-container" class="row-container">
-                                    <div id="pauseJokerAmount">
-                                    @user.getPauseJoker
-                                    </div>
-                                    <img id="pauseJoker" src="@routes.Assets.versioned("images/pauseJoker.png")" alt="Pause Joker" onclick="usePauseJoker()" style="cursor: pointer; width: 50px; height: 50px;">
-                                </div>
-                                <div id="button-container" class="row-container">
-                                    <div id="doublePointsJokerAmount">
-                                    @user.getDoublePointsJoker
-                                    </div>
-                                    <img id="doublePointsJoker" src="@routes.Assets.versioned("images/doubleItJoker.png")" alt="Double It Joker" onclick="useDoublePointsJoker()" style="cursor: pointer; width: 50px; height: 50px;">
-                                </div>
+                                }
                             </div>
                         </div>
 
@@ -88,7 +76,7 @@
                         <div id="button-container" class="row-container">
                             <button id="check-answer-button" onclick="checkAnswer()" style="display: block">Antwort überprüfen</button>
                             <button id="next-question-button" onclick="getNextQuestion()" style="display: none">Nächste Frage</button>
-                            <button id="end-quiz-container" onclick="saveEndScore()" style="display: none">Quiz beenden</button>
+                            <button id="end-quiz-container" onclick="handleEndOfQuiz()" style="display: none">Quiz beenden</button>
                         </div>
                     </div>
                 </div>

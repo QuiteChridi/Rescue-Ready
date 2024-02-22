@@ -1,5 +1,5 @@
 let correctAnswerCount = 0;
-let scoreCount = 0;
+let score = 0;
 let questionTimer = 20;
 let timerRunning = false;
 let timerInterval;
@@ -28,42 +28,6 @@ function selectQuizAndGetName(quizId){
             console.log(error.message));
 }
 
-function backToSelection() {
-    document.getElementById("start-quiz-container").style.display = "none"
-    document.getElementById("welcome-container").style.display = "flex"
-}
-
-function startQuiz() {
-    startTimer();
-    getNextQuestion();
-}
-
-function startTimer() {
-    if (!timerRunning) {
-        questionTimer = 21;
-        timerRunning = true;
-        timerInterval = setInterval(function () {
-            updateTimerDisplay();
-            questionTimer--;
-            updateTimerDisplay();
-
-            if (questionTimer <= 0) {
-                submitAnswer(null);
-            }
-        }, 1000);
-    }
-}
-
-function updateScore() {
-    if (doubleIt === true) {
-        correctAnswerCount += 2;
-        doubleIt = false;
-    } else {
-        correctAnswerCount += 1;
-    }
-    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + correctAnswerCount;
-}
-
 function getNextQuestion() {
     fetch("/getNextQuestion", {
         method: "GET",
@@ -87,6 +51,51 @@ function getNextQuestion() {
     }).catch(error => console.log(error.message));
 }
 
+function startTimer() {
+    if (!timerRunning) {
+        questionTimer = 21;
+        timerRunning = true;
+        timerInterval = setInterval(function () {
+            updateTimerDisplay();
+            questionTimer--;
+            updateTimerDisplay();
+
+            if (questionTimer <= 0) {
+                submitAnswer(null);
+            }
+        }, 1000);
+    }
+}
+
+function updateTimerDisplay() {
+    const timerBar = document.getElementById('timer-bar');
+    const timerText = document.getElementById('timer-text');
+    const container = document.getElementById('timer-bar-container');
+
+    const percentage = (questionTimer / 20) * 100;
+
+    const containerWidth = container.clientWidth * 0.91;
+    const barWidth = Math.min((percentage / 100) * containerWidth, containerWidth);
+
+    timerBar.style.width = barWidth + 'px';
+
+    if (questionTimer <= 5) {
+        const red = 255; // Farbe am Ende
+        const green = Math.floor((questionTimer / 5) * 128);
+        timerBar.style.backgroundColor = `rgb(${red},${green},0)`;
+    } else {
+        const red = Math.floor(((20 - questionTimer) / 15) * 255);
+        const green = 128; // Farbe am Anfang
+        timerBar.style.backgroundColor = `rgb(${red},${green},0)`;
+    }
+
+    timerText.innerText = formatTime(questionTimer);
+    if (questionTimer <= 0) {
+        timerBar.style.width = containerWidth + 'px';
+    }
+}
+
+
 function renderNextQuestion(question, answers, score) {
     document.getElementById('start-quiz-container').style.display = "none";
     document.getElementById("quizStarted-container").style.display = "flex";
@@ -97,6 +106,7 @@ function renderNextQuestion(question, answers, score) {
 
     document.getElementById('question-container').style.display = 'flex';
     document.getElementById('question').innerHTML = question;
+    enableRadioButtons();
     let answersContainer = document.getElementById('answer-form');
     answersContainer.innerHTML = "";
     shuffleAnswers(answers);
@@ -114,18 +124,35 @@ function renderNextQuestion(question, answers, score) {
 
 
     document.getElementById('joker-container').style.display = 'flex';
-    document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyJoker.png";
-    document.getElementById('pauseJoker').src = "/assets/images/pauseJoker.png";
-    document.getElementById('doublePointsJoker').src = "/assets/images/doubleItJoker.png";
-    document.getElementById('5050Joker').disabled = false;
-    document.getElementById('pauseJoker').disabled = false;
-    document.getElementById('doublePointsJoker').disabled = false;
+    document.getElementById('jokerPicPath1').src = "/assets/images/fiftyFiftyJoker.png";
+    document.getElementById('jokerPicPath2').src = "/assets/images/pauseJoker.png";
+    document.getElementById('jokerPicPath3').src = "/assets/images/doubleItJoker.png";
+    document.getElementById('jokerPicPath1').disabled = false;
+    document.getElementById('jokerPicPath2').disabled = false;
+    document.getElementById('jokerPicPath3').disabled = false;
 
     document.getElementById('check-answer-button').style.display = 'flex';
     document.getElementById('next-question-button').style.display = 'none';
     document.getElementById('end-quiz-container').style.display = 'none';
 
     document.getElementById('result').style.display = "none";
+}
+
+function backToSelection() {
+    document.getElementById("start-quiz-container").style.display = "none"
+    document.getElementById("welcome-container").style.display = "flex"
+}
+
+
+
+function updateScore() {
+    if (doubleIt === true) {
+        correctAnswerCount += 2;
+        doubleIt = false;
+    } else {
+        correctAnswerCount += 1;
+    }
+    document.getElementById('current-score').innerText = "Aktueller Punktestand: " + correctAnswerCount;
 }
 
 function checkAnswer() {
@@ -157,55 +184,51 @@ function submitAnswer(selectedAnswerElement) {
         return response.json();
     }).then(data => {
         if (data.isCorrect === true) {
-            calculateHighscore(questionTimer);
+            calculateHighscore();
         }
         stopTimer();
         renderResult(data.isCorrect, data.correctAnswer);
+        disableRadioButtons();
+        document.getElementById('jokerPicPath1').disabled = true;
+        document.getElementById('jokerPicPath2').disabled = true;
+        document.getElementById('jokerPicPath3').disabled = true;
         document.getElementById('check-answer-button').style.display = 'none';
         document.getElementById('next-question-button').style.display = 'flex';
     }).catch(error => console.log(error.message));
 }
 
-
 function renderResult(isCorrect, correctAnswer) {
     let message;
+    let resultElement = document.getElementById("result");
 
     if (isCorrect) {
         updateScore(correctAnswerCount);
         message = "Richtige Antwort!";
+        resultElement.classList.remove("incorrect");
+        resultElement.classList.add("correct");
     } else {
         message = "Falsch. Die richtige Antwort lautet: " + correctAnswer;
+        resultElement.classList.remove("correct");
+        resultElement.classList.add("incorrect");
     }
 
-    let resultElement = document.getElementById("result");
     resultElement.style.display = "flex";
     resultElement.innerHTML = "<i>" + message + "</i>";
 }
 
-function updateTimerDisplay() {
-    const timerBar = document.getElementById('timer-bar');
-    const timerText = document.getElementById('timer-text');
-    const container = document.getElementById('timer-bar-container');
-
-    const percentage = (questionTimer / 20) * 100;
-
-    const containerWidth = container.clientWidth * 0.91;
-    const barWidth = Math.min((percentage / 100) * containerWidth, containerWidth);
-
-    timerBar.style.width = barWidth + 'px';
-
-    if (questionTimer <= 5) {
-        timerBar.style.backgroundColor = 'red';
-    } else {
-        timerBar.style.backgroundColor = 'green';
-    }
-
-    timerText.innerText = formatTime(questionTimer);
-    if (questionTimer <= 0) {
-        timerBar.style.width = containerWidth + 'px';
-    }
+function disableRadioButtons() {
+    let radioButtons = document.querySelectorAll('#answer-form input[type="radio"]');
+    radioButtons.forEach(function(radioButton) {
+        radioButton.disabled = true;
+    });
 }
 
+function enableRadioButtons() {
+    let radioButtons = document.querySelectorAll('#answer-form input[type="radio"]');
+    radioButtons.forEach(function(radioButton) {
+        radioButton.disabled = false;
+    });
+}
 
 function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
@@ -220,38 +243,33 @@ function stopTimer() {
     }
 }
 
-function calculateHighscore(questionTimer) {
+function calculateHighscore() {
     if (doubleIt === true) {
-        scoreCount += (2*questionTimer);
+        score += (2*questionTimer);
     } else {
-        scoreCount += questionTimer;
+        score += questionTimer;
     }
 }
 
-function setNewAmountOfCoins(availableCoins) {
-    let newAmountOfCoins = Math.floor(scoreCount/10);
-    newAmountOfCoins += availableCoins;
-
-    fetch("/setCoins", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify({ newAmountOfCoins: newAmountOfCoins})
-    })
-        .then(response => response.json())
-        .then(data => {
-            saveQuizResult(scoreCount);
-        })
-        .catch(error => console.error("Fehler beim Setzen der neuen Coins:", error));
+function handleEndOfQuiz(){
+    saveQuizResult();
+    setNewAmountOfCoins();
 }
 
-function saveQuizResult(score) {
+function setNewAmountOfCoins() {
+    let coinsGained = Math.floor(score/10);
+    getCoins().then(data => {
+        let newAmountOfCoins = coinsGained + data.availableCoins
+        setCoins(newAmountOfCoins);
+    });
+
+}
+
+function saveQuizResult() {
     fetch("/saveQuizResult", {
         method: "POST",
         body: JSON.stringify({
-            highscore: score
+            score: score
         }),
         headers: {
             "Content-Type": "application/json"
@@ -289,21 +307,32 @@ function shuffleAnswers(array) {
     }
 }
 
-function useFiftyFiftyJoker() {
-    getFiftyFiftyJoker().then(data => {
-        let availableFiftyFiftyJoker = data.availableFiftyFiftyJoker;
+function useJokerOfId(jokerID) {
+    if (jokerID === 1) {
+        useFiftyFiftyJoker();
+    } else if (jokerID === 2) {
+        usePauseJoker();
+    } else if (jokerID === 3) {
+        useDoublePointsJoker();
+    } else {
+        console.log("Joker nicht implementiert!!!")
+    }
+}
 
-        if (availableFiftyFiftyJoker >= 1 && !document.getElementById('5050Joker').disabled) {
-            executeFiftyFiftyJoker();
-            setFiftyFiftyJoker(availableFiftyFiftyJoker - 1).then(data => {
-                document.getElementById("fiftyFiftyJokerAmount").innerText = data.newAmountOfJokers
-            })
-            document.getElementById('5050Joker').src = "/assets/images/fiftyFiftyNope.png";
-            document.getElementById('5050Joker').disabled = true;
-        } else {
-            console.log("Nicht genügend FiftyFiftyJoker verfügbar oder Joker wurde bereits genutzt");
-        }
-    })
+function useFiftyFiftyJoker() {
+    if(!document.getElementById("jokerPicPath1").disabled) {
+        useJoker(1).then(data => {
+            if (data.success === true) {
+                executeFiftyFiftyJoker();
+
+                document.getElementById("jokerAmount1").innerText = data.newAmountOfJokers
+                document.getElementById('jokerPicPath1').src = "/assets/images/fiftyFiftyNope.png";
+                document.getElementById('jokerPicPath1').disabled = true;
+            } else {
+                console.log("Nicht genügend FiftyFiftyJoker verfügbar oder Joker wurde bereits genutzt");
+            }
+        })
+    }
 }
 
 function executeFiftyFiftyJoker() {
@@ -328,20 +357,19 @@ function executeFiftyFiftyJoker() {
 }
 
 function usePauseJoker() {
-    getPauseJoker().then(data => {
-        let availableJoker = data.availablePauseJoker;
+    if(!document.getElementById('jokerPicPath2').disabled){
+        useJoker(2).then(data => {
+            if (data.success === true) {
+                executePauseJoker();
 
-        if (availableJoker >= 1 && !document.getElementById('pauseJoker').disabled) {
-            executePauseJoker();
-            setPauseJoker(availableJoker - 1).then(data => {
-                document.getElementById("pauseJokerAmount").innerText = data.newAmountOfJokers;
-            })
-            document.getElementById('pauseJoker').src = "/assets/images/pauseNope.png";
-            document.getElementById('pauseJoker').disabled = true;
-        } else {
-            console.log("Nicht genügend PauseJoker verfügbar oder Joker wurde bereits genutzt");
-        }
-    })
+                document.getElementById("jokerAmount2").innerText = data.newAmountOfJokers;
+                document.getElementById('jokerPicPath2').src = "/assets/images/pauseNope.png";
+                document.getElementById('jokerPicPath2').disabled = true;
+            } else {
+                console.log("Nicht genügend PauseJoker verfügbar oder Joker wurde bereits genutzt");
+            }
+        })
+    }
 }
 
 function executePauseJoker() {
@@ -352,22 +380,34 @@ function executePauseJoker() {
 }
 
 function useDoublePointsJoker() {
-    getDoublePointsJoker().then(data => {
-        let availableJoker = data.availableDoublePointsJoker;
+    if(!document.getElementById('jokerPicPath3').disabled){
+        useJoker(3).then(data => {
+            if (data.success === true) {
+                executeDoublePointsJoker();
 
-        if (availableJoker >= 1 && !document.getElementById('doublePointsJokerAmount').disabled) {
-            executeDoublePointsJoker();
-            setDoublePointsJoker(availableJoker - 1).then(data => {
-                document.getElementById("doublePointsJokerAmount").innerText = data.newAmountOfJokers;
-            })
-            document.getElementById('doublePointsJoker').src = "/assets/images/doubleItNope.png";
-            document.getElementById('doublePointsJoker').disabled = true;
-        } else {
-            console.log("Nicht genügend DoublePointsJoker verfügbar oder Joker wurde bereits genutzt");
-        }
-    })
+                document.getElementById("jokerAmount3").innerText = data.newAmountOfJokers;
+                document.getElementById('jokerPicPath3').src = "/assets/images/doubleItNope.png";
+                document.getElementById('jokerPicPath3').disabled = true;
+            } else {
+                console.log("Nicht genügend DoublePointsJoker verfügbar oder Joker wurde bereits genutzt");
+            }
+        })
+    }
 }
 
 function executeDoublePointsJoker() {
     doubleIt = true;
+}
+
+function useJoker(id) {
+    return fetch("/useJoker", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            jokerId: id
+        })
+    }).then(response => response.json())
 }

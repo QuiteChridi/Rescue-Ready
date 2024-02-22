@@ -32,9 +32,9 @@
                     </div>
                 </div>
 
-                <div id="friendProfile-buttons">
-                    <button class="medium-button" id="friendProfile-button" onclick = "editProfile()">Bearbeiten</button>
-                    <button class="alternativ-button medium-button" id="friendProfile-button" onclick="logout()">Logout</button>
+                <div id="profile-buttons">
+                    <button class="medium-button" id="profile-button" onclick = "editProfile()">Bearbeiten</button>
+                    <button class="alternativ-button medium-button" id="profile-button" onclick="logout()">Logout</button>
                 </div>
             </div>
         </body>
@@ -42,7 +42,7 @@
     <body>
         <div class="sizeAble-container" id="editProfile-container" style="display: none">
             <img id="profilePicture2"  src="@routes.Assets.versioned("" + user.getProfilePicPath)" alt="Profilbild">
-            <div class="profile-editor">
+            <div class="profile-editor column-container">
                 <div class="edit-profile-pic-container">
                     @helper.form(action = routes.ProfileController.saveProfilePicToAssets(), Symbol("enctype") -> "multipart/form-data") {
                         <p id="profilePic-label">Profilbild:</p>

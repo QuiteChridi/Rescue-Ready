@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import com.google.inject.Inject;
 
-import controllers.interfaces.AbstractUserFactory;
+import controllers.interfaces.AccountManager;
 import controllers.interfaces.User;
 import play.libs.Json;
 import play.mvc.*;
@@ -20,16 +20,12 @@ import views.html.signup;
 
 public class LoginController extends Controller {
 
-    private final AbstractUserFactory users;
+    private final AccountManager accounts;
     final Logger loginLogger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    public LoginController(UserFactory users) {
-        this.users = users;
-    }
-
-    public LoginController(AbstractUserFactory users) {
-        this.users = users;
+    public LoginController(UserFactory accounts) {
+        this.accounts = accounts;
     }
 
     public Result login() {
@@ -49,7 +45,7 @@ public class LoginController extends Controller {
 
         loginLogger.debug("Attempting login check.");
         try {
-            User user = users.authenticate(username, password);
+            User user = accounts.authenticate(username, password);
             if (user != null) {
                 result.put("response", "Login successful");
                 return ok(result).addingToSession(request, "userID", Integer.toString(user.getId()));
@@ -76,7 +72,7 @@ public class LoginController extends Controller {
         ObjectNode resultBody = Json.newObject();
 
         try {
-            User newUser = users.createUserInUsers(username, password, email);
+            User newUser = accounts.createUser(username, password, email);
             if (newUser != null) {
                 resultBody.put("response", "Signup successful");
                 return ok(resultBody).addingToSession(request, "userID", Integer.toString(newUser.getId()));
@@ -89,6 +85,4 @@ public class LoginController extends Controller {
             return internalServerError("Exception with username + password");
         }
     }
-
-
 }

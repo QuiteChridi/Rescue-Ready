@@ -10,5 +10,5 @@ function getProfilePic() {
         .then(data => {
             document.getElementById("profileImg").src = "/assets/" + data;
         })
-        .catch(error => console.error("Fehler beim Abrufen der verfügbaren Coins", error));
+        .catch(error => console.error("Fehler beim Abrufen des Profilbilds", error));
 }

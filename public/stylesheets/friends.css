@@ -1,6 +1,6 @@
 .friend-list {
     width: 100%;
-    max-height: 40vh; /* Setzen Sie die gewünschte maximale Höhe hier ein */
+    max-height: 60vh;
     overflow-y: auto;
     border: 1px solid #000000;
     list-style: none;
@@ -33,13 +33,6 @@
     width: 20%;
 }
 
-#friendAdd-container {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    align-items: start;
-    gap: 5px;
-}
-
 #friendAdd-send {
     width: 100%;
     display: flex;
@@ -69,11 +62,10 @@
 
 .user-list {
     width: 100%;
-    max-height: 40vh;
+    max-height: 60vh;
     overflow-y: auto;
     border: 1px solid #000000;
     list-style: none;
-
 }
 
 .user-list li {
@@ -95,7 +87,7 @@
 }
 
 .user-list li #userName {
-    width: 50%;
+    width: 70%;
     font-size: 25px;
 }
 
@@ -109,35 +101,3 @@
     align-items: start;
     gap: 5px;
 }
-
-#userAdd-send {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 5px;
-}
-
-.userAddInputContainer {
-    width: 75%;
-}
-
-.userAddInput {
-    width: 100%;
-    font-size: 24px;
-    box-sizing: border-box;
-    padding: 5px;
-}
-
-#userAdd-button {
-    width: 25%;
-}
-
-#add-button {
-    width: 100%;
-}
-.highlight {
-    background-color: yellow;
-    color: black;
-}
-

@@ -1,4 +1,4 @@
-const BASE_IMAGE_URL = "/assets/images/profilePics/";
+const BASE_IMAGE_URL = "/assets/images/profilePics/profilePic";
 const BASE_PROFILE_URL = "/friendProfile/";
 
 let originalUserList = [];
@@ -85,7 +85,7 @@ function filterAndHighlightUsers(query) {
         li.classList.add('flex', 'flex-row', 'align-items-center', 'justify-content-center', 'gap-5', 'padding-5');
         li.innerHTML = `
             <img src="${user.profilePicPath}" alt="Profile Picture" style="width: 10%; max-height: 40px; max-width: 40px; border-radius: 50%;">
-            <a href="${BASE_PROFILE_URL}${user.id}" style="width: 50%; font-size: 25px;">${user.name}</a>
+            <a href="${BASE_PROFILE_URL}${user.id}" style="width: 70%; font-size: 25px;">${user.name}</a>
             <button class="add-friend-button" data-user-id="${user.id}" style="width: 20%;">Hinzufügen</button>
         `;
         if (query && user.name.toLowerCase().includes(query.toLowerCase())) {

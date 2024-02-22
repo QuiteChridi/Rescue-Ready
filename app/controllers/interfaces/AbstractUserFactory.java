@@ -1,20 +1,7 @@
 package controllers.interfaces;
 
-import java.util.List;
-
-public interface AbstractUserFactory {
-    User authenticate(String username, String password);
-
-    User createUserInUsers(String name, String password, String email);
-
+public interface AbstractUserFactory{
     User getUserById(int id);
 
     User getUserById(String id);
-
-    List<User> getAllUsers();
-
-    List<User> searchUsersByName(String searchQuery);
-
-    boolean addFriend(int userId, int friendId);
-    boolean removeFriend(int userId, int friendId);
 }
