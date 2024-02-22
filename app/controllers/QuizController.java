@@ -25,7 +25,7 @@ public class QuizController extends Controller {
     private final AbstractQuizFactory quizzes;
     private final AbstractUserFactory users;
     private final AbstractHighscoreFactory scores;
-    private final AbstractJokerFactory jokers;
+    private final JokerGetter jokers;
 
     @Inject
     public QuizController(QuizFactory quizzes, UserFactory users, HighscoreFactory scores, JokerFactory jokers) {

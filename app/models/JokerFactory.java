@@ -82,24 +82,6 @@ public class JokerFactory implements AbstractJokerFactory {
         });
     }
 
-    @Override
-    public List<Integer> getAllJokerAmountsOfUser(int userId) {
-        return db.withConnection(conn -> {
-            List<Integer> amounts = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM joker_of_users WHERE user_id = ?");
-            stmt.setInt(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            while(amounts.size() < 3){
-                while (rs.next()) {
-                    amounts.add(rs.getInt("amount"));
-                }
-                amounts.add(0);
-            }
-            stmt.close();
-            return amounts;
-        });
-    }
-
     public class JokerImplementation extends Joker {
 
         private final int jokerId;

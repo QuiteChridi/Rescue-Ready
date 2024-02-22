@@ -79,14 +79,14 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     @Override
     public boolean isFriend(int userId, int otherUserId) {
         return db.withConnection(conn -> {
-            List<User> result = new ArrayList<>();
             String sql = "SELECT * FROM friends WHERE friends.id_user_1 = ? AND friends.id_user_2 = ? ";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, userId);
             stmt.setInt(2, otherUserId);
             ResultSet rs = stmt.executeQuery();
+            boolean isFriend = rs.next();
             stmt.close();
-            return rs.next();
+            return isFriend;
         });
     }
 
