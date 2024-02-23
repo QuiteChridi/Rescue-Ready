@@ -1,13 +1,8 @@
-package integrationTests;
+package componentTests;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import controllers.QuizController;
 import controllers.interfaces.Highscore;
-import controllers.interfaces.JokerGetter;
 import models.HighscoreFactory;
-import models.JokerFactory;
-import models.QuizFactory;
-import models.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 import play.libs.Json;
@@ -15,22 +10,45 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static play.test.Helpers.fakeRequest;
-import static play.test.Helpers.route;
+import static org.junit.Assert.*;
+import static play.test.Helpers.*;
 
 public class QuizTest extends WithApplication {
-    private QuizController quizController;
     private HighscoreFactory highscoreFactory;
 
     @Before
     public  void setUp(){
-        UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
         highscoreFactory = provideApplication().injector().instanceOf(HighscoreFactory.class);
-        QuizFactory quizFactory = provideApplication().injector().instanceOf(QuizFactory.class);
-        JokerFactory jokerGetter = provideApplication().injector().instanceOf(JokerFactory.class);
-        quizController = new QuizController(quizFactory, userFactory, highscoreFactory, jokerGetter);
+    }
+
+    @Test
+    public void simulationOfPlayingQuiz() {
+        Http.RequestBuilder request = fakeRequest()
+                .header(Http.HeaderNames.HOST, "localhost:19001")
+                .session("userID", "1")
+                .method(GET)
+                .uri("/quiz");
+
+        Result result = route(app, request);
+        assertEquals(Http.Status.OK, result.status());
+
+        while(!contentAsString(result).contains("endOfQuiz")){
+            request = fakeRequest()
+                    .header(Http.HeaderNames.HOST, "localhost:19001")
+                    .session("userID", "1")
+                    .method(GET)
+                    .uri("/getNextQuestion");
+
+            result = route(app, request);
+            assertEquals(Http.Status.OK, result.status());
+
+            if(!contentAsString(result).contains("endOfQuiz")){
+                assertTrue(contentAsString(result).contains("question"));
+                assertTrue(contentAsString(result).contains("answers"));
+            }
+        }
+        assertFalse(contentAsString(result).contains("question"));
+        assertFalse(contentAsString(result).contains("answers"));
     }
 
     @Test
@@ -39,13 +57,13 @@ public class QuizTest extends WithApplication {
 
         Highscore oldHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1 );
         int scoreToSet = oldHighscore.getScore() + 10;
-        quizController.setQuiz(1);
         requestBody.put("score", scoreToSet);
 
         Http.RequestBuilder requestWithHigherScore = fakeRequest()
                 .session("userID", "1")
                 .bodyJson(requestBody)
-                .method("POST")
+                .header(Http.HeaderNames.HOST, "localhost:19001")
+                .method(POST)
                 .uri("/saveQuizResult");
 
         Result result = route(app, requestWithHigherScore);
@@ -61,13 +79,13 @@ public class QuizTest extends WithApplication {
 
         Highscore oldHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1 );
         int scoreToSet = oldHighscore.getScore() - 10;
-        quizController.setQuiz(1);
         requestBody.put("score", scoreToSet);
 
         Http.RequestBuilder requestWithHigherScore = fakeRequest()
+                .header(Http.HeaderNames.HOST, "localhost:19001")
                 .session("userID", "1")
                 .bodyJson(requestBody)
-                .method("POST")
+                .method(POST)
                 .uri("/saveQuizResult");
 
         Result result = route(app, requestWithHigherScore);

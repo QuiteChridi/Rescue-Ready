@@ -1,6 +1,7 @@
 package models;
 import controllers.interfaces.User;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import play.db.Database;
 import org.junit.Before;

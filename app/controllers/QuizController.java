@@ -20,6 +20,7 @@ import java.util.Map;
 
 
 public class QuizController extends Controller {
+    private final int DEFAULT_QUIZ_ID = 1;
 
     private Quiz quiz;
     private final AbstractQuizFactory quizzes;
@@ -33,6 +34,7 @@ public class QuizController extends Controller {
         this.users = users;
         this.scores = scores;
         this.jokers = jokers;
+        this.quiz = quizzes.getQuizById(DEFAULT_QUIZ_ID);
     }
 
     public Result quiz(Http.Request request) {
@@ -51,10 +53,6 @@ public class QuizController extends Controller {
 
         String quizName = quiz.getName();
         return ok(Json.newObject().put("quizName", quizName));
-    }
-
-    public void setQuiz(int quizId){
-        quiz = quizzes.getQuizById(quizId);
     }
 
     public Result getNextQuestion() {
@@ -93,7 +91,6 @@ public class QuizController extends Controller {
 
         JsonNode json = request.body().asJson();
         int newHighscore = json.findPath("score").asInt();
-        System.out.println(newHighscore);
         Highscore oldHighscore = scores.getHighscoreOfUserAndQuiz(user.getId(), quiz.getId());
 
         if(oldHighscore == null || newHighscore > oldHighscore.getScore()){
