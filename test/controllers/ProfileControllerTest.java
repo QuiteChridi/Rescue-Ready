@@ -22,9 +22,6 @@ import static play.mvc.Results.redirect;
 import static play.test.Helpers.*;
 
 public class ProfileControllerTest extends WithApplication {
-    private UserFactory userFactoryStub;
-    private HighscoreFactory highscoreFactoryStub;
-    private QuizFactory quizFactoryDummy;
     private UserFactory.UserImplementation userStub;
     private List<Highscore> highscoreListStub;
     private ProfileController profileController;
@@ -35,10 +32,10 @@ public class ProfileControllerTest extends WithApplication {
         userStub = mock(UserFactory.UserImplementation.class);
         highscoreListStub = new LinkedList<>();
 
-        userFactoryStub = mock(UserFactory.class);
+        UserFactory userFactoryStub = mock(UserFactory.class);
         when(userFactoryStub.getUserById(0)).thenReturn(userStub);
 
-        highscoreFactoryStub = mock(HighscoreFactory.class);
+        HighscoreFactory highscoreFactoryStub = mock(HighscoreFactory.class);
         when(highscoreFactoryStub.getHighscoresOfUser(0)).thenReturn(highscoreListStub);
 
         profileController = new ProfileController(userFactoryStub, highscoreFactoryStub);
@@ -62,6 +59,4 @@ public class ProfileControllerTest extends WithApplication {
 
         assertEquals(303, result.status());
     }
-
-
 }

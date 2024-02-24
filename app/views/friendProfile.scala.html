@@ -2,7 +2,7 @@
 
 @index("FriendProfile") {
     @defining(play.core.PlayVersion.current) { version =>
-        <body>
+        <body onload="showAddFriendButtonIfNotFriend(@friend.getId)">
             <div class="sizeAble-container" id="profile-container">
                 <div class="header column-container" id="profile-header">
                     <img id="profilePicture"  src="@routes.Assets.versioned("" + friend.getProfilePicPath)" alt="Profilbild">
@@ -36,7 +36,7 @@
 
                 <div id="friendProfile-buttons">
                     <button class="medium-button" id="friendProfile-button">Chat</button>
-                    <button class="medium-button add-friend-button" id="friendProfile-button" data-user-id="@friend.getId">Hinzufügen</button>
+                    <button class="medium-button add-friend-button" id="add-friend-button" style="visibility: hidden" data-user-id="@friend.getId">Hinzufügen</button>
                     <button class="medium-button alternativ-button" id="friendProfile-button" onclick="window.history.back()">Zurück</button>
                 </div>
 

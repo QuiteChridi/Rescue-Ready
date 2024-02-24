@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import controllers.interfaces.FriendManager;
 import controllers.interfaces.User;
@@ -52,6 +53,15 @@ public class FriendController extends Controller{
         } else {
             return ProfileController.internalServerError("Freund konnte nicht entfernt werden");
         }
+    }
+
+    public Result checkFriendship(Http.Request request, int otherUserId){
+        int userId = getUserIdFromSession(request);
+        if(userId == 0) return redirect(routes.LoginController.login());
+
+        ObjectNode result = Json.newObject();
+        result.put("isFriendship",friendManager.isFriend(userId, otherUserId) );
+        return ok(result);
     }
 
     private int getUserIdFromSession(Http.Request request){

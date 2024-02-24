@@ -63,3 +63,26 @@ function saveProfilePic() {
             console.error('Error:', error);
         });
 }
+
+function showAddFriendButtonIfNotFriend(userId){
+    let addFriendButton = document.getElementById("add-friend-button")
+
+    fetch(`/isFriend/${userId}`, {
+        method: "POST",
+        credentials: "include"
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('HTTP error! Status: ${response.status}');
+            }
+            return response.json()
+        }).then(data =>{
+            if(!data.isFriendship){
+                addFriendButton.style.visibility = "visible"
+            }
+    })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+}

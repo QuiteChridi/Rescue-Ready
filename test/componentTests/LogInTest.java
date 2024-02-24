@@ -1,4 +1,4 @@
-package integrationTests;
+package componentTests;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.interfaces.User;

@@ -99,7 +99,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
         });
     }
 
-    public class HighscoreImplementation extends Highscore {
+    public static class HighscoreImplementation extends Highscore {
         private final int score;
         private final int quizId;
         private final int userId;

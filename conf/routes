@@ -20,14 +20,13 @@ GET         /searchUsers            controllers.FriendController.searchUsers(req
 POST        /addFriend/:friendId    controllers.FriendController.addFriend(request: play.mvc.Http.Request, friendId: Int)
 POST        /removeFriend/:friendId controllers.FriendController.removeFriend(request: play.mvc.Http.Request,friendId: Int)
 GET         /friends                controllers.FriendController.friends(request: play.mvc.Http.Request)
+POST        /isFriend/:otherUserId  controllers.FriendController.checkFriendship(request: play.mvc.Http.Request, otherUserId: Int)
 
 POST        /saveUser               controllers.ProfileController.saveChangesToUser(request: play.mvc.Http.Request)
 POST        /saveProfilePic         controllers.ProfileController.saveProfilePicToAssets(request: play.mvc.Http.Request)
 
 GET         /getMessages/:conversationPartnerId    controllers.MessageController.getMessages(request: play.mvc.Http.Request, conversationPartnerId: Int)
 POST        /sendMessage/:receiverId               controllers.MessageController.sendMessage(request: play.mvc.Http.Request, receiverId: Int)
-
-
 
 
 

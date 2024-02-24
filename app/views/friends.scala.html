@@ -8,6 +8,7 @@
 
             </div>
 
+            @if(!friends.isEmpty) {
             <div class="inner-container" id="friendList-container">
                 <div class="friend-list">
                     @for(friend <- friends) {
@@ -26,6 +27,7 @@
                     <button id="chat-send" class="chat-send">Senden</button>
                 </div>
             </div>
+            }
 
             <div class="inner-container" id="userAdd-container">
                 <div id="userAdd-text">

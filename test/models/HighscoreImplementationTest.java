@@ -9,69 +9,66 @@ import play.test.WithApplication;
 import static org.junit.Assert.*;
 
 public class HighscoreImplementationTest extends WithApplication {
-/*
+
     private static int TEST_SCORE = 100;
+    private static int HIGHER_SCORE = 110;
+    private static int LOWER_SCORE = 90;
     private static String TEST_USER_NAME = "willi";
     private static String TEST_QUIZ_NAME = "someQuiz";
     private static String TEST_PROFILE_PIC_PATH = "/public/ProfilePic.png";
     private static int TEST_USER_ID = 1;
-    private static int TEST_User
+    private static int TEST_QUIZ_ID = 2;
+    private Highscore highscore;
+    private Highscore higherHighscore;
+    private Highscore lowerHighscore;
 
+    @Before public void setUp(){
+        highscore = new HighscoreFactory.HighscoreImplementation(TEST_SCORE, TEST_QUIZ_ID, TEST_USER_ID, TEST_QUIZ_NAME, TEST_USER_NAME, TEST_PROFILE_PIC_PATH);
+        higherHighscore = new HighscoreFactory.HighscoreImplementation(HIGHER_SCORE, TEST_QUIZ_ID, TEST_USER_ID, TEST_QUIZ_NAME, TEST_USER_NAME, TEST_PROFILE_PIC_PATH);
+        lowerHighscore = new HighscoreFactory.HighscoreImplementation(LOWER_SCORE, TEST_QUIZ_ID, TEST_USER_ID, TEST_QUIZ_NAME, TEST_USER_NAME, TEST_PROFILE_PIC_PATH);
+
+    }
 
     @Test
-    public void getNameShouldReturnName(){
-        new HighscoreFactory.HighscoreImplementation(, )
+    public void getQuizIdShouldReturnQuizId(){
+        assertEquals(TEST_QUIZ_ID, highscore.getQuizId());
+    }
 
-        assertEquals("test", highscore.getUserName());
+    @Test
+    public void getUserIdShouldReturnQuizId(){
+        assertEquals(TEST_QUIZ_ID, highscore.getQuizId());
     }
 
     @Test
     public void getScoreShouldReturnScore(){
-        assertEquals(123, highscore.getScore());
+        assertEquals(TEST_SCORE, highscore.getScore());
     }
 
     @Test
-    public void setScoreShouldSetNewScore(){
-        int newScore = 10;
-        highscore.setScore(newScore);
-        assertEquals(newScore, highscore.getScore());
+    public void getProfilePicPathShouldReturnProfilePicPath(){
+        assertEquals(TEST_PROFILE_PIC_PATH, highscore.getProfilePicPath());
     }
 
     @Test
-    public void highscoresWithSameNameAndSameScoreShouldBeEqual(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 123);
-        assertEquals(h1, h2);
+    public void getUserNameShouldReturnName(){
+        assertEquals(TEST_USER_NAME, highscore.getUserName());
     }
 
     @Test
-    public void highscoresWithDifferentNameShouldNotBeEqual(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("toast", 123);
-        assertNotEquals(h1, h2);
+    public void getQuizNameShouldReturnQuizName(){
+        assertEquals(TEST_QUIZ_NAME, highscore.getQuizName());
     }
-    @Test
-    public void highscoresWithSameNameAndDifferentScoreShouldBeEqual(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 122);
-        assertEquals(h1, h2);
-    }
+
     @Test
     public void compareToShouldReturnZeroForHighscoreWithSameScores(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 123);
-        assertEquals(0, h1.compareTo(h2));
+        assertEquals(0, highscore.compareTo(highscore));
     }
     @Test
     public void compareToShouldReturnPositiveIntForHighscoreWithHigherScores(){
-        var h1 = new HighscoreFactory.Highscore("test", 123);
-        var h2 = new HighscoreFactory.Highscore("test", 122);
-        assertTrue(h1.compareTo(h2) < 0);
+        assertTrue(highscore.compareTo(higherHighscore) > 0);
     }
     @Test
     public void compareToShouldReturnNegativeIntForHighscoreWithLowerScores(){
-        var h1 = new HighscoreFactory.Highscore("test", 122);
-        var h2 = new HighscoreFactory.Highscore("test", 123);
-        assertTrue(h1.compareTo(h2) > 0);
-    }*/
+        assertTrue(highscore.compareTo(lowerHighscore) < 0);
+    }
 }
