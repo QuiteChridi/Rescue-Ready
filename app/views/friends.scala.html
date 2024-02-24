@@ -15,7 +15,7 @@
                         <li>
                             <img src="@routes.Assets.versioned("" + friend.getProfilePicPath)" alt="Profile Picture">
                             <a id="friendName" href="@routes.ProfileController.friendProfile(friend.getId)" >@friend.getName</a>
-                            <button onclick="openChat(@friend.getId)">Chat</button>
+                            <button onclick="openChat(@friend.getId)" data-receiver-id="@friend.getId()">Chat</button>
                             <button class="alternativ-button" onclick="removeFriend(@friend.getId)">Entfernen</button>
                         </li>
                     }

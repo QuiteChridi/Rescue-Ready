@@ -13,6 +13,17 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     });
 
+    setupFriendshipButtonListeners();
+    if (document.getElementById('newFriend')) {
+        setupSearchInput();
+    }
+    if (document.getElementById('chat-container')) {
+        setupChatButtonListeners();
+        setupChatSendButton();
+    }
+});
+
+function setupFriendshipButtonListeners() {
     document.querySelectorAll('.add-friend-button').forEach(button => {
         button.addEventListener('click', function () {
             const userId = this.getAttribute('data-user-id');
@@ -22,6 +33,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    document.querySelectorAll('.remove-friend-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const friendId = this.getAttribute('data-friend-id');
+            const friendName = this.getAttribute('data-friend-name');
+            removeFriend(friendId, friendName);
+        });
+    });
+}
+
+function setupSearchInput() {
     const searchInput = document.getElementById('newFriend');
     if (searchInput) {
         searchInput.addEventListener('input', function () {
@@ -30,23 +51,31 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.error('Suchfeld mit ID "newFriend" wurde nicht gefunden.');
     }
+}
 
+function setupChatButtonListeners() {
     document.querySelectorAll('.chat-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const receiverId = this.getAttribute('data-receiver-id');
             openChat(receiverId);
         });
     });
+}
 
-    document.getElementById('chat-send').addEventListener('click', function(event) {
-        event.preventDefault();
-        const chatContainer = document.getElementById('chat-container');
-        const receiverId = chatContainer.getAttribute('data-receiver-id');
-        const messageText = document.getElementById('chat-input').value;
-
-        sendMessage(receiverId, messageText);
-    });
-});
+function setupChatSendButton() {
+    const chatSendButton = document.getElementById('chat-send');
+    if (chatSendButton) {
+        chatSendButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            const messageText = document.getElementById('chat-input').value;
+            const chatContainer = document.getElementById('chat-container');
+            const receiverId = chatContainer.getAttribute('data-receiver-id');
+            sendMessage(receiverId, messageText);
+        });
+    } else {
+        console.error('Button mit ID "chat-send" wurde nicht gefunden.');
+    }
+}
 
 function addFriend(userId, userName) {
     fetch(`/addFriend/${userId}`, {method: 'POST'})
@@ -97,10 +126,9 @@ function filterAndHighlightUsers(query) {
 }
 
 
-
 function addEventListenersToButtons() {
     document.querySelectorAll('.add-friend-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const userId = this.getAttribute('data-user-id');
             addFriend(userId);
         });
@@ -108,18 +136,11 @@ function addEventListenersToButtons() {
 }
 
 function openChat(receiverId) {
-    // Stellen Sie sicher, dass der Chat-Container sichtbar ist
     const chatContainer = document.getElementById('chat-container');
     chatContainer.style.display = 'block';
-
-    // Setzen oder aktualisieren Sie die receiverId für den Chat-Container
     chatContainer.setAttribute('data-receiver-id', receiverId);
-
-    // Löschen Sie alle vorhandenen Nachrichten im Chat-Container
     const messagesContainer = document.getElementById('chat-messages');
     messagesContainer.innerHTML = '';
-
-    // Laden Sie die Nachrichten für diesen spezifischen Freund
     fetchMessages(receiverId);
 }
 
@@ -133,7 +154,7 @@ function sendMessage(receiverId, messageText) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ content: messageText })
+        body: JSON.stringify({content: messageText})
     })
         .then(response => {
             if (response.ok) {
@@ -151,13 +172,17 @@ function sendMessage(receiverId, messageText) {
 }
 
 function fetchMessages(receiverId) {
+    const currentUserId = sessionStorage.getItem('userId');
+
     fetch(`/getMessages/${receiverId}`)
         .then(response => response.json())
         .then(messages => {
+            console.log(messages);
             const messagesContainer = document.getElementById('chat-messages');
             messagesContainer.innerHTML = '';
             messages.forEach(message => {
-                appendMessageToChat(message.content, message.direction);
+                const direction = message.senderId.toString() === currentUserId ? 'sent' : 'received';
+                appendMessageToChat(message.messageText, direction);
             });
         })
         .catch(error => {
@@ -168,7 +193,7 @@ function fetchMessages(receiverId) {
 function appendMessageToChat(messageText, direction) {
     const messagesContainer = document.getElementById('chat-messages');
     const messageElement = document.createElement('div');
-    messageElement.classList.add('chat-messages', direction); //messages
+    messageElement.classList.add('message', direction);
     messageElement.textContent = messageText;
     messagesContainer.appendChild(messageElement);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;

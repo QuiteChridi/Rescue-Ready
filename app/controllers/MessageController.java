@@ -27,10 +27,9 @@ public class MessageController extends Controller {
         if (json == null) {
             return badRequest("Expecting JSON data");
         }
-
         try {
             int senderId = Integer.parseInt(request.session().get("userID").orElseThrow(() -> new IllegalStateException("User ID not found in session")));
-            String messageText = json.get("content").asText(); // Stellen Sie sicher, dass dies mit dem Schlüssel in Ihrem Frontend-Code übereinstimmt
+            String messageText = json.get("content").asText();
             messageFactory.sendMessage(senderId, receiverId, messageText);
             return ok("Nachricht gesendet");
         } catch (Exception e) {
@@ -38,7 +37,7 @@ public class MessageController extends Controller {
         }
     }
     public Result getMessages(Http.Request request, int conversationPartnerId) {
-        int userId = Integer.parseInt(request.session().get("userID").orElse(null));
+        int userId = Integer.parseInt(request.session().get("userID").orElseThrow(() -> new IllegalStateException("User ID not found in session")));
         List<controllers.interfaces.Message> messages = messageFactory.getMessages(userId, conversationPartnerId);
         return ok(Json.toJson(messages));
     }

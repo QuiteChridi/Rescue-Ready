@@ -44,16 +44,17 @@
 }
 .message {
     padding: 5px;
-    margin: 4px;
-    border-radius: 5px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    max-width: 80%;
 }
 
 .sent {
-    align-self: flex-end;
     background-color: #DCF8C6;
+    align-self: flex-end;
 }
 
 .received {
-    align-self: flex-start;
     background-color: #ECECEC;
+    align-self: flex-start;
 }
