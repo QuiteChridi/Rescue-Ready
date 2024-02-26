@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 @Singleton
 public class UserFactory implements AbstractUserFactory, FriendManager, AccountManager {
     private Database db;
-    //private HighscoreFactory scores;
 
     /**
      * Constructor for UserFactory
+     *
      * @param db the database
      */
     @Inject
@@ -29,6 +29,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Authenticates a user with the given credentials
+     *
      * @param username username from user input
      * @param password password from user input
      * @return Found user or null if user not found
@@ -51,9 +52,10 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Creates a user in the database
-     * @param name username
+     *
+     * @param name     username
      * @param password password
-     * @param email email
+     * @param email    email
      * @return User if created, else null
      */
     @Override
@@ -76,6 +78,13 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         });
     }
 
+    /**
+     * Checks if a user is a friend of another user
+     *
+     * @param userId      id of user
+     * @param otherUserId id of other user
+     * @return true if user is friend of other user, else false
+     */
     @Override
     public boolean isFriend(int userId, int otherUserId) {
         return db.withConnection(conn -> {
@@ -92,6 +101,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Retrieves a user from database with given ID
+     *
      * @param id id of user to find
      * @return User if found, else null
      */
@@ -112,6 +122,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Polymorphism method for getUserById(int)
+     *
      * @param id String of id
      * @return User if found, else null
      */
@@ -122,6 +133,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Retrieves all users from the database that match the search query
+     *
      * @param searchQuery the search query
      * @return List of all users that match the search query
      */
@@ -130,21 +142,26 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         return db.withConnection(conn -> {
             List<User> users = new ArrayList<>();
             String sql = "SELECT * FROM user WHERE name LIKE ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, "%" + searchQuery + "%");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                UserImplementation user = new UserImplementation(rs);
-                users.add(user);
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, "%" + searchQuery + "%");
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    UserImplementation user = new UserImplementation(rs);
+                    users.add(user);
+                }
+                stmt.close();
+                return users;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
             }
-            stmt.close();
-            return users;
         });
     }
 
     /**
      * Adds a friend to the database
-     * @param userId id of user
+     *
+     * @param userId   id of user
      * @param friendId id of friend
      * @return true if friend was added successfully, else false
      */
@@ -164,6 +181,13 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         });
     }
 
+    /**
+     * Removes a friend from the database
+     *
+     * @param userId   id of user
+     * @param friendId id of friend
+     * @return true if friend was removed successfully, else false
+     */
     @Override
     public boolean removeFriend(int userId, int friendId) {
         return db.withConnection(conn -> {
@@ -213,6 +237,12 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         });
     }
 
+    /**
+     * Returns a list of all friends of a user
+     *
+     * @param userId id of user
+     * @return List of all friends of the user
+     */
     @Override
     public List<User> getFriends(int userId) {
         return db.withConnection(conn -> {
@@ -230,6 +260,12 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         });
     }
 
+    /**
+     * Returns a list of all users that are not friends of a user
+     *
+     * @param userId id of user
+     * @return List of all users that are not friends of the user
+     */
     @Override
     public List<User> getNotFriends(int userId) {
         List<User> allUsers = getAllUsers();
@@ -238,14 +274,15 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         List<User> notFriends = allUsers.stream()
                 .filter(user -> !friends.contains(user))
                 .collect(Collectors.toList());
-        
+
         return notFriends;
     }
 
-
+    /**
+     * Implementation of the User interface
+     */
     public class UserImplementation extends User {
         private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/profilePic.png";
-
         private final int id;
         private String username;
         private String password;
@@ -254,6 +291,14 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
         private List<Integer> jokers = new ArrayList<>();
         private String profilePicPath;
 
+        /**
+         * Constructor for UserImplementation
+         *
+         * @param id       id of user
+         * @param username username of user
+         * @param password password of user
+         * @param mail     email of user
+         */
         private UserImplementation(int id, String username, String password, String mail) {
             this.id = id;
             this.username = username;
@@ -263,6 +308,12 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
             this.profilePicPath = DEFAULT_PROFILE_PIC_PATH;
         }
 
+        /**
+         * Constructor for UserImplementation
+         *
+         * @param rs ResultSet from database
+         * @throws SQLException
+         */
         private UserImplementation(ResultSet rs) throws SQLException {
             this.id = rs.getInt("iduser");
             this.username = rs.getString("name");
@@ -293,61 +344,119 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
             });
         }
 
+        /**
+         * Deletes the user from the database
+         */
         @Override
         public int getCoins() {
             return coins;
         }
 
+        /**
+         * Sets the amount of coins the user has
+         *
+         * @param coins amount of coins
+         */
         @Override
         public void setCoins(int coins) {
             this.coins = coins;
         }
 
+        /**
+         * Returns the profile picture path of the user
+         *
+         * @return profile picture path
+         */
         @Override
         public String getProfilePicPath() {
             return profilePicPath;
         }
 
+        /**
+         * Sets the profile picture path of the user
+         *
+         * @param profilePicPath profile picture path
+         */
         @Override
         public void setProfilePicPath(String profilePicPath) {
             this.profilePicPath = profilePicPath;
         }
 
+        /**
+         * Returns the id of the user
+         *
+         * @return id of user
+         */
         @Override
         public int getId() {
             return id;
         }
 
+        /**
+         * Returns the username of the user
+         *
+         * @return username of user
+         */
         @Override
         public String getName() {
             return username;
         }
 
+        /**
+         * Sets the username of the user
+         *
+         * @param username username of user
+         */
         @Override
         public void setName(String username) {
             this.username = username;
         }
 
+        /**
+         * Returns the email of the user
+         *
+         * @return email of user
+         */
         @Override
         public String getMail() {
             return mail;
         }
 
+        /**
+         * Sets the email of the user
+         *
+         * @param mail email of user
+         */
         @Override
         public void setMail(String mail) {
             this.mail = mail;
         }
 
+        /**
+         * Returns the password of the user
+         *
+         * @return password of user
+         */
         @Override
         public String getPassword() {
             return password;
         }
 
+        /**
+         * Sets the password of the user
+         *
+         * @param password password of user
+         */
         @Override
         public void setPassword(String password) {
             this.password = password;
         }
 
+        /**
+         * Returns the list of jokers of the user
+         *
+         * @return list of jokers
+         */
         @Override
         public boolean equals(Object obj) {
             if (this == obj) {

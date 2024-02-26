@@ -23,11 +23,22 @@ public class LoginController extends Controller {
     private final AccountManager accounts;
     final Logger loginLogger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Constructor for the LoginController
+     *
+     * @param accounts the UserFactory
+     * @Inject is used to inject the UserFactory
+     * this means, that the UserFactory is created by the dependency injection framework and passed to the constructor
+     */
     @Inject
     public LoginController(UserFactory accounts) {
         this.accounts = accounts;
     }
 
+    /**
+     * Renders the login page
+     * @return the login page
+     */
     public Result login() {
         return ok(login.render());
     }
@@ -59,7 +70,7 @@ public class LoginController extends Controller {
         return ok(result);
     }
 
-    public Result logout () {
+    public Result logout() {
         System.out.println("Logged out");
         return redirect("/").withNewSession();
     }
