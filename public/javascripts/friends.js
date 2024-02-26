@@ -1,4 +1,5 @@
-const BASE_IMAGE_URL = "/assets/images/profilePics/profilePic";
+const BASE_IMAGE_URL = "/assets/public/images/profilePics/";
+const SEARCH_IMAGE_URL = "/assets/";
 const BASE_PROFILE_URL = "/friendProfile/";
 
 let originalUserList = [];
@@ -46,11 +47,20 @@ function setupSearchInput() {
     const searchInput = document.getElementById('newFriend');
     if (searchInput) {
         searchInput.addEventListener('input', function () {
-            filterAndHighlightUsers(this.value.trim());
+            filterUsers(this.value.trim());
         });
     } else {
         console.error('Suchfeld mit ID "newFriend" wurde nicht gefunden.');
     }
+}
+
+function addEventListenersToButtons() {
+    document.querySelectorAll('.add-friend-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const userId = this.getAttribute('data-user-id');
+            addFriend(userId);
+        });
+    });
 }
 
 function setupChatButtonListeners() {
@@ -103,11 +113,68 @@ function removeFriend(friendId, userName) {
         .catch(error => console.error('Fehler:', error));
 }
 
-function filterAndHighlightUsers(query) {
+function filterUsers(query) {
+    console.log("Filtering users with query:", query);
+
+    if (!query.trim()) {
+        console.log("Query is empty, displaying original user list.");
+        displayUsers(originalUserList);
+        return;
+    }
+
+    console.log(`Sending search request to server with query: ${query}`);
+
+    fetch(`/searchUsers?name=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(filteredUsers => {
+            console.log("Received filtered users from server:", filteredUsers);
+            displayUsers(filteredUsers);
+        })
+        .catch(error => {
+            console.error('Fehler beim Filtern der Nutzer:', error);
+        });
+}
+
+function displayUsers(users) {
+    const userListContainer = document.querySelector('.user-list');
+    userListContainer.innerHTML = '';
+
+    users.forEach(user => {
+        const li = document.createElement('li');
+        li.classList.add('flex', 'flex-row', 'align-items-center', 'justify-content-center', 'gap-5', 'padding-5');
+
+        let profilePicPath;
+        if (user.profilePicPath.startsWith('/assets/')) {
+            profilePicPath = user.profilePicPath;
+        } else {
+            profilePicPath = users === originalUserList ? BASE_IMAGE_URL + user.profilePicPath : SEARCH_IMAGE_URL + user.profilePicPath;
+        }
+
+        li.innerHTML = `
+            <img src="${profilePicPath}" alt="Profile Picture" style="width: 10%; max-height: 40px; max-width: 40px; border-radius: 50%;">    
+            <a href="${BASE_PROFILE_URL}${user.id}" style="width: 70%; font-size: 25px;">${user.name}</a>
+            <button class="add-friend-button" data-user-id="${user.id}" style="width: 20%;">Hinzufügen</button>
+        `;
+
+        li.querySelector('.add-friend-button').addEventListener('click', function () {
+            addFriend(user.id, user.name);
+        });
+
+        userListContainer.appendChild(li);
+    });
+}
+
+
+/**
+ function filterUsers(query) {
     const userList = document.querySelector('.user-list');
     userList.style.display = 'block';
     userList.innerHTML = '';
-
     const filteredUsers = originalUserList.filter(user => user.name.toLowerCase().includes(query.toLowerCase()));
 
     filteredUsers.forEach(user => {
@@ -125,26 +192,7 @@ function filterAndHighlightUsers(query) {
         addEventListenersToButtons();
     });
 }
-
-
-function addEventListenersToButtons() {
-    document.querySelectorAll('.add-friend-button').forEach(button => {
-        button.addEventListener('click', function () {
-            const userId = this.getAttribute('data-user-id');
-            addFriend(userId);
-        });
-    });
-}
-
-function openChat(receiverId) {
-    const chatContainer = document.getElementById('chat-container');
-    chatContainer.style.display = 'block';
-    chatContainer.setAttribute('data-receiver-id', receiverId);
-    const messagesContainer = document.getElementById('chat-messages');
-    messagesContainer.innerHTML = '';
-    fetchMessages(receiverId);
-}
-
+ */
 
 function sendMessage(receiverId, messageText) {
     if (!messageText.trim()) {
@@ -189,6 +237,15 @@ function fetchMessages(receiverId) {
         .catch(error => {
             console.error('Fehler beim Abrufen der Nachrichten:', error);
         });
+}
+
+function openChat(receiverId) {
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.style.display = 'block';
+    chatContainer.setAttribute('data-receiver-id', receiverId);
+    const messagesContainer = document.getElementById('chat-messages');
+    messagesContainer.innerHTML = '';
+    fetchMessages(receiverId);
 }
 
 function appendMessageToChat(messageText, direction) {
