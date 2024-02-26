@@ -105,6 +105,7 @@ function removeFriend(friendId, userName) {
 
 function filterAndHighlightUsers(query) {
     const userList = document.querySelector('.user-list');
+    userList.style.display = 'block';
     userList.innerHTML = '';
 
     const filteredUsers = originalUserList.filter(user => user.name.toLowerCase().includes(query.toLowerCase()));
