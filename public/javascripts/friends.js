@@ -88,6 +88,9 @@ function setupChatSendButton() {
 }
 
 function addFriend(userId, userName) {
+    if(!userName) {
+        userName = "Der Nutzer";
+    }
     fetch(`/addFriend/${userId}`, {method: 'POST'})
         .then(response => {
             if (response.ok) {
