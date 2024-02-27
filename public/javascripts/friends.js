@@ -104,10 +104,13 @@ function addFriend(userId, userName) {
 }
 
 function removeFriend(friendId, userName) {
+    if(!userName) {
+        userName = "Der Nutzer";
+    }
     fetch(`/removeFriend/${friendId}`, {method: 'POST', credentials: 'include'})
         .then(response => {
             if (response.ok) {
-                alert(`Der Nutzer wurde erfolgreich entfernt.`);
+                alert(`${userName} wurde erfolgreich entfernt.`);
                 location.reload();
             } else {
                 alert(`Fehler beim Entfernen von ${userName}.`);
