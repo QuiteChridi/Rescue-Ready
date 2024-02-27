@@ -11,7 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Factory for creating and retrieving users from the database
+ * Factory for creating and retrieving users from the database.
+ * Implements the AbstractUserFactory, FriendManager and AccountManager interfaces.
+ * It is a singleton class, meaning that only one instance of it will be created.
+ * It is responsible for creating User objects and getting users from the database.
  */
 @Singleton
 public class UserFactory implements AbstractUserFactory, FriendManager, AccountManager {
@@ -51,7 +54,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     }
 
     /**
-     * Creates a user in the database
+     * Creates a user in the database with the given credentials
      *
      * @param name     username
      * @param password password
@@ -123,7 +126,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     /**
      * Polymorphism method for getUserById(int)
      *
-     * @param id String of id
+     * @param id String of id of user to find
      * @return User if found, else null
      */
     @Override
@@ -134,7 +137,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     /**
      * Retrieves all users from the database that match the search query
      *
-     * @param searchQuery the search query
+     * @param searchQuery the search query to match users with
      * @return List of all users that match the search query
      */
     @Override
@@ -206,6 +209,8 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Delete the user from the database
+     *
+     * @param userId id of user to delete
      */
     @Override
     public void deleteUser(int userId) {
@@ -220,6 +225,8 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
 
     /**
      * Returns a list of all users in the database
+     *
+     * @return List of all users in the database
      */
     @Override
     public List<User> getAllUsers() {
@@ -279,7 +286,8 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     }
 
     /**
-     * Implementation of the User interface
+     * Implementation of the User interface for creating User objects
+     * It is a static class, meaning that it can only be used by the UserFactory class.
      */
     public class UserImplementation extends User {
         private static final String DEFAULT_PROFILE_PIC_PATH = "images/profilePics/profilePic.png";

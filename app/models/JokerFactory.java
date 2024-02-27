@@ -13,15 +13,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JokerFactory is a class that implements the AbstractJokerFactory interface.
+ * It is responsible for creating Joker objects and getting jokers from the database.
+ * It is a singleton class, meaning that only one instance of it will be created.
+ */
 @Singleton
 public class JokerFactory implements AbstractJokerFactory {
     private final Database db;
 
+    /**
+     * Constructor for JokerFactory.
+     *
+     * @param db The database to be used.
+     */
     @Inject
     JokerFactory(Database db) {
         this.db = db;
     }
 
+    /**
+     * Method to get all jokers.
+     *
+     * @param userId The id of the user.
+     * @return A list of jokers.
+     */
     @Override
     public List<Joker> getAllJokers(int userId) {
         return db.withConnection(conn -> {
@@ -38,6 +54,13 @@ public class JokerFactory implements AbstractJokerFactory {
         });
     }
 
+    /**
+     * Method to get a joker by its id.
+     *
+     * @param id     The id of the joker.
+     * @param userId The id of the user.
+     * @return The joker.
+     */
     @Override
     public JokerImplementation getJokerById(int id, int userId) {
         return db.withConnection(conn -> {
@@ -53,6 +76,13 @@ public class JokerFactory implements AbstractJokerFactory {
         });
     }
 
+    /**
+     * Method to set the amount of a joker for a user.
+     *
+     * @param jokerId The id of the joker.
+     * @param userId  The id of the user.
+     * @param amount  The amount of the joker.
+     */
     @Override
     public void setJokerAmountOfUser(int jokerId, int userId, int amount) {
         db.withConnection(conn -> {
@@ -66,6 +96,13 @@ public class JokerFactory implements AbstractJokerFactory {
         });
     }
 
+    /**
+     * Method to get the amount of a joker for a user.
+     *
+     * @param jokerId The id of the joker.
+     * @param userId  The id of the user.
+     * @return The amount of the joker.
+     */
     @Override
     public int getJokerAmountOfUser(int jokerId, int userId) {
         return db.withConnection(conn -> {
@@ -82,6 +119,10 @@ public class JokerFactory implements AbstractJokerFactory {
         });
     }
 
+    /**
+     * The joker implementation class that extends the Joker class. It is used to create Joker objects.
+     * It is a static class, meaning that it can only be used by the JokerFactory class.
+     */
     public class JokerImplementation extends Joker {
 
         private final int jokerId;
@@ -96,6 +137,13 @@ public class JokerFactory implements AbstractJokerFactory {
 
         private String jokerPicPath;
 
+        /**
+         * Constructor for JokerImplementation.
+         *
+         * @param rs     The result set of the joker.
+         * @param userId The id of the user.
+         * @throws SQLException If an error occurs while accessing the database.
+         */
         private JokerImplementation(ResultSet rs, int userId) throws SQLException {
             this.jokerId = rs.getInt("idJoker");
             this.jokerName = rs.getString("name");
@@ -105,28 +153,61 @@ public class JokerFactory implements AbstractJokerFactory {
             this.jokerAmount = getJokerAmountOfUser(jokerId, userId);
         }
 
+        /**
+         * Method to get the id of the joker.
+         *
+         * @return The id of the joker.
+         */
         @Override
         public int getId() {
             return jokerId;
         }
+
+        /**
+         * Method to get the name of the joker.
+         *
+         * @return The name of the joker.
+         */
         @Override
         public String getName() {
             return jokerName;
         }
+
+        /**
+         * Method to get the description of the joker.
+         *
+         * @return The description of the joker.
+         */
         @Override
         public String getDescription() {
             return jokerDescription;
         }
+
+        /**
+         * Method to get the price of the joker.
+         *
+         * @return The price of the joker.
+         */
         @Override
         public int getPrice() {
             return jokerPrice;
         }
 
+        /**
+         * Method to get the path to the picture of the joker.
+         *
+         * @return The path to the picture of the joker.
+         */
         @Override
         public String getJokerPicPath() {
             return jokerPicPath;
         }
 
+        /**
+         * Method to get the amount of the joker.
+         *
+         * @return The amount of the joker.
+         */
         @Override
         public int getAmount() {
             return jokerAmount;

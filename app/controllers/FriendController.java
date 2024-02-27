@@ -16,24 +16,57 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class FriendController extends Controller{
+/**
+ * This controller contains an action to handle HTTP requests
+ * to the application's friend page.
+ * It extends the Controller class provided by Play.
+ */
+
+public class FriendController extends Controller {
+
+    /**
+     * The friendManager is used to manage the friends of a user.
+     */
     final FriendManager friendManager;
 
+    /**
+     * The constructor is used to inject the friendManager.
+     *
+     * @param users The friendManager to be injected.
+     * @Inject is used to inject the friendManager.
+     */
     @Inject
     public FriendController(UserFactory users) {
         this.friendManager = users;
     }
 
+    /**
+     * This method is used to render the friend page.
+     * It checks if the user is logged in and if not redirects to the login page.
+     * It then returns the friend page.
+     *
+     * @param request The HTTP request.
+     * @return The friend page.
+     */
     public Result friends(Http.Request request) {
         int userId = getUserIdFromSession(request);
-        if(userId == 0) return redirect(routes.LoginController.login());
+        if (userId == 0) return redirect(routes.LoginController.login());
 
         return ok(friends.render(friendManager.getFriends(userId), friendManager.getNotFriends(userId)));
     }
 
+    /**
+     * This method is used to add a friend to the user's friend list.
+     * It checks if the user is logged in and if not redirects to the login page.
+     * It then adds the friend to the user's friend list and returns a message.
+     *
+     * @param request  The HTTP request.
+     * @param friendId The ID of the friend to be added.
+     * @return A message.
+     */
     public Result addFriend(Http.Request request, int friendId) {
         int userId = getUserIdFromSession(request);
-        if(userId == 0) return redirect(routes.LoginController.login());
+        if (userId == 0) return redirect(routes.LoginController.login());
 
         boolean success = friendManager.addFriend(userId, friendId);
         if (success) {
@@ -43,9 +76,18 @@ public class FriendController extends Controller{
         }
     }
 
+    /**
+     * This method is used to remove a friend from the user's friend list.
+     * It checks if the user is logged in and if not redirects to the login page.
+     * It then removes the friend from the user's friend list and returns a message.
+     *
+     * @param request  The HTTP request.
+     * @param friendId The ID of the friend to be removed.
+     * @return A message.
+     */
     public Result removeFriend(Http.Request request, int friendId) {
         int userId = getUserIdFromSession(request);
-        if(userId == 0) return redirect(routes.LoginController.login());
+        if (userId == 0) return redirect(routes.LoginController.login());
 
         boolean success = friendManager.removeFriend(userId, friendId);
         if (success) {
@@ -55,16 +97,31 @@ public class FriendController extends Controller{
         }
     }
 
-    public Result checkFriendship(Http.Request request, int otherUserId){
+    /**
+     * This method is used to check if two users are friends.
+     * It checks if the user is logged in and if not redirects to the login page.
+     * It then checks if the two users are friends and returns the result.
+     *
+     * @param request     The HTTP request.
+     * @param otherUserId The ID of the other user.
+     * @return The result.
+     */
+    public Result checkFriendship(Http.Request request, int otherUserId) {
         int userId = getUserIdFromSession(request);
-        if(userId == 0) return redirect(routes.LoginController.login());
+        if (userId == 0) return redirect(routes.LoginController.login());
 
         ObjectNode result = Json.newObject();
-        result.put("isFriendship",friendManager.isFriend(userId, otherUserId) );
+        result.put("isFriendship", friendManager.isFriend(userId, otherUserId));
         return ok(result);
     }
 
-    private int getUserIdFromSession(Http.Request request){
+    /**
+     * This method is used to get the ID of the user from the session.
+     *
+     * @param request The HTTP request.
+     * @return The ID of the user.
+     */
+    private int getUserIdFromSession(Http.Request request) {
         return request
                 .session()
                 .get("userID")
@@ -72,6 +129,14 @@ public class FriendController extends Controller{
                 .orElse(0);
     }
 
+    /**
+     * This method is used to search for users by name.
+     * It checks if the user is logged in and if not redirects to the login page.
+     * It then searches for users by name and returns the result.
+     *
+     * @param request The HTTP request.
+     * @return The result.
+     */
     public Result searchUsers(Http.Request request) {
         List<User> matchingUsers = new ArrayList<>();
 
