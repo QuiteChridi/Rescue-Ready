@@ -22,6 +22,10 @@
                 </div>
 
                 <div id="chat-container" class="chat-container" style="display: none;">
+                    <div id="chat-header" class="chat-header">
+                        <h3><span id="chat-receiver-name"></span></h3>
+                        <button id="chat-close" class="chat-close" onclick="closeChat()"></button>
+                    </div>
                     <div id="chat-messages" class="chat-messages"></div>
                     <input type="text" id="chat-input" class="chat-input" placeholder="Schreibe eine Nachricht...">
                     <button id="chat-send" class="chat-send">Senden</button>

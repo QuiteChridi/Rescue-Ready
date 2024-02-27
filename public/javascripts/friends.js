@@ -4,6 +4,9 @@ const BASE_PROFILE_URL = "/friendProfile/";
 
 let originalUserList = [];
 
+/**
+ * Is executed when the DocumentObjectModel(DOM) is fully loaded.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     const userListElements = document.querySelectorAll('.user-list li');
     originalUserList = Array.from(userListElements).map(li => {
@@ -175,31 +178,6 @@ function displayUsers(users) {
     });
 }
 
-
-/**
- function filterUsers(query) {
-    const userList = document.querySelector('.user-list');
-    userList.style.display = 'block';
-    userList.innerHTML = '';
-    const filteredUsers = originalUserList.filter(user => user.name.toLowerCase().includes(query.toLowerCase()));
-
-    filteredUsers.forEach(user => {
-        const li = document.createElement('li');
-        li.classList.add('flex', 'flex-row', 'align-items-center', 'justify-content-center', 'gap-5', 'padding-5');
-        li.innerHTML = `
-            <img src="${user.profilePicPath}" alt="Profile Picture" style="width: 10%; max-height: 40px; max-width: 40px; border-radius: 50%;">
-            <a href="${BASE_PROFILE_URL}${user.id}" style="width: 70%; font-size: 25px;">${user.name}</a>
-            <button class="add-friend-button" data-user-id="${user.id}" style="width: 20%;">Hinzufügen</button>
-        `;
-        if (query && user.name.toLowerCase().includes(query.toLowerCase())) {
-            li.classList.add('highlight');
-        }
-        userList.appendChild(li);
-        addEventListenersToButtons();
-    });
-}
- */
-
 function sendMessage(receiverId, messageText) {
     if (!messageText.trim()) {
         return;
@@ -252,6 +230,11 @@ function openChat(receiverId) {
     const messagesContainer = document.getElementById('chat-messages');
     messagesContainer.innerHTML = '';
     fetchMessages(receiverId);
+}
+
+function closeChat() {
+    const chatContainer = document.getElementById('chat-container');
+    chatContainer.style.display = 'none';
 }
 
 function appendMessageToChat(messageText, direction) {
