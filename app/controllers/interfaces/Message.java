@@ -27,6 +27,8 @@ public abstract class Message {
      */
     public abstract List<MessageFactory.MessageImplementation> getMessages(int userId, int conversationPartnerId);
 
+    public abstract int getId();
+
     /**
      * Gets the id of the sender.
      *
