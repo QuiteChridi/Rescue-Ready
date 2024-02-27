@@ -17,7 +17,6 @@ import static org.mockito.Mockito.*;
 
 import static play.test.Helpers.*;
 
-
 public class LoginControllerTest {
 
     @Test

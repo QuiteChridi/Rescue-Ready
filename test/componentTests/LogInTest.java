@@ -14,9 +14,15 @@ import views.html.signup;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
+/**
+ * This class contains tests for the LoginController.
+ */
 public class
 LogInTest extends WithApplication {
 
+    /**
+     * This test checks if the login page is returned when the main method is called.
+     */
     @Test
     public void mainShouldReturnLoginPage() {
         Http.RequestBuilder request = new Http.RequestBuilder()
@@ -28,6 +34,10 @@ LogInTest extends WithApplication {
         assertEquals(contentAsString(login.render()), contentAsString(result));
     }
 
+    /**
+     * This test checks if the signup page is returned when the signup method is called.
+     * The signup page should be returned when the signup method is called.
+     */
     @Test
     public void signupShouldReturnSignupPage() {
         Http.RequestBuilder requestBuilder = new Http.RequestBuilder()
@@ -38,6 +48,10 @@ LogInTest extends WithApplication {
         assertEquals(contentAsString(signup.render()), contentAsString(result));
     }
 
+    /**
+     * This test checks if the login page is returned when the login method is called.
+     * The login page should be returned when the login method is called.
+     */
     @Test
     public void loginTestUserShouldBeAbleToLogInWithValidCredentials(){
         UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
@@ -58,6 +72,10 @@ LogInTest extends WithApplication {
         assertEquals(validUser.getId(), Integer.parseInt(result.session().get("userID").orElse(" ")));
     }
 
+    /**
+     * This test checks if the login page is returned when the login method is called.
+     * The login page should be returned when the login method is called.
+     */
     @Test
     public void loginTestUserShouldNotBeAbleToLogInWithInvalidName(){
         UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
@@ -80,7 +98,10 @@ LogInTest extends WithApplication {
         assertTrue(contentAsString(result).contains("Wrong username or password"));
     }
 
-
+    /**
+     * This test checks if the login page is returned when the login method is called.
+     * The login page should be returned when the login method is called.
+     */
     @Test
     public void loginTestUserShouldNotBeAbleToLogInWithInvalidPassword(){
         UserFactory userFactory = provideApplication().injector().instanceOf(UserFactory.class);
@@ -103,6 +124,10 @@ LogInTest extends WithApplication {
         assertTrue(contentAsString(result).contains("Wrong username or password"));
     }
 
+    /**
+     * This test checks if the login page is returned when the login method is called.
+     * The login page should be returned when the login method is called.
+     */
     @Test
     public void testIndexContainsLoginLink() {
         Http.RequestBuilder request = new Http.RequestBuilder()

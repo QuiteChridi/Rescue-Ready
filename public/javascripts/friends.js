@@ -4,9 +4,6 @@ const BASE_PROFILE_URL = "/friendProfile/";
 
 let originalUserList = [];
 
-/**
- * Is executed when the DocumentObjectModel(DOM) is fully loaded.
- */
 document.addEventListener('DOMContentLoaded', function () {
     const userListElements = document.querySelectorAll('.user-list li');
     originalUserList = Array.from(userListElements).map(li => {
@@ -55,15 +52,6 @@ function setupSearchInput() {
     } else {
         console.error('Suchfeld mit ID "newFriend" wurde nicht gefunden.');
     }
-}
-
-function addEventListenersToButtons() {
-    document.querySelectorAll('.add-friend-button').forEach(button => {
-        button.addEventListener('click', function () {
-            const userId = this.getAttribute('data-user-id');
-            addFriend(userId);
-        });
-    });
 }
 
 function setupChatButtonListeners() {
