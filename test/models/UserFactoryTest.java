@@ -14,23 +14,28 @@ import java.sql.Statement;
 
 import static org.junit.Assert.*;
 
+/**
+ * Testclass for UserFactory
+ */
 public class UserFactoryTest {
     private Database database;
     private UserFactory users;
-
     private String NAME_USER_1 = "testuser";
     private String PASSWORD_USER_1 = "testpassword";
     private String EMAIL_USER_1 = "test@test.de";
     private int ID_USER_1;
-
     private String NEW_USERNAME = "othertestuser";
     private String NEW_PASSWORD = "othertestpassword";
     private String NEW_EMAIL = "othertest@test.de";
-
     private String INVALID_USERNAME = "invalid";
     private String INVALID_PASSWORD = "invalid";
     private int INVALID_ID = 999;
 
+    /**
+     * Given a database with an user
+     * When the database is set up
+     * Then it should contain the user
+     */
     @Before
     public void givenADatabaseWithAnUser(){
         database = Databases.inMemory("inMemory");
@@ -54,6 +59,9 @@ public class UserFactoryTest {
         });
     }
 
+    /**
+     * The authenticate method should return the user for a valid username and password
+     */
     @Test
     public void authenticateShouldReturnUserForValidUsernameAndPassword(){
         User user = users.authenticate(NAME_USER_1, PASSWORD_USER_1);
@@ -61,6 +69,9 @@ public class UserFactoryTest {
         assertNotNull(user);
     }
 
+    /**
+     * The authenticate method should return null for a INvalid username
+     */
     @Test
     public void authenticateShouldReturnNullForInValidUsername(){
         User user = users.authenticate(INVALID_USERNAME, PASSWORD_USER_1);
@@ -68,6 +79,9 @@ public class UserFactoryTest {
         assertNull(user);
     }
 
+    /**
+     * The authenticate method should return null for a Invalid password
+     */
     @Test
     public void authenticateShouldReturnNullForInValidPassword(){
         User user = users.authenticate(NAME_USER_1, INVALID_PASSWORD);
@@ -75,6 +89,9 @@ public class UserFactoryTest {
         assertNull(user);
     }
 
+    /**
+     * The authenticate method should return null for a Invalid username and password
+     */
     @Test
     public void createUserInUsersShouldReturnCreatedUser(){
         User newUser = users.createUser(NEW_USERNAME, NEW_PASSWORD, NEW_EMAIL);
@@ -86,6 +103,9 @@ public class UserFactoryTest {
         assertEquals(fetchedUser.getMail(), newUser.getMail());
     }
 
+    /**
+     * The Id of the user should be returned by getId if the user exists in the database
+     */
     @Test
     public void getUserByIdShouldReturnUserForValidID(){
         User user = users.getUserById(ID_USER_1);
@@ -96,6 +116,9 @@ public class UserFactoryTest {
         assertEquals(EMAIL_USER_1, user.getMail());
     }
 
+    /**
+     * The getUserById method should return null for an invalid ID
+     */
     @Test
     public void getUserByIdShouldReturnNullForInvalidID(){
         User user = users.getUserById(INVALID_ID);
@@ -103,7 +126,9 @@ public class UserFactoryTest {
         assertNull(user);
     }
 
-
+    /**
+     * The tearDown method should shut down the database
+     */
     @After
     public void tearDown() {
         database.shutdown();

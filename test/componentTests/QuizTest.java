@@ -13,14 +13,26 @@ import play.test.WithApplication;
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
+/**
+ * This class contains tests for the QuizController.
+ * The tests are written using the JUnit testing framework.
+ * It extends the WithApplication class to provide a fake application for the tests.
+ */
 public class QuizTest extends WithApplication {
     private HighscoreFactory highscoreFactory;
 
+    /**
+     * This method is called before each test to set up the test environment.
+     * It initializes the highscoreFactory attribute with a new instance of HighscoreFactory.
+     */
     @Before
     public  void setUp(){
         highscoreFactory = provideApplication().injector().instanceOf(HighscoreFactory.class);
     }
 
+    /**
+     * This test checks if the quiz page is returned when the quiz method is called.
+     */
     @Test
     public void simulationOfPlayingQuiz() {
         Http.RequestBuilder request = fakeRequest()
@@ -51,6 +63,9 @@ public class QuizTest extends WithApplication {
         assertFalse(contentAsString(result).contains("answers"));
     }
 
+    /**
+     * This test checks if the highscore page is returned when the highscore method is called.
+     */
     @Test
     public void safeHighscoreShouldSafeHigherScore() {
         ObjectNode requestBody = Json.newObject();
@@ -73,6 +88,9 @@ public class QuizTest extends WithApplication {
         assertEquals(newHighscore.getScore(), scoreToSet);
     }
 
+    /**
+     * This test checks if the highscore page is returned when the highscore method is called.
+     */
     @Test
     public void safeHighscoreShouldNotSafeLowerScore() {
         ObjectNode requestBody = Json.newObject();

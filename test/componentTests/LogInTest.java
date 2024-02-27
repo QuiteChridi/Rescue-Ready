@@ -16,6 +16,7 @@ import static play.test.Helpers.*;
 
 /**
  * This class contains tests for the LoginController.
+ * The tests are written using the JUnit testing framework.
  */
 public class
 LogInTest extends WithApplication {

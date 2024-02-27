@@ -17,8 +17,17 @@ import static org.mockito.Mockito.*;
 
 import static play.test.Helpers.*;
 
+/**
+ * This class contains tests for the LoginController.
+ * The tests are written using the JUnit testing framework.
+ */
 public class LoginControllerTest {
 
+    /**
+     * This test checks if the login page is returned when the login method is called.
+     * It uses the contentAsString method to compare the content of the page with the expected content.
+     * The login method is called by creating a new instance of the LoginController class and calling the login method on it.
+     */
     @Test
     public void loginShouldReturnLoginPage() {
         UserFactory userFactoryDummy = mock(UserFactory.class);
@@ -27,6 +36,11 @@ public class LoginControllerTest {
         assertEquals(contentAsString(login.render()), contentAsString(loginController.login()));
     }
 
+    /**
+     * This test checks if the signup page is returned when the signUp method is called.
+     * It uses the contentAsString method to compare the content of the page with the expected content.
+     * The signUp method is called by creating a new instance of the LoginController class and calling the signUp method on it.
+     */
     @Test
     public void signupShouldReturnSignupPage() {
         UserFactory userFactoryDummy = mock(UserFactory.class);
@@ -35,6 +49,11 @@ public class LoginControllerTest {
         assertEquals(contentAsString(signup.render()), contentAsString(loginController.signUp()));
     }
 
+    /**
+     * This test checks if the authenticate method returns an error message if the verify method returns null.
+     * It uses the contentAsString method to compare the content of the page with the expected content.
+     * The authenticate method is called by creating a new instance of the LoginController class and calling the authenticate method on it.
+     */
     @Test
     public void authenticateShouldReturnErrorMessageIfVerifyReturnsNull() {
         UserFactory userFactoryDummy = mock(UserFactory.class);
@@ -56,6 +75,11 @@ public class LoginControllerTest {
         verify(userFactoryDummy).authenticate(" ", " ");
     }
 
+    /**
+     * This test checks if the authenticate method returns a successful login message if the verify method returns a user.
+     * It uses the contentAsString method to compare the content of the page with the expected content.
+     * The authenticate method is called by creating a new instance of the LoginController class and calling the authenticate method on it.
+     */
     @Test
     public void authenticateShouldReturnSuccessfulLoginIfVerifyReturnsUser() {
         UserFactory.UserImplementation userStub = mock(UserFactory.UserImplementation.class);
@@ -80,6 +104,11 @@ public class LoginControllerTest {
         verify(userFactoryStub).authenticate(" ", " ");
     }
 
+    /**
+     * This test checks if the logout method resets the session.
+     * It uses the session method to get the session and checks if the size of the session data is 0.
+     * The logout method is called by creating a new instance of the LoginController class and calling the logout method on it.
+     */
     @Test
     public void logoutShouldResetSession() {
         UserFactory userFactoryDummy = mock(UserFactory.class);
@@ -90,6 +119,11 @@ public class LoginControllerTest {
         assertEquals(0,  session.data().size());
     }
 
+    /**
+     * This test checks if the createUser method returns a not acceptable message if the user already exists.
+     * It uses the status method to compare the status of the result with the expected status.
+     * The createUser method is called by creating a new instance of the LoginController class and calling the createUser method on it.
+     */
     @Test
     public void createUserShouldReturnNotAcceptableIfUserExists() {
         UserFactory userFactoryDummy = mock(UserFactory.class);
@@ -111,6 +145,11 @@ public class LoginControllerTest {
         verify(userFactoryDummy).createUser(" ", " ", " ");
     }
 
+    /**
+     * This test checks if the createUser method adds the user to the session if the user does not exist.
+     * It uses the session method to get the session and checks if the session contains the user.
+     * The createUser method is called by creating a new instance of the LoginController class and calling the createUser method on it.
+     */
     @Test
     public void createUserShouldAddUserToSessionIfUsernameNotExists() {
         UserFactory.UserImplementation dummyUser= mock(UserFactory.UserImplementation.class);

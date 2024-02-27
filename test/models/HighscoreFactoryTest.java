@@ -18,10 +18,12 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Testclass for HighscoreFactory
+ */
 public class HighscoreFactoryTest {
     private HighscoreFactory highscores;
     private Database database;
-
     private final String NAME_USER = "testuser";
     private final String PASSWORD_USER = "testpassword";
     private final String EMAIL_USER = "test@test.de";
@@ -30,7 +32,11 @@ public class HighscoreFactoryTest {
     private final int ID_QUIZ = 99;
     private final int SCORE_HIGHSCORE = 100;
 
-
+    /**
+     * Given a database with an user, a quiz and a highscore
+     * When getPossibleQuizNames is called
+     * Then it should return all quiz names
+     */
     @Before
     public void givenADatabaseWithAnUserAnQuizAndAnHighscore(){
         database = Databases.inMemory("inMemory");
@@ -88,6 +94,10 @@ public class HighscoreFactoryTest {
         });
     }
 
+    /**
+     * The getPossibleQuizNames method should return all quiz names from the database
+     *
+     */
     @Test
     public void getPossibleQuizNamesShouldReturnAllQuizNames(){
         Map<Integer, String> quizNames = highscores.getPossibleQuizNames();
@@ -97,6 +107,9 @@ public class HighscoreFactoryTest {
         assertEquals(NAME_QUIZ, quizNames.get(ID_QUIZ));
     }
 
+    /**
+     * The Highscore of a quiz should return all highscores of a quiz from the database
+     */
     @Test
     public void getHighscoreOfQuizShouldReturnAllHighscoresOfAQuiz(){
         List<Highscore> scoresOfQuiz = highscores.getHighscoresOfQuiz(ID_QUIZ);
@@ -105,6 +118,9 @@ public class HighscoreFactoryTest {
         assertEquals(1, scoresOfQuiz.size());
     }
 
+    /**
+     * The Highscore of a user should return all highscores of a user from the database
+     */
     @Test
     public void getHighscoreOfUSERShouldReturnAllHighscoresOfAnUser(){
         List<Highscore> scoresOfUser = highscores.getHighscoresOfUser(ID_USER);
@@ -113,6 +129,9 @@ public class HighscoreFactoryTest {
         assertEquals(1, scoresOfUser.size());
     }
 
+    /**
+     * The Highscore of a user and a quiz should return the highscore of a user and a quiz from the database
+     */
     @Test
     public void fetchedHighscoreByUserAndQuizIdShouldContainValues(){
         Highscore highscore = highscores.getHighscoreOfUserAndQuiz(ID_USER, ID_QUIZ);
@@ -126,7 +145,10 @@ public class HighscoreFactoryTest {
         assertEquals(NAME_QUIZ, highscore.getQuizName());
     }
 
-
+    /**
+     * The tearDown method is called after the tests are finished
+     * It shuts down the database
+     */
     @After
     public void tearDown() {
         database.shutdown();
