@@ -77,7 +77,7 @@ function saveProfilePic() {
 function changeAddFriendToChatIfFriend(userId){
     let addFriendButton = document.getElementById("add-friend-button")
     let chatButton = document.getElementById("chat-button")
-
+    chatButton.style.display ="none"
     fetch(`/isFriend/${userId}`, {
         method: "POST",
         credentials: "include"
