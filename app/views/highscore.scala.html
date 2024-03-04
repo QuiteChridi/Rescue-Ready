@@ -17,7 +17,6 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Score</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -28,9 +27,6 @@
                                             <a id="highscore-username" href="@routes.ProfileController.friendProfile(value.getUserId)">@value.getUserName</a>
                                         </td>
                                         <td>@value.getScore</td>
-                                        <td>
-                                            <button class="add-friend-button" data-user-id="@value.getUserId">Hinzufügen</button>
-                                        </td>
                                     </tr>
                                 }
                             </tbody>
