@@ -64,8 +64,9 @@ function saveProfilePic() {
         });
 }
 
-function showAddFriendButtonIfNotFriend(userId){
+function changeAddFriendToChatIfFriend(userId){
     let addFriendButton = document.getElementById("add-friend-button")
+    let chatButton = document.getElementById("chat-button")
 
     fetch(`/isFriend/${userId}`, {
         method: "POST",
@@ -77,12 +78,12 @@ function showAddFriendButtonIfNotFriend(userId){
             }
             return response.json()
         }).then(data =>{
-            if(!data.isFriendship){
-                addFriendButton.style.visibility = "visible"
+            if(data.isFriendship){
+                addFriendButton.style.display = "none"
+                chatButton.style.display = "inline"
             }
     })
         .catch(error => {
             console.error('Error:', error);
         });
-
 }
