@@ -43,13 +43,9 @@
         <div class="sizeAble-container" id="editProfile-container" style="display: none">
             <img id="profilePicture2"  src="@routes.Assets.versioned("" + user.getProfilePicPath)" alt="Profilbild">
             <div class="profile-editor column-container">
-                <div class="edit-profile-pic-container">
-                    @helper.form(action = routes.ProfileController.saveProfilePicToAssets(), Symbol("enctype") -> "multipart/form-data") {
-                        <p id="profilePic-label">Profilbild:</p>
-                        <input id="newProfilePicture" type="file" name="picture">
-                    }
-                </div>
                 <div class ="edit-profile-data-container">
+                    <p id="profilePic-label">Profilbild:</p>
+                    <input id="newProfilePicture" type="file" name="picture" onchange="profilePicPreview()">
                     <p id="name-label">Name:</p>
                     <input type="text" id="name-input" value = @user.getName>
                     <p id="password-label">Password:</p>

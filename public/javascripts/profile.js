@@ -5,15 +5,18 @@ function editProfile(){
 }
 
 function saveChanges() {
-    saveProfilePic();
+
     let username = document.getElementById("name-input").value;
     let password = document.getElementById("password-input").value;
     let email = document.getElementById("email-input").value;
+
     let profilePic = document.getElementById("newProfilePicture").files[0];
     let profilePicPath = ""
     if(profilePic != null){
         profilePicPath = profilePic.name;
     }
+
+    saveProfilePic()
 
     fetch("/saveUser", {
         method: "POST",
@@ -41,6 +44,13 @@ function saveChanges() {
     }).catch(error => console.log(error.message))
 }
 
+
+function profilePicPreview(){
+    let profilePicturePreview = document.getElementById("profilePicture2")
+    let newProfilePic = document.getElementById("newProfilePicture").files[0];
+
+    profilePicturePreview.src = URL.createObjectURL(newProfilePic)
+}
 function saveProfilePic() {
     let profilePicInput = document.getElementById("newProfilePicture");
     let profilePicFile = profilePicInput.files[0]; // Das ausgewählte Bild
