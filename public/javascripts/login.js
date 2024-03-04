@@ -53,26 +53,27 @@ function signup() {
     fetch("/signup", {
         method: "POST",
         body: JSON.stringify({
-
             username: username,
             password: password,
             email: email
-
         }),
         headers: {
-            "Content-Type": "text/json"
+            "Content-Type": "application/json"
         },
         credentials: "include"
-    }).then(response  => {
-        if (!response.ok){
-            throw new Error('HTTP error! Status: ${result.status}')
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        return response.json()
+        return response.json();
     }).then(data => {
-        if(data.response === "Signup successful"){
-            window.location.href = "quiz"
+        if (data.response === "Signup successful") {
+            window.location.href = "/quiz";
         } else {
-            alert(data.response)
+            alert(data.response);
         }
-    }).catch(error => console.log(error.message))
+    }).catch(error => {
+        console.error('Error during signup:', error.message);
+        alert('Der Benutzer existiert bereits. Bitte geben Sie erneut die Nutzerdaten ein.');
+    });
 }
