@@ -93,13 +93,37 @@
 
 
     align-items: center;
-
+    text-align: center;
+    justify-content: center;
 }
 
 
 #row-container {
 
     align-items: center;
-
+    text-align: center;
+    justify-content: center;
 }
 
+#check-answer-button{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding: 10px 20px;
+}
+
+#next-question-button{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding: 10px 20px;
+}
+#end-quiz-container{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding: 10px 20px;
+}
