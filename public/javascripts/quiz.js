@@ -279,10 +279,19 @@ function saveQuizResult() {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        window.location.href="quiz"
-        alert("Ergebnis gespeichert!");
+        alert("Du hast einen Score von " + score + " erreicht!");
+        document.getElementById("quizStarted-container").style.display = "none"
+        document.getElementById("welcome-container").style.display = "flex"
+        lastScore(score);
     })
         .catch(error => console.error('Fehler beim Speichern des Ergebnisses:', error));
+}
+
+function lastScore(lastscore) {
+    document.getElementById("selectQuiz-h3").innerHTML = "In deinem letzten Quiz hast du einen Score von " + lastscore + " erreicht!";
+    document.getElementById("selectQuiz-h3").style.color = "green";
+    score = 0;
+    correctAnswerCount = 0;
 }
 
 function getCorrectAnswer() {
