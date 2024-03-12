@@ -63,4 +63,12 @@ public interface FriendManager {
      * @return true if the user is a friend, false otherwise
      */
     boolean isFriend(int userId, int otherUserId);
+
+    /**
+     * Gets a user by their id from the database and returns the user
+     *
+     * @param id the id of the user
+     * @return the user
+     */
+    User getUserById(int id);
 }

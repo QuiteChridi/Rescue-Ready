@@ -111,15 +111,11 @@ function removeFriend(friendId, userName) {
 }
 
 function filterUsers(query) {
-    console.log("Filtering users with query:", query);
 
     if (!query.trim()) {
-        console.log("Query is empty, displaying original user list.");
         displayUsers(originalUserList);
         return;
     }
-
-    console.log(`Sending search request to server with query: ${query}`);
 
     fetch(`/searchUsers?name=${encodeURIComponent(query)}`, {
         method: 'GET',
@@ -129,7 +125,6 @@ function filterUsers(query) {
     })
         .then(response => response.json())
         .then(filteredUsers => {
-            console.log("Received filtered users from server:", filteredUsers);
             displayUsers(filteredUsers);
         })
         .catch(error => {
@@ -198,7 +193,6 @@ function fetchMessages(receiverId) {
     fetch(`/getMessages/${receiverId}`)
         .then(response => response.json())
         .then(messages => {
-            console.log(messages);
             const messagesContainer = document.getElementById('chat-messages');
             messagesContainer.innerHTML = '';
             messages.forEach(message => {
@@ -211,14 +205,37 @@ function fetchMessages(receiverId) {
         });
 }
 
-function openChat(receiverId) {
-    const chatContainer = document.getElementById('chat-container');
-    chatContainer.style.display = 'block';
-    chatContainer.setAttribute('data-receiver-id', receiverId);
-    const messagesContainer = document.getElementById('chat-messages');
-    messagesContainer.innerHTML = '';
-    fetchMessages(receiverId);
+function openChat(friendId) {
+    fetch(`/searchUsersById?id=${friendId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Problem beim Abrufen des Nutzernamens: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(user => {
+            if (user && user.name) {
+                displayChat(user.name, friendId);
+            } else {
+                throw new Error('Nutzername konnte nicht gefunden werden.');
+            }
+        })
+        .catch(error => {
+            console.error('Fehler beim Abrufen der Benutzerinformationen:', error);
+            alert('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.');
+        });
 }
+
+function displayChat(friendName, friendId) {
+    const chatReceiverNameElement = document.getElementById('chat-receiver-name');
+    const chatContainer = document.getElementById('chat-container');
+
+    chatReceiverNameElement.textContent = `Chat mit: ${friendName}`;
+    chatContainer.style.display = 'block';
+    chatContainer.setAttribute('data-receiver-id', friendId);
+    fetchMessages(friendId);
+}
+
 
 function closeChat() {
     const chatContainer = document.getElementById('chat-container');

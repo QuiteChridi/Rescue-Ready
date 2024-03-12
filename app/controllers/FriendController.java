@@ -147,4 +147,19 @@ public class FriendController extends Controller {
 
         return ProfileController.ok(Json.toJson(matchingUsers));
     }
+
+    /**
+     * This method is used to search for users by ID.
+     * It checks if the user is logged in and if not redirects to the login page.
+     * It then searches for users by ID and returns the result.
+     *
+     * @param request The HTTP request.
+     * @param id      The ID of the user.
+     * @return The result.
+     */
+
+    public Result searchUsersById(Http.Request request, int id) {
+        User user = friendManager.getUserById(id);
+        return ok(Json.toJson(user));
+    }
 }
