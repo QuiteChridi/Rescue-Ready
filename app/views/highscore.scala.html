@@ -7,7 +7,7 @@
 
             <div class="sizeAble-container">
                 <div class="header">
-                    <h1>Highscores</h1>
+                    <h3 id="highscoreTitle"></h3>
                 </div>
 
                 <div class="highscores-table-container">
@@ -37,7 +37,7 @@
 
                 <div id="highscoreSwitch-buttons">
                 @for(quiz <- quizzes) {
-                    <button onclick="selectHighscore(this.id)" type="button" id="@quiz._1">@quiz._2</button>
+                    <button onclick="selectHighscore(this.id); changeQuizName('@quiz._2')" type="button" id="@quiz._1">@quiz._2</button>
                 }
                 </div>
 
