@@ -279,7 +279,6 @@ function saveQuizResult() {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        alert("Du hast einen Score von " + score + " erreicht!");
         document.getElementById("quizStarted-container").style.display = "none"
         document.getElementById("welcome-container").style.display = "flex"
         lastScore(score);
@@ -288,7 +287,7 @@ function saveQuizResult() {
 }
 
 function lastScore(lastscore) {
-    document.getElementById("selectQuiz-h3").innerHTML = "In deinem letzten Quiz hast du einen Score von " + lastscore + " erreicht!";
+    document.getElementById("selectQuiz-h3").innerHTML = "In deinem letzten Quiz hast du einen Score von " + lastscore + " erreicht!\nDas Ergebnis wurde gespeichert!";
     document.getElementById("selectQuiz-h3").style.color = "green";
     score = 0;
     correctAnswerCount = 0;
