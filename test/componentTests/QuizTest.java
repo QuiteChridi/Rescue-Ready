@@ -3,6 +3,7 @@ package componentTests;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import controllers.interfaces.Highscore;
 import models.HighscoreFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import play.libs.Json;
@@ -19,16 +20,6 @@ import static play.test.Helpers.*;
  * It extends the WithApplication class to provide a fake application for the tests.
  */
 public class QuizTest extends WithApplication {
-    private HighscoreFactory highscoreFactory;
-
-    /**
-     * This method is called before each test to set up the test environment.
-     * It initializes the highscoreFactory attribute with a new instance of HighscoreFactory.
-     */
-    @Before
-    public  void setUp(){
-        highscoreFactory = provideApplication().injector().instanceOf(HighscoreFactory.class);
-    }
 
     /**
      * This test checks if the quiz page is returned when the quiz method is called.
@@ -67,32 +58,8 @@ public class QuizTest extends WithApplication {
      * This test checks if the highscore page is returned when the highscore method is called.
      */
     @Test
-    public void safeHighscoreShouldSafeHigherScore() {
-        ObjectNode requestBody = Json.newObject();
-
-        Highscore oldHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1 );
-        int scoreToSet = oldHighscore.getScore() + 10;
-        requestBody.put("score", scoreToSet);
-
-        Http.RequestBuilder requestWithHigherScore = fakeRequest()
-                .session("userID", "1")
-                .bodyJson(requestBody)
-                .header(Http.HeaderNames.HOST, "localhost:19001")
-                .method(POST)
-                .uri("/saveQuizResult");
-
-        Result result = route(app, requestWithHigherScore);
-        Highscore newHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1 );
-
-        assertEquals(Http.Status.OK, result.status());
-        assertEquals(newHighscore.getScore(), scoreToSet);
-    }
-
-    /**
-     * This test checks if the highscore page is returned when the highscore method is called.
-     */
-    @Test
     public void safeHighscoreShouldNotSafeLowerScore() {
+        HighscoreFactory highscoreFactory = provideApplication().injector().instanceOf(HighscoreFactory.class);
         ObjectNode requestBody = Json.newObject();
 
         Highscore oldHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1 );
@@ -111,5 +78,31 @@ public class QuizTest extends WithApplication {
 
         assertEquals(Http.Status.OK, result.status());
         assertNotEquals(newHighscore.getScore(), scoreToSet);
+    }
+
+    /**
+     * This test checks if the highscore page is returned when the highscore method is called.
+     */
+    @Test
+    public void safeHighscoreShouldSafeHigherScore() {
+        HighscoreFactory highscoreFactory = provideApplication().injector().instanceOf(HighscoreFactory.class);
+        ObjectNode requestBody = Json.newObject();
+
+        Highscore oldHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1);
+        int scoreToSet = oldHighscore.getScore() + 10;
+        requestBody.put("score", scoreToSet);
+
+        Http.RequestBuilder requestWithHigherScore = fakeRequest()
+                .session("userID", "1")
+                .bodyJson(requestBody)
+                .header(Http.HeaderNames.HOST, "localhost:19001")
+                .method(POST)
+                .uri("/saveQuizResult");
+
+        Result result = route(app, requestWithHigherScore);
+        Highscore newHighscore = highscoreFactory.getHighscoreOfUserAndQuiz(1, 1);
+
+        assertEquals(Http.Status.OK, result.status());
+        assertEquals(newHighscore.getScore(), scoreToSet);
     }
 }
