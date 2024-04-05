@@ -27,7 +27,7 @@ public class QuizFactoryTest {
 
     @Before
     public void givenADatabaseWithAQuiz() {
-        database = Databases.inMemory("inMemory");
+        database = Databases.inMemory("default");
         Evolutions.applyEvolutions(database);
         quizzes = new QuizFactory(database);
 

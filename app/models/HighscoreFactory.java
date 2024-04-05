@@ -44,7 +44,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
     public List<Highscore> getHighscoresOfQuiz(int quizId) {
         return db.withConnection(conn -> {
             List<Highscore> highscores = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.iduser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE quiz_idQuiz = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.idUser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE quiz_idQuiz = ?");
             stmt.setInt(1, quizId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -88,7 +88,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
     public Highscore getHighscoreOfUserAndQuiz(int userId, int quizId) {
         return db.withConnection(conn -> {
             Highscore highscore = null;
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.iduser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE user_iduser = ? AND quiz_idQuiz = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.idUser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE user_iduser = ? AND quiz_idQuiz = ?");
             stmt.setInt(1, userId);
             stmt.setInt(2, quizId);
             ResultSet rs = stmt.executeQuery();
@@ -130,7 +130,7 @@ public class HighscoreFactory implements AbstractHighscoreFactory {
     public List<Highscore> getHighscoresOfUser(int userId) {
         return db.withConnection(conn -> {
             List<Highscore> highscores = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.iduser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE user_iduser = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM highscores JOIN user ON user_iduser = user.idUser JOIN quiz ON quiz_idQuiz = quiz.idQuiz WHERE user_iduser = ?");
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

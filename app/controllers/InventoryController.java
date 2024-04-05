@@ -122,7 +122,6 @@ public class InventoryController extends Controller {
         int oldAmountOfJokers = jokers.getJokerAmountOfUser(jokerId, user.getId());
         int coins = user.getCoins();
         int price = jokers.getJokerById(jokerId, user.getId()).getPrice();
-        System.out.println("JokerId: " + jokerId);
         ObjectNode result = Json.newObject();
         if (coins >= price) {
             int newAmountOfJokers = oldAmountOfJokers + 1;

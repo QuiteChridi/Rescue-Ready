@@ -39,7 +39,7 @@ public class HighscoreFactoryTest {
      */
     @Before
     public void givenADatabaseWithAnUserAnQuizAndAnHighscore(){
-        database = Databases.inMemory("inMemory");
+        database = Databases.inMemory("default");
         Evolutions.applyEvolutions(database);
 
 
@@ -53,7 +53,7 @@ public class HighscoreFactoryTest {
         });
 
         database.withConnection(conn -> {
-            String sql = "INSERT INTO user (iduser, name, password, email) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO user (idUser, name, password, email) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, Integer.toString(ID_USER));
             stmt.setString(2, NAME_USER);

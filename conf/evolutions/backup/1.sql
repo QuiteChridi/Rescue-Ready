@@ -80,11 +80,47 @@ CREATE TABLE IF NOT EXISTS `questions` (
          ON DELETE CASCADE
          ON UPDATE CASCADE);
 
+
+CREATE TABLE IF NOT EXISTS `joker` (
+ `name` varchar(45) NOT NULL,
+ `price` int NOT NULL,
+ `idjoker` int NOT NULL,
+ `description` varchar(100) NOT NULL,
+ `joker_pic_path` varchar(100) NOT NULL,
+  PRIMARY KEY (`idjoker`)
+);
+
+CREATE TABLE IF NOT EXISTS `joker_of_users` (
+  `user_id` int NOT NULL,
+  `joker_id` int NOT NULL,
+  `amount` int NOT NULL,
+  PRIMARY KEY (`user_id`,`joker_id`),
+  KEY `joker_id_idx` (`joker_id`),
+  CONSTRAINT `joker_id` FOREIGN KEY (`joker_id`) REFERENCES `joker` (`idjoker`),
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`iduser`)
+);
+
+CREATE TABLE IF NOT EXISTS `messages` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `sender_id` int NOT NULL,
+    `receiver_id` int NOT NULL,
+    `message` text NOT NULL,
+    `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `sender_id` (`sender_id`),
+    KEY `receiver_id` (`receiver_id`),
+    CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `user` (`iduser`),
+    CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `user` (`iduser`)
+);
+
+
 -- !Downs
 DROP TABLE IF EXISTS `user` ;
 DROP TABLE IF EXISTS `friends` ;
 DROP TABLE IF EXISTS `highscores` ;
 DROP TABLE IF EXISTS `quiz` ;
 DROP TABLE IF EXISTS `questions` ;
-
+DROP TABLE IF EXISTS `joker` ;
+DROP TABLE IF EXISTS `joker_of_users`;
+DROP TABLE IF EXISTS `messages`;
 

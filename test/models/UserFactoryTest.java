@@ -38,7 +38,7 @@ public class UserFactoryTest {
      */
     @Before
     public void givenADatabaseWithAnUser(){
-        database = Databases.inMemory("inMemory");
+        database = Databases.inMemory("default");
         Evolutions.applyEvolutions(database);
         users = new UserFactory(database);
 

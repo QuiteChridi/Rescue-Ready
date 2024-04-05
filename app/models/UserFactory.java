@@ -2,6 +2,7 @@ package models;
 
 import controllers.interfaces.*;
 import play.db.Database;
+import play.db.Databases;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,7 +30,6 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     UserFactory(Database db) {
         this.db = db;
     }
-
     /**
      * Authenticates a user with the given credentials
      *
@@ -112,7 +112,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     public UserImplementation getUserById(int id) {
         return db.withConnection(conn -> {
             UserImplementation user = null;
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE iduser = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE idUser = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -254,7 +254,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
     public List<User> getFriends(int userId) {
         return db.withConnection(conn -> {
             List<User> result = new ArrayList<>();
-            String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.iduser WHERE friends.id_user_1 = ?;";
+            String sql = "SELECT user.* FROM friends JOIN user ON friends.id_user_2 = user.idUser WHERE friends.id_user_1 = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
@@ -323,7 +323,7 @@ public class UserFactory implements AbstractUserFactory, FriendManager, AccountM
          * @throws SQLException
          */
         private UserImplementation(ResultSet rs) throws SQLException {
-            this.id = rs.getInt("iduser");
+            this.id = rs.getInt("idUser");
             this.username = rs.getString("name");
             this.mail = rs.getString("email");
             this.password = rs.getString("password");
