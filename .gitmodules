@@ -1,0 +1,3 @@
+[submodule "Authoringtool"]
+	path = Authoringtool
+	url = https://github.com/QuiteChridi/Authoringtool.git
