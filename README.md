@@ -1,11 +1,20 @@
-# How to start the Application
+# Rescue Ready
+
+This Project features a quiz to train people in first aid. It was built as a Group of five people as part of an university course, using the [Play Framework](https://www.playframework.com/). 
+
+**Key features**
+- Quiz 
+- Multiple Jokers and a Shop to buy them
+- Log-in/Signup Mechanik to retain User Data
+- A Global Leaderboard
+- Possibility to befriend other users and chat with them
+## How to start the Application
 
 **Prerequisites**
 - IntelliJ IDEA (recommended)
 - SDK - Amazon Coretto version 11.0.21 (recommended)
 
-**How to start**
-
+**How to run**
 1. clone the repository
 2. open the Project using IntelliJ IDEA
 3. select "Import project from external model" then select "sbt"
@@ -16,4 +25,4 @@
 8. please note, that the project uses a volatile in Memory Database for Demo purposes, therefore all changes made are not retained upon restarting the application.
 
 Note: Play may ask you to apply Database evolutions. If so click the "Apply Evolutions" button. This is used to ensure the correct state of the database.
-Note: For futrther information please see the Project Wiki
+**For further information please see the Project Wiki**
