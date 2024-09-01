@@ -1,6 +1,8 @@
 # Rescue Ready
-
 This Project features a quiz to train people in first aid. It was built as a Group of five people as part of an university course, using the [Play Framework](https://www.playframework.com/). 
+
+### Click on the Thumbnail for a Video Showcase
+[![IMAGE ALT TEXT](https://img.youtube.com/vi/wbFFTe3mmZI/0.jpg)](https://www.youtube.com/watch?v=wbFFTe3mmZI&t)
 
 **Key features**
 - Quiz 
